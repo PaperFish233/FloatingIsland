@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:orderInCategory="0"
+        android:id="@+id/home"
+        android:icon="@drawable/state_checked_homepage"
+
+        android:title="首页" />
+
+    <item
+        android:orderInCategory="1"
+        android:id="@+id/message"
+        android:icon="@drawable/state_checked_topic"
+        android:title="话题" />
+
+    <item
+        android:orderInCategory="2"
+        android:id="@+id/myself"
+        android:icon="@drawable/state_checked_mine"
+        android:title="我的" />
+
+</menu>

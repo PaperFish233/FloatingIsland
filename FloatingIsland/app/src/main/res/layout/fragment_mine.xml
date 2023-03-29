@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/Toolbar3"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:navigationIcon="@mipmap/logo3"
+        android:background="@color/purple_700"
+        app:subtitleTextColor="@color/white"
+        app:titleTextColor="@color/white"/>
+
+    <com.example.floatingisland.utils.ReboundScrollView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+
+        android:background="#F4F3F3"
+        android:scrollbars="none"
+        android:overScrollMode="never">
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/fragment_mine">
+
+    <com.allen.library.SuperTextView
+        android:id="@+id/avatar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:sLeftTextString="头像"
+        android:layout_marginTop="20dp"
+        app:sRightIconRes="@mipmap/avatar"
+        app:sDividerLineType="both" />
+
+    <com.allen.library.SuperTextView
+        android:id="@+id/account"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:sLeftTextString="账号"
+        app:sRightTextColor="#ACACAC"
+        app:sRightIconRes="@mipmap/toright"
+        app:sDividerLineType="both"/>
+
+    <com.allen.library.SuperTextView
+        android:id="@+id/nickname"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:sLeftTextString="昵称"
+        app:sRightTextColor="#ACACAC"
+        app:sRightIconRes="@mipmap/toright"
+        app:sDividerLineType="both"/>
+
+    <com.allen.library.SuperTextView
+        android:id="@+id/signature"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:sLeftTextString="个人简介"
+        app:sRightTextColor="#ACACAC"
+        app:sRightIconRes="@mipmap/toright"
+        app:sDividerLineType="both"/>
+
+    <com.allen.library.SuperTextView
+        android:id="@+id/mineposts"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        app:sLeftTextString="我的帖子"
+        app:sRightIconRes="@mipmap/toright"
+        app:sDividerLineType="both"/>
+
+    <com.allen.library.SuperTextView
+        android:id="@+id/minecollection"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:sLeftTextString="我的收藏"
+        app:sRightIconRes="@mipmap/toright"
+        app:sDividerLineType="both"/>
+
+    <com.allen.library.SuperTextView
+        android:id="@+id/minecollectionpeople"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:sLeftTextString="关注的人"
+        app:sRightIconRes="@mipmap/toright"
+        app:sDividerLineType="both"/>
+
+    <com.allen.library.SuperTextView
+        android:id="@+id/exit"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        app:sCenterBottomTextString="退出该账号"
+        app:sDividerLineType="both"/>
+
+</LinearLayout>
+
+</com.example.floatingisland.utils.ReboundScrollView>
+
+</LinearLayout>

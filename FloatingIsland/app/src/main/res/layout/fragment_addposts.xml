@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_addposts"
+    tools:context=".fragment.addpostsFragment"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/Toolbar3"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/purple_700"
+        app:navigationIcon="@mipmap/close"
+        app:subtitleTextColor="@color/white"
+        app:titleTextColor="@color/white"/>
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/connect"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="分享你此刻的心情..."
+        android:minLines="6"
+        android:maxLines="6"
+        android:textSize="16sp"
+        app:met_primaryColor="@color/purple_700"
+        app:met_floatingLabel="normal"
+
+        />
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/imageurl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="图片链接"
+        android:maxLines="1"
+        android:textSize="16sp"
+        app:met_primaryColor="@color/purple_700"
+        app:met_floatingLabel="normal"
+        />
+
+    <TextView
+        android:id="@+id/topic"
+        android:layout_marginTop="10dp"
+        android:textColor="#2196F3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="#选择话题"/>
+
+    <Button
+        android:id="@+id/git"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="发布"/>
+
+</LinearLayout>

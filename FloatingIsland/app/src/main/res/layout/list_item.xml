@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/card_style"
+    android:padding="10dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/avatar"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/avatar"
+            />
+
+        <TextView
+            android:id="@+id/nickname"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/avatar"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:text=" 用户昵称占位" />
+
+        <TextView
+            android:id="@+id/datetime"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@id/avatar"
+            android:textSize="12sp"
+            android:textColor="#ACACAC"
+            android:text=" 发布时间占位" />
+
+        <TextView
+            android:id="@+id/pid"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:text=" pid占位" />
+
+        <ImageView
+            android:id="@+id/focus"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/focus2"
+            />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="#DCDCDC"/>
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_alignParentRight="true"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="15px"/>
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textColor="#000000"
+        android:text="内容占位"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="#DCDCDC"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/topic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:textSize="14sp"
+            android:textColor="#2196F3"
+            android:text="#话题占位" />
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:gravity="right">
+
+         <ImageView
+             android:id="@+id/like"
+             android:layout_width="25dp"
+             android:layout_height="25dp"
+             android:layout_marginLeft="15dp"
+             android:src="@mipmap/like2"
+             />
+
+         <TextView
+             android:id="@+id/likenum"
+             android:layout_width="35dp"
+             android:layout_height="25dp"
+             android:text="占位"
+             android:textColor="@color/black"
+             android:gravity="center"
+             android:layout_centerVertical="true"
+             android:textSize="12sp"/>
+
+         <ImageView
+             android:id="@+id/collection"
+             android:layout_width="25dp"
+             android:layout_height="25dp"
+             android:layout_marginLeft="5dp"
+             android:src="@mipmap/collection2"
+             />
+
+         <ImageView
+             android:id="@+id/comment"
+             android:layout_width="25dp"
+             android:layout_height="25dp"
+             android:layout_marginLeft="15dp"
+             android:src="@mipmap/comment"
+             />
+
+     </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>
