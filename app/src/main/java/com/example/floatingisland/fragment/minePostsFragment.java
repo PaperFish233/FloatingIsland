@@ -3,6 +3,7 @@ package com.example.floatingisland.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
@@ -57,6 +58,8 @@ public class minePostsFragment extends Fragment {
 
         minePostsFragment = inflater.inflate(R.layout.fragment_mineposts, container, false);
 
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
+        String loginInfo = sharedPreferences.getString("account", "");
 
         Toolbar toolbar = minePostsFragment.findViewById(R.id.Toolbar_mineposts);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -68,7 +71,9 @@ public class minePostsFragment extends Fragment {
             }
         });
 
-        OkHttp.post(getContext(), Constant.getminePosts, null, new OkCallback<Result<List<Posts>>>() {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("uaccount", loginInfo);
+        OkHttp.post(getContext(), Constant.getminePosts, params, new OkCallback<Result<List<Posts>>>() {
             @Override
             public void onResponse(Result<List<Posts>> response) {
                 for (Posts datum : response.getData()) {
@@ -157,6 +162,9 @@ public class minePostsFragment extends Fragment {
                 mHolder=(minePostsFragment.ViewHolder)view.getTag();  //重新获得ViewHolder
             }
 
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
+            String loginInfo = sharedPreferences.getString("account", "");
+
             mHolder.focus.setVisibility(View.INVISIBLE);//设置不可见
 
             mHolder.card_pid.setText(list.get(position).get("pid").toString());
@@ -173,6 +181,7 @@ public class minePostsFragment extends Fragment {
             HashMap<String, String> params = new HashMap<>();
             int pid=Integer.parseInt(mHolder.card_pid.getText().toString());
             params.put("pid", String.valueOf(pid));
+            params.put("uaccount", loginInfo);
             OkHttp.post(getContext(), Constant.selectlike, params, new OkCallback<Result>() {
                 @Override
                 public void onResponse(Result response) {
@@ -192,6 +201,7 @@ public class minePostsFragment extends Fragment {
             //收藏状态检测
             HashMap<String, String> params1 = new HashMap<>();
             int pid1=Integer.parseInt(mHolder.card_pid.getText().toString());
+            params1.put("uaccount", loginInfo);
             params1.put("pid", String.valueOf(pid1));
             OkHttp.post(getContext(), Constant.selectcollection, params1, new OkCallback<Result>() {
                 @Override
@@ -215,6 +225,7 @@ public class minePostsFragment extends Fragment {
                     int pid=Integer.parseInt(mHolder.card_pid.getText().toString());
                     HashMap<String, String> params = new HashMap<>();
                     params.put("pid", String.valueOf(pid));
+                    params.put("uaccount", loginInfo);
                     OkHttp.post(getContext(), Constant.like, params, new OkCallback<Result>() {
                         @Override
                         public void onResponse(Result response) {
@@ -226,7 +237,6 @@ public class minePostsFragment extends Fragment {
                                 mHolder.like.setImageResource(R.mipmap.like2);
                                 String i = String.valueOf(Integer.parseInt(mHolder.likenum.getText().toString()) - 1);
                                 mHolder.likenum.setText(i);
-
                             }
 
                         }
@@ -246,6 +256,7 @@ public class minePostsFragment extends Fragment {
                     int pid=Integer.parseInt(mHolder.card_pid.getText().toString());
                     HashMap<String, String> params = new HashMap<>();
                     params.put("pid", String.valueOf(pid));
+                    params.put("uaccount", loginInfo);
                     OkHttp.post(getContext(), Constant.collection, params, new OkCallback<Result>() {
                         @Override
                         public void onResponse(Result response) {

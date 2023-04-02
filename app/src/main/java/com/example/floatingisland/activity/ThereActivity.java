@@ -7,8 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 
 import com.example.floatingisland.R;
-import com.example.floatingisland.fragment.addPostsFragment;
-import com.example.floatingisland.fragment.collectionPostsFragment;
+import com.example.floatingisland.fragment.mineCollectionPostsFragment;
 import com.example.floatingisland.fragment.minePostsFragment;
 
 public class ThereActivity extends AppCompatActivity {
@@ -36,7 +35,7 @@ public class ThereActivity extends AppCompatActivity {
             //开始事务
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             //将MyFragment添加到容器视图中
-            collectionPostsFragment collectionpostsFragment = new collectionPostsFragment();
+            mineCollectionPostsFragment collectionpostsFragment = new mineCollectionPostsFragment();
             fragmentTransaction.add(R.id.thereLayout, collectionpostsFragment);
             //提交事务
             fragmentTransaction.commit();

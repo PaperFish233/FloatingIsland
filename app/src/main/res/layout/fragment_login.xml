@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_login"
+    android:orientation="vertical"
+    android:background="#F4F3F3"
+    tools:context=".fragment.loginFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/Toolbar_login"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/purple_700"
+        app:navigationIcon="@mipmap/logo_login"
+        app:subtitleTextColor="@color/white"
+        app:titleTextColor="@color/white"/>
+
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/account"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingLeft="10dp"
+        android:hint="账号"
+        android:maxLines="1"
+        android:textSize="16sp"
+        android:layout_marginTop="70dp"
+        app:met_clearButton="true"
+        app:met_primaryColor="@color/purple_700"
+        app:met_floatingLabel="normal"
+        />
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/password"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingLeft="10dp"
+        android:hint="密码"
+        android:maxLines="1"
+        android:password="true"
+        android:textSize="16sp"
+        app:met_clearButton="true"
+        app:met_primaryColor="@color/purple_700"
+        app:met_floatingLabel="normal"
+        />
+
+    <CheckBox
+        android:id="@+id/agree"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:text="已阅读并同意《用户协议》"
+        android:textColor="#BBBBBB"
+        android:layout_gravity="center"
+        android:textSize="14sp"
+        android:buttonTint="@color/purple_500"
+        android:checked="true"/>
+
+    <Button
+        android:id="@+id/login"
+        android:text="登录"
+        android:layout_gravity="center"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="14sp"
+        android:text="还没有账号？点我进行注册"
+        android:textColor="@color/purple_500"
+        android:layout_gravity="center"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/protocol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:textSize="14sp"
+        android:text="《用户协议》"
+        android:textColor="#2196F3"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        />
+
+    </RelativeLayout>
+
+</LinearLayout>

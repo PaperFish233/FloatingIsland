@@ -17,7 +17,6 @@
     <com.example.floatingisland.utils.ReboundScrollView
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-
         android:background="#F4F3F3"
         android:scrollbars="none"
         android:overScrollMode="never">
@@ -95,7 +94,8 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginTop="20dp"
-        app:sCenterBottomTextString="退出该账号"
+        app:sCenterTextColor="#F44336"
+        app:sCenterTextString="退出该账号"
         app:sDividerLineType="both"/>
 
 </LinearLayout>

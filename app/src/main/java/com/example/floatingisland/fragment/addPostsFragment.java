@@ -62,7 +62,7 @@ public class addPostsFragment extends Fragment {
                 String pimageurl1 = imageurl.getText().toString();
                 params.put("pconnect", pconnect1);
                 params.put("pimageurl", pimageurl1);
-                if(pconnect1.equals("") && pimageurl1.equals("")) {
+                if(pconnect1.equals("") || pimageurl1.equals("")) {
                     Toast.makeText(getContext(), "不能发布空的内容哦！", Toast.LENGTH_SHORT).show();
                 }else{
                 OkHttp.post(getContext(), Constant.insertPosts, params, new OkCallback<Result>() {

@@ -3,6 +3,7 @@ package com.example.floatingisland.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +48,7 @@ import java.util.Map;
 public class HomePageFragment extends Fragment {
 
     private View HomePageFragment;
+
 
     //将数据封装成数据源
     List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
@@ -93,8 +95,6 @@ public class HomePageFragment extends Fragment {
         final RefreshLayout refreshLayout = HomePageFragment.findViewById(R.id.refreshLayout);
         //设置 Header 为 经典 样式
         refreshLayout.setRefreshHeader(new ClassicsHeader(getContext()));
-        //设置 Footer 为 经典 样式
-        refreshLayout.setRefreshFooter(new ClassicsFooter(getContext()));
 
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -107,12 +107,7 @@ public class HomePageFragment extends Fragment {
 
             }
         });
-        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshlayout) {
-                    refreshlayout.finishLoadMore();//传入false表示加载失败
-            }
-        });
+
 
         FloatingActionButton fab = HomePageFragment.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -120,7 +115,6 @@ public class HomePageFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), OneActivity.class);
                 startActivity(intent);
-
                 }
         });
 
@@ -169,6 +163,10 @@ public class HomePageFragment extends Fragment {
                 mHolder=(ViewHolder)view.getTag();  //重新获得ViewHolder
             }
 
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
+            String loginInfo = sharedPreferences.getString("account", "");
+
+
             mHolder.card_pid.setText(list.get(position).get("pid").toString());
             mHolder.likenum.setText(list.get(position).get("likenum").toString());
             Glide.with(getContext()).load(list.get(position).get("avatarurl")).apply(RequestOptions.bitmapTransform(new RoundedCorners(100)).override(100, 100)).into(mHolder.card_avatar);
@@ -182,13 +180,12 @@ public class HomePageFragment extends Fragment {
             HashMap<String, String> params2 = new HashMap<>();
             int pid2=Integer.parseInt(mHolder.card_pid.getText().toString());
             params2.put("pid", String.valueOf(pid2));
+            params2.put("uaccount", loginInfo);
             OkHttp.post(getContext(), Constant.selectfocus, params2, new OkCallback<Result>() {
                 @Override
                 public void onResponse(Result response) {
                     if(response.getMessage().equals("已关注")){
                         mHolder.focus.setVisibility(View.INVISIBLE);//设置不可见
-                    }else if(response.getMessage().equals("未关注")){
-                        mHolder.focus.setImageResource(R.mipmap.focus2);
                     }
                 }
 
@@ -203,6 +200,7 @@ public class HomePageFragment extends Fragment {
             HashMap<String, String> params = new HashMap<>();
             int pid=Integer.parseInt(mHolder.card_pid.getText().toString());
             params.put("pid", String.valueOf(pid));
+            params.put("uaccount", loginInfo);
             OkHttp.post(getContext(), Constant.selectlike, params, new OkCallback<Result>() {
                 @Override
                 public void onResponse(Result response) {
@@ -223,6 +221,7 @@ public class HomePageFragment extends Fragment {
             HashMap<String, String> params1 = new HashMap<>();
             int pid1=Integer.parseInt(mHolder.card_pid.getText().toString());
             params1.put("pid", String.valueOf(pid1));
+            params1.put("uaccount", loginInfo);
             OkHttp.post(getContext(), Constant.selectcollection, params1, new OkCallback<Result>() {
                 @Override
                 public void onResponse(Result response) {
@@ -245,6 +244,7 @@ public class HomePageFragment extends Fragment {
                     int pid=Integer.parseInt(mHolder.card_pid.getText().toString());
                     HashMap<String, String> params = new HashMap<>();
                     params.put("pid", String.valueOf(pid));
+                    params.put("uaccount", loginInfo);
                     OkHttp.post(getContext(), Constant.focus, params, new OkCallback<Result>() {
                         @Override
                         public void onResponse(Result response) {
@@ -269,6 +269,7 @@ public class HomePageFragment extends Fragment {
                     int pid=Integer.parseInt(mHolder.card_pid.getText().toString());
                     HashMap<String, String> params = new HashMap<>();
                     params.put("pid", String.valueOf(pid));
+                    params.put("uaccount", loginInfo);
                     OkHttp.post(getContext(), Constant.like, params, new OkCallback<Result>() {
                         @Override
                         public void onResponse(Result response) {
@@ -300,6 +301,7 @@ public class HomePageFragment extends Fragment {
                     int pid=Integer.parseInt(mHolder.card_pid.getText().toString());
                     HashMap<String, String> params = new HashMap<>();
                     params.put("pid", String.valueOf(pid));
+                    params.put("uaccount", loginInfo);
                     OkHttp.post(getContext(), Constant.collection, params, new OkCallback<Result>() {
                         @Override
                         public void onResponse(Result response) {

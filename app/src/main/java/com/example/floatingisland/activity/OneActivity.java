@@ -9,8 +9,6 @@ import android.os.Bundle;
 import com.example.floatingisland.R;
 import com.example.floatingisland.fragment.CommentBottomDialog;
 import com.example.floatingisland.fragment.addPostsFragment;
-import com.example.floatingisland.fragment.collectionPostsFragment;
-import com.example.floatingisland.fragment.minePostsFragment;
 
 public class OneActivity extends AppCompatActivity {
 
