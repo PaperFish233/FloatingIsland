@@ -13,9 +13,18 @@ import com.example.floatingisland.fragment.minePostsFragment;
 public class ThereActivity extends AppCompatActivity {
 
     @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_from_right);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_there);
+
+
+
 
         int jumpcode = getIntent().getIntExtra("jumpcode", 0);
         if (jumpcode == 1) {

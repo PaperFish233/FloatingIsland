@@ -1,6 +1,7 @@
 package com.example.floatingisland.fragment;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -45,6 +46,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.dmoral.toasty.MyToast;
+
 public class HomePageFragment extends Fragment {
 
     private View HomePageFragment;
@@ -65,6 +68,8 @@ public class HomePageFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,@Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
 
         HomePageFragment = inflater.inflate(R.layout.fragment_homepage,container,false);
+
+        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
 
         OkHttp.post(getContext(), Constant.getPosts, null, new OkCallback<Result<List<Posts>>>() {
             @Override
@@ -88,7 +93,7 @@ public class HomePageFragment extends Fragment {
 
             @Override
             public void onFailure(String state, String msg) {
-                Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                MyToast.errorBig("连接服务器超时！");
             }
         });
 
@@ -115,6 +120,7 @@ public class HomePageFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), OneActivity.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
                 }
         });
 
@@ -186,12 +192,14 @@ public class HomePageFragment extends Fragment {
                 public void onResponse(Result response) {
                     if(response.getMessage().equals("已关注")){
                         mHolder.focus.setVisibility(View.INVISIBLE);//设置不可见
+                    }else{
+                        mHolder.focus.setVisibility(View.VISIBLE);//设置可见
                     }
                 }
 
                 @Override
                 public void onFailure(String state, String msg) {
-                    Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                    MyToast.errorBig("连接服务器超时！");
                 }
             });
 
@@ -213,7 +221,7 @@ public class HomePageFragment extends Fragment {
 
                 @Override
                 public void onFailure(String state, String msg) {
-                    Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                    MyToast.errorBig("连接服务器超时！");
                 }
             });
 
@@ -234,7 +242,7 @@ public class HomePageFragment extends Fragment {
 
                 @Override
                 public void onFailure(String state, String msg) {
-                    Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                    MyToast.errorBig("连接服务器超时！");
                 }
             });
 
@@ -248,15 +256,17 @@ public class HomePageFragment extends Fragment {
                     OkHttp.post(getContext(), Constant.focus, params, new OkCallback<Result>() {
                         @Override
                         public void onResponse(Result response) {
-                            Toast.makeText(getContext(), response.getMessage(), Toast.LENGTH_SHORT).show();
                             if(response.getMessage().equals("关注成功")){
+                                MyToast.successBig(response.getMessage());
                                 mHolder.focus.setVisibility(View.INVISIBLE);//设置不可见
+                            }else{
+                                MyToast.errorBig(response.getMessage());
                             }
                         }
 
                         @Override
                         public void onFailure(String state, String msg) {
-                            Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                            MyToast.errorBig("连接服务器超时！");
                         }
                     });
 
@@ -288,7 +298,7 @@ public class HomePageFragment extends Fragment {
 
                         @Override
                         public void onFailure(String state, String msg) {
-                            Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                            MyToast.errorBig("连接服务器超时！");
                         }
                     });
 
@@ -305,7 +315,7 @@ public class HomePageFragment extends Fragment {
                     OkHttp.post(getContext(), Constant.collection, params, new OkCallback<Result>() {
                         @Override
                         public void onResponse(Result response) {
-                            Toast.makeText(getContext(), response.getMessage(), Toast.LENGTH_SHORT).show();
+                            MyToast.successBig(response.getMessage());
                             if(response.getMessage().equals("收藏成功")){
                                 mHolder.collection.setImageResource(R.mipmap.collection1);
                             }else if(response.getMessage().equals("取消收藏成功")){
@@ -316,7 +326,7 @@ public class HomePageFragment extends Fragment {
 
                         @Override
                         public void onFailure(String state, String msg) {
-                            Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                            MyToast.errorBig("连接服务器超时！");
                         }
                     });
 

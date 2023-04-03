@@ -16,6 +16,12 @@ import com.example.floatingisland.fragment.registerFragment;
 public class WelcomeActivity extends AppCompatActivity {
 
     @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);

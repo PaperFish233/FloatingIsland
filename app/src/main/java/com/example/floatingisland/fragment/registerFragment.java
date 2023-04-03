@@ -1,6 +1,7 @@
 package com.example.floatingisland.fragment;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,6 +30,8 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.HashMap;
 
+import es.dmoral.toasty.MyToast;
+
 
 public class registerFragment extends Fragment {
 
@@ -47,6 +50,8 @@ public class registerFragment extends Fragment {
 
         registerFragment = inflater.inflate(R.layout.fragment_register, container, false);
 
+        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
+
         MaterialEditText avatarurl = registerFragment.findViewById(R.id.avatarurl);
         MaterialEditText account = registerFragment.findViewById(R.id.account);
         MaterialEditText password = registerFragment.findViewById(R.id.password);
@@ -63,7 +68,7 @@ public class registerFragment extends Fragment {
                 String password1 = password.getText().toString();
                 String nickname1 = nickname.getText().toString();
                 if(avatarurl1.equals("") || account1.equals("") || password1.equals("") || nickname1.equals("")){
-                    Toast.makeText(getContext(), "你有为空的选项，请填写完毕！", Toast.LENGTH_SHORT).show();
+                    MyToast.errorBig("你有为空的选项，请填写完毕！");
                 }else{
                     if(agree.isChecked()==true){
                         HashMap<String, String> params = new HashMap<>();
@@ -75,27 +80,26 @@ public class registerFragment extends Fragment {
                             @Override
                             public void onResponse(Result response) {
                                 if(response.getMessage().equals("注册成功")){
-                                    Toast.makeText(getContext(), "注册成功！", Toast.LENGTH_SHORT).show();
-
+                                    MyToast.successBig(response.getMessage());
                                     getFragmentManager().beginTransaction()
                                             .setCustomAnimations(R.anim.slide_in_from_left, R.anim.slide_out_from_right, R.anim.slide_in_from_right, R.anim.slide_out_from_left)
                                             .replace(R.id.welcomeLayout, new loginFragment())
                                             .commit();
                                 }else if(response.getMessage().equals("账号已存在")){
-                                    Toast.makeText(getContext(), "账号已存在，请修改账号重新注册！", Toast.LENGTH_SHORT).show();
+                                    MyToast.errorBig("账号已存在，请修改账号重新注册！");
                                 }else if(response.getMessage().equals("注册失败")){
-                                    Toast.makeText(getContext(), "注册失败！", Toast.LENGTH_SHORT).show();
+                                    MyToast.errorBig(response.getMessage());
                                 }
 
                             }
 
                             @Override
                             public void onFailure(String state, String msg) {
-                                Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                                MyToast.errorBig("服务器连接超时！");
                             }
                         });
                     }else{
-                        Toast.makeText(getContext(), "请阅读并同意《用户协议》！", Toast.LENGTH_SHORT).show();
+                        MyToast.errorBig("请阅读并同意《用户协议》！");
                     }
                 }
             }

@@ -1,6 +1,7 @@
 package com.example.floatingisland.fragment;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -40,6 +41,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.dmoral.toasty.MyToast;
+
 public class minePostsFragment extends Fragment {
 
     private View minePostsFragment;
@@ -57,6 +60,8 @@ public class minePostsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         minePostsFragment = inflater.inflate(R.layout.fragment_mineposts, container, false);
+
+        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
         String loginInfo = sharedPreferences.getString("account", "");
@@ -95,7 +100,7 @@ public class minePostsFragment extends Fragment {
 
             @Override
             public void onFailure(String state, String msg) {
-                Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                MyToast.errorBig("连接服务器超时！");
             }
         });
 
@@ -106,15 +111,11 @@ public class minePostsFragment extends Fragment {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 refreshlayout.finishRefresh();//传入false表示刷新失败
-                Intent intent = new Intent(getContext(), ThereActivity.class);
-                intent.putExtra("jumpcode",1);
-                startActivity(intent);
-                activity.overridePendingTransition(0,0);
-                activity.onBackPressed();//销毁自己
-
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.thereLayout, new minePostsFragment())
+                        .commit();
             }
         });
-
 
         return minePostsFragment;
 
@@ -194,7 +195,7 @@ public class minePostsFragment extends Fragment {
 
                 @Override
                 public void onFailure(String state, String msg) {
-                    Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                    MyToast.errorBig("连接服务器超时！");
                 }
             });
 
@@ -215,7 +216,7 @@ public class minePostsFragment extends Fragment {
 
                 @Override
                 public void onFailure(String state, String msg) {
-                    Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                    MyToast.errorBig("连接服务器超时！");
                 }
             });
 
@@ -243,7 +244,7 @@ public class minePostsFragment extends Fragment {
 
                         @Override
                         public void onFailure(String state, String msg) {
-                            Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                            MyToast.errorBig("连接服务器超时！");
                         }
                     });
 
@@ -260,7 +261,7 @@ public class minePostsFragment extends Fragment {
                     OkHttp.post(getContext(), Constant.collection, params, new OkCallback<Result>() {
                         @Override
                         public void onResponse(Result response) {
-                            Toast.makeText(getContext(), response.getMessage(), Toast.LENGTH_SHORT).show();
+                            MyToast.successBig(response.getMessage());
                             if(response.getMessage().equals("收藏成功")){
                                 mHolder.collection.setImageResource(R.mipmap.collection1);
                             }else if(response.getMessage().equals("取消收藏成功")){
@@ -271,7 +272,7 @@ public class minePostsFragment extends Fragment {
 
                         @Override
                         public void onFailure(String state, String msg) {
-                            Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                            MyToast.errorBig("连接服务器超时！");
                         }
                     });
 

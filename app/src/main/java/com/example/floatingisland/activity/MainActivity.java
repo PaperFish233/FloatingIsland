@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+
+import android.app.Application;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -18,6 +20,8 @@ import com.example.floatingisland.fragment.HomePageFragment;
 import com.example.floatingisland.fragment.MineFragment;
 import com.example.floatingisland.fragment.TopicFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import es.dmoral.toasty.MyToast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MyToast.init(getApplication(),false,true);
 
         initView();
     }
@@ -93,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             if (secondTime - firstTime < 2000) {
                 System.exit(0);
             } else {
-                Toast.makeText(MainActivity.this, "再按一次退出应用", Toast.LENGTH_SHORT).show();
+                MyToast.errorBig("再按一次退出应用");
                 firstTime = System.currentTimeMillis();
             }
             return true;

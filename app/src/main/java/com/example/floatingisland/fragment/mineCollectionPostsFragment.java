@@ -4,6 +4,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,6 +37,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.dmoral.toasty.MyToast;
+
 
 public class mineCollectionPostsFragment extends Fragment {
 
@@ -55,6 +58,8 @@ public class mineCollectionPostsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         mineCollectionPostsFragment = inflater.inflate(R.layout.fragment_minecollectionposts, container, false);
+
+        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
         String loginInfo = sharedPreferences.getString("account", "");
@@ -93,7 +98,7 @@ public class mineCollectionPostsFragment extends Fragment {
 
             @Override
             public void onFailure(String state, String msg) {
-                Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                MyToast.errorBig("连接服务器超时！");
             }
         });
 
@@ -105,11 +110,9 @@ public class mineCollectionPostsFragment extends Fragment {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 refreshlayout.finishRefresh();//传入false表示刷新失败
-                Intent intent = new Intent(getContext(), ThereActivity.class);
-                intent.putExtra("jumpcode",2);
-                startActivity(intent);
-                activity.overridePendingTransition(0,0);
-                activity.onBackPressed();//销毁自己
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.thereLayout, new mineCollectionPostsFragment())
+                        .commit();
 
             }
         });
@@ -181,12 +184,14 @@ public class mineCollectionPostsFragment extends Fragment {
                 public void onResponse(Result response) {
                     if(response.getMessage().equals("已关注")){
                         mHolder.focus.setVisibility(View.INVISIBLE);//设置不可见
+                    }else{
+                        mHolder.focus.setVisibility(View.VISIBLE);//设置可见
                     }
                 }
 
                 @Override
                 public void onFailure(String state, String msg) {
-                    Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                    MyToast.errorBig("连接服务器超时！");
                 }
             });
 
@@ -207,7 +212,7 @@ public class mineCollectionPostsFragment extends Fragment {
 
                 @Override
                 public void onFailure(String state, String msg) {
-                    Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                    MyToast.errorBig("连接服务器超时！");
                 }
             });
 
@@ -228,7 +233,7 @@ public class mineCollectionPostsFragment extends Fragment {
 
                 @Override
                 public void onFailure(String state, String msg) {
-                    Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                    MyToast.errorBig("连接服务器超时！");
                 }
             });
 
@@ -242,15 +247,17 @@ public class mineCollectionPostsFragment extends Fragment {
                     OkHttp.post(getContext(), Constant.focus, params, new OkCallback<Result>() {
                         @Override
                         public void onResponse(Result response) {
-                            Toast.makeText(getContext(), response.getMessage(), Toast.LENGTH_SHORT).show();
                             if(response.getMessage().equals("关注成功")){
+                                MyToast.successBig(response.getMessage());
                                 mHolder.focus.setVisibility(View.INVISIBLE);//设置不可见
+                            }else{
+                                MyToast.errorBig(response.getMessage());
                             }
                         }
 
                         @Override
                         public void onFailure(String state, String msg) {
-                            Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                            MyToast.errorBig("连接服务器超时！");
                         }
                     });
 
@@ -282,7 +289,7 @@ public class mineCollectionPostsFragment extends Fragment {
 
                         @Override
                         public void onFailure(String state, String msg) {
-                            Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                            MyToast.errorBig("连接服务器超时！");
                         }
                     });
 
@@ -299,7 +306,7 @@ public class mineCollectionPostsFragment extends Fragment {
                     OkHttp.post(getContext(), Constant.collection, params, new OkCallback<Result>() {
                         @Override
                         public void onResponse(Result response) {
-                            Toast.makeText(getContext(), response.getMessage(), Toast.LENGTH_SHORT).show();
+                            MyToast.successBig(response.getMessage());
                             if(response.getMessage().equals("收藏成功")){
                                 mHolder.collection.setImageResource(R.mipmap.collection1);
                             }else if(response.getMessage().equals("取消收藏成功")){
@@ -310,7 +317,7 @@ public class mineCollectionPostsFragment extends Fragment {
 
                         @Override
                         public void onFailure(String state, String msg) {
-                            Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                            MyToast.errorBig("连接服务器超时！");
                         }
                     });
 

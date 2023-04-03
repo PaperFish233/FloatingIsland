@@ -1,6 +1,7 @@
 package com.example.floatingisland.fragment;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +25,8 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.HashMap;
 
+import es.dmoral.toasty.MyToast;
+
 
 public class addPostsFragment extends Fragment {
 
@@ -40,6 +43,8 @@ public class addPostsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         addpostsFragment = inflater.inflate(R.layout.fragment_addposts, container, false);
+
+        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
 
         Toolbar toolbar = addpostsFragment.findViewById(R.id.Toolbar_addposts);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -63,21 +68,26 @@ public class addPostsFragment extends Fragment {
                 params.put("pconnect", pconnect1);
                 params.put("pimageurl", pimageurl1);
                 if(pconnect1.equals("") || pimageurl1.equals("")) {
-                    Toast.makeText(getContext(), "不能发布空的内容哦！", Toast.LENGTH_SHORT).show();
+                    MyToast.errorBig("不能发布空的内容哦！");
                 }else{
                 OkHttp.post(getContext(), Constant.insertPosts, params, new OkCallback<Result>() {
                     @Override
                     public void onResponse(Result response) {
+                        if(response.getMessage().equals("发布成功")){
+                            MyToast.successBig(response.getMessage());
                             Toast.makeText(getContext(), response.getMessage(), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getContext(), MainActivity.class);
                             startActivity(intent);
                             activity.onBackPressed();//销毁自己
+                        }else{
+                            MyToast.errorBig(response.getMessage());
+                        }
 
                     }
 
                     @Override
                     public void onFailure(String state, String msg) {
-                        Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                        MyToast.errorBig("连接服务器超时！");
                     }
                 });
                 }

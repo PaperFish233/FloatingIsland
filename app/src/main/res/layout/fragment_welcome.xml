@@ -5,12 +5,20 @@
     android:layout_height="match_parent"
     tools:context=".fragment.WelcomeFragment">
 
-    <TextView
+    <ImageView
+        android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="欢迎界面（待完善）"
-        android:textSize="30sp"
-        android:layout_centerInParent="true"
-        />
+        android:src="@mipmap/icon_welcome1"
+        android:layout_centerInParent="true"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/icon_welcome2"
+        android:layout_marginTop="160dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"/>
+
 
 </RelativeLayout >

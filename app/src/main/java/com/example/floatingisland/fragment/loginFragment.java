@@ -1,6 +1,7 @@
 package com.example.floatingisland.fragment;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,6 +31,8 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.HashMap;
 
+import es.dmoral.toasty.MyToast;
+
 public class loginFragment extends Fragment {
 
     private View LoginFragment;
@@ -47,6 +50,8 @@ public class loginFragment extends Fragment {
 
         LoginFragment = inflater.inflate(R.layout.fragment_login,container,false);
 
+        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
+
         MaterialEditText account = LoginFragment.findViewById(R.id.account);
         MaterialEditText password = LoginFragment.findViewById(R.id.password);
         Button login = LoginFragment.findViewById(R.id.login);
@@ -60,7 +65,7 @@ public class loginFragment extends Fragment {
                 String account1 = account.getText().toString();
                 String password1 = password.getText().toString();
                 if(account1.equals("") || password1.equals("")){
-                    Toast.makeText(getContext(), "你有为空的选项，请填写完毕！", Toast.LENGTH_SHORT).show();
+                    MyToast.errorBig("你有为空的选项，请填写完毕！");
                }else{
                     if(agree.isChecked()==true){
                         HashMap<String, String> params = new HashMap<>();
@@ -70,7 +75,7 @@ public class loginFragment extends Fragment {
                             @Override
                             public void onResponse(Result response) {
                                 if(response.getMessage().equals("登录成功")){
-                                    Toast.makeText(getContext(), "登录成功！", Toast.LENGTH_SHORT).show();
+                                    MyToast.successBig(response.getMessage());
                                     SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = sharedPreferences.edit();
                                     editor.putString("account", account1);
@@ -78,20 +83,21 @@ public class loginFragment extends Fragment {
 
                                     Intent intent = new Intent(getContext(), MainActivity.class);
                                     startActivity(intent);
+                                    getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                                     activity.onBackPressed();//销毁自己
                                 }else if(response.getMessage().equals("登录失败")){
-                                    Toast.makeText(getContext(), "账号或密码错误，请重新输入！", Toast.LENGTH_SHORT).show();
+                                    MyToast.errorBig("账号或密码错误，请重新输入！");
                                 }
 
                             }
 
                             @Override
                             public void onFailure(String state, String msg) {
-                                Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                                MyToast.errorBig("连接服务器超时！");
                             }
                         });
                     }else{
-                        Toast.makeText(getContext(), "请阅读并同意《用户协议》！", Toast.LENGTH_SHORT).show();
+                        MyToast.errorBig("请阅读并同意《用户协议》！");
                     }
                 }
             }

@@ -2,6 +2,7 @@ package com.example.floatingisland.fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,6 +38,8 @@ import com.example.floatingisland.utils.net.Result;
 import java.util.HashMap;
 import java.util.List;
 
+import es.dmoral.toasty.MyToast;
+
 public class MineFragment extends Fragment {
 
     private View MineFragment;
@@ -53,6 +56,8 @@ public class MineFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,@Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
 
         MineFragment = inflater.inflate(R.layout.fragment_mine,container,false);
+
+        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
         String loginInfo = sharedPreferences.getString("account", "");
@@ -102,7 +107,7 @@ public class MineFragment extends Fragment {
 
             @Override
             public void onFailure(String state, String msg) {
-                Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_SHORT).show();
+                MyToast.errorBig("连接服务器超时！");
             }
         });
 
@@ -111,7 +116,7 @@ public class MineFragment extends Fragment {
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "点击头像！", Toast.LENGTH_SHORT).show();
+                MyToast.successBig("点击头像！");
 
             }
         });
@@ -119,7 +124,7 @@ public class MineFragment extends Fragment {
         account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "点击账号！", Toast.LENGTH_SHORT).show();
+                MyToast.successBig("点击账号！");
 
             }
         });
@@ -127,14 +132,14 @@ public class MineFragment extends Fragment {
         nickname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "点击昵称！", Toast.LENGTH_SHORT).show();
+                MyToast.successBig("点击昵称！");
             }
         });
 
         signature.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "点击简介！", Toast.LENGTH_SHORT).show();
+                MyToast.successBig("点击简介！");
             }
         });
 
@@ -144,6 +149,7 @@ public class MineFragment extends Fragment {
                 Intent intent = new Intent(getContext(), ThereActivity.class);
                 intent.putExtra("jumpcode",1);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
             }
         });
 
@@ -153,13 +159,14 @@ public class MineFragment extends Fragment {
                 Intent intent = new Intent(getContext(), ThereActivity.class);
                 intent.putExtra("jumpcode",2);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
             }
         });
 
         minecollectionpeople.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "点击关注的人！", Toast.LENGTH_SHORT).show();
+                MyToast.successBig("点击关注的人！");
             }
         });
 
@@ -179,8 +186,8 @@ public class MineFragment extends Fragment {
                         editor.apply();
 
                         Intent intent = new Intent(getContext(), WelcomeActivity.class);
-                        intent.putExtra("jumpcode",1);
                         startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         activity.onBackPressed();//销毁自己
                     }
                 });
@@ -199,13 +206,6 @@ public class MineFragment extends Fragment {
 
             }
         });
-
-
-
-
-
-
-
 
 
         return MineFragment;

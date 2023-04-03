@@ -52,6 +52,7 @@ public class WelcomeFragment extends Fragment {
                 }else{
                     Intent intent = new Intent(getContext(), MainActivity.class);
                     startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                     activity.onBackPressed();//销毁自己
                 }
             }
