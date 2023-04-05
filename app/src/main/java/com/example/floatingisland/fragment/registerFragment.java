@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -51,6 +52,16 @@ public class registerFragment extends Fragment {
         registerFragment = inflater.inflate(R.layout.fragment_register, container, false);
 
         MyToast.init((Application) requireContext().getApplicationContext(),false,true);
+
+        Toolbar toolbar = registerFragment.findViewById(R.id.Toolbar_register);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 处理左上角按钮点击事件
+                activity.onBackPressed();//销毁自己，用全局变量activity代替getActivity()
+
+            }
+        });
 
         MaterialEditText avatarurl = registerFragment.findViewById(R.id.avatarurl);
         MaterialEditText account = registerFragment.findViewById(R.id.account);

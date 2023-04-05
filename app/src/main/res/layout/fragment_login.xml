@@ -65,7 +65,9 @@
         android:text="登录"
         android:layout_gravity="center"
         android:layout_width="350dp"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        app:cornerRadius="25dp"/>
 
     <TextView
         android:id="@+id/register"

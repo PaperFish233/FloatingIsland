@@ -15,7 +15,6 @@
             android:id="@+id/avatar"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:src="@mipmap/avatar"
             />
@@ -23,8 +22,7 @@
         <TextView
             android:id="@+id/nickname"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
+            android:layout_height="wrap_content"
             android:layout_toRightOf="@id/avatar"
             android:textSize="14sp"
             android:textColor="#000000"
@@ -33,7 +31,7 @@
         <TextView
             android:id="@+id/datetime"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@id/avatar"
             android:textSize="12sp"

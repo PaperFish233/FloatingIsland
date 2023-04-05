@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="@color/purple_700"
-        app:navigationIcon="@mipmap/close"
+        app:navigationIcon="@mipmap/logo_mineposts"
         app:subtitleTextColor="@color/white"
         app:titleTextColor="@color/white"/>
 

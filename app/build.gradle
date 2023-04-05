@@ -62,4 +62,7 @@ dependencies {
     //Toasty
     implementation 'com.github.hss01248:Toasty:2.0.6'
 
+    //FlipTabs
+    implementation 'com.github.Chrisvin:FlipTabs:v1.5'
+
 }

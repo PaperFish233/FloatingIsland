@@ -12,19 +12,9 @@
         android:layout_height="40dp"
         android:background="@color/purple_700"
         app:navigationIcon="@mipmap/logo1"
-        app:menu="@menu/search_menu"
         app:subtitleTextColor="@color/white"
         app:titleTextColor="@color/white">
     </androidx.appcompat.widget.Toolbar>
-
-    <com.scwang.smart.refresh.layout.SmartRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/refreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <com.scwang.smart.refresh.header.ClassicsHeader
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -32,17 +22,30 @@
         android:paddingTop="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:background="#F4F3F3"
-        >
+        android:background="#F4F3F3">
 
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:divider="@null"
-        android:dividerHeight="5dp"
-        android:scrollbars="none"
-        android:overScrollMode="never"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imagevideoLayout" />
+
+        <com.jem.fliptabs.FlipTab
+            android:id="@+id/ft1"
+            android:layout_height="wrap_content"
+            android:layout_width="250dp"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            app:leftTabText="图文流"
+            app:rightTabText="短视频"
+            app:startingTab="left"
+            app:removeDefaultPadding="true"
+            app:overallColor="@color/purple_500"
+            app:flipAnimationDuration="400"
+            app:wobbleReturnAnimationDuration="200"
+            app:wobbleAngle="3"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
@@ -57,6 +60,6 @@
 
     </RelativeLayout>
 
-    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
 
 </LinearLayout>

@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="@color/purple_700"
-        app:navigationIcon="@mipmap/close"
+        app:navigationIcon="@mipmap/logo_publish"
         app:subtitleTextColor="@color/white"
         app:titleTextColor="@color/white"/>
 
@@ -54,6 +54,8 @@
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="发布"/>
+        android:text="发布"
+        android:textColor="@color/white"
+        app:cornerRadius="25dp"/>
 
 </LinearLayout>
