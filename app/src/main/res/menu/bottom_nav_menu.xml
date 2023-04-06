@@ -12,7 +12,7 @@
         android:orderInCategory="1"
         android:id="@+id/message"
         android:icon="@drawable/state_checked_topic"
-        android:title="话题" />
+        android:title="发现" />
 
     <item
         android:orderInCategory="2"

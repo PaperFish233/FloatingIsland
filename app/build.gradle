@@ -65,4 +65,10 @@ dependencies {
     //FlipTabs
     implementation 'com.github.Chrisvin:FlipTabs:v1.5'
 
+    //JZPlayer视频播放器
+    implementation 'cn.jzvd:jiaozivideoplayer:7.7.0'
+
+    //searchbox搜索框
+    implementation 'com.wenwenwen888:searchbox:1.0.1'
+
 }

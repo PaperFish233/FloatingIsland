@@ -14,9 +14,9 @@ import android.view.ViewGroup;
 
 import com.example.floatingisland.R;
 
-public class HomePageVideoFragment extends Fragment {
+public class HomePageFPflowFragment extends Fragment {
 
-    private View HomePageVideoFragment;
+    private View HomePageFPflowFragment;
 
     //getActivity()可能会抛出空指针异常
     private Activity activity;
@@ -29,10 +29,10 @@ public class HomePageVideoFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        HomePageVideoFragment = inflater.inflate(R.layout.fragment_homepagevideo, container, false);
+        HomePageFPflowFragment = inflater.inflate(R.layout.fragment_homepagefpflow, container, false);
 
 
 
-        return HomePageVideoFragment;
+        return HomePageFPflowFragment;
     }
 }

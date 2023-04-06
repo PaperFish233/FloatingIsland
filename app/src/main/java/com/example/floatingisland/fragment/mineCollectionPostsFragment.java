@@ -37,6 +37,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.jzvd.Jzvd;
+import cn.jzvd.JzvdStd;
 import es.dmoral.toasty.MyToast;
 
 
@@ -46,6 +48,12 @@ public class mineCollectionPostsFragment extends Fragment {
 
     //将数据封装成数据源
     List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Jzvd.releaseAllVideos();
+    }
 
     //getActivity()可能会抛出空指针异常
     private Activity activity;
@@ -156,6 +164,7 @@ public class mineCollectionPostsFragment extends Fragment {
                 mHolder.like=(ImageView)view.findViewById(R.id.like);
                 mHolder.comment=(ImageView)view.findViewById(R.id.comment);
                 mHolder.focus=(ImageView)view.findViewById(R.id.focus);
+                mHolder.jz_video=(JzvdStd)view.findViewById(R.id.jz_video);
                 view.setTag(mHolder);  //将ViewHolder存储在View中
             }else {
                 view=convertView;
@@ -171,8 +180,20 @@ public class mineCollectionPostsFragment extends Fragment {
             mHolder.card_nickname.setText("  "+list.get(position).get("nickname").toString());
             mHolder.card_datetime.setText("  发布于 "+list.get(position).get("datetime").toString());
             mHolder.card_content.setText(list.get(position).get("content").toString());
-            Glide.with(getContext()).load(list.get(position).get("imageurl")).apply(RequestOptions.bitmapTransform(new RoundedCorners(20)).override(1280, 720)).into(mHolder.card_image);
             mHolder.card_topic.setText("#"+list.get(position).get("topicname").toString());
+
+            //图文或视频检测
+            String url = list.get(position).get("imageurl").toString();
+            if(url.endsWith(".gif") || url.endsWith(".jpg") || url.endsWith(".png")) {
+                mHolder.jz_video.setVisibility(View.GONE);
+                mHolder.card_image.setVisibility(View.VISIBLE);
+                Glide.with(getContext()).load(list.get(position).get("imageurl")).apply(RequestOptions.bitmapTransform(new RoundedCorners(20)).override(1280, 720)).into(mHolder.card_image);
+            } else if(url.endsWith(".mp4") || url.endsWith(".avi") || url.endsWith(".mov")) {
+                mHolder.card_image.setVisibility(View.GONE);
+                mHolder.jz_video.setVisibility(View.VISIBLE);
+                Glide.with(getContext()).load(url).centerCrop().into(mHolder.jz_video.posterImageView);
+                mHolder.jz_video.setUp(url, "");
+            }
 
             //关注状态检测
             HashMap<String, String> params2 = new HashMap<>();
@@ -353,6 +374,7 @@ public class mineCollectionPostsFragment extends Fragment {
         ImageView collection;
         ImageView comment;
         ImageView focus;
+        JzvdStd jz_video;
     }
 
 }

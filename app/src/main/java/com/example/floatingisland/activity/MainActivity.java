@@ -8,19 +8,16 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.app.Application;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.floatingisland.R;
-import com.example.floatingisland.fragment.CommentBottomDialog;
 import com.example.floatingisland.fragment.HomePageFragment;
 import com.example.floatingisland.fragment.MineFragment;
-import com.example.floatingisland.fragment.TopicFragment;
+import com.example.floatingisland.fragment.DiscoverFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import cn.jzvd.Jzvd;
 import es.dmoral.toasty.MyToast;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Fragment
     private HomePageFragment HomePageFragment = new HomePageFragment();
-    private TopicFragment TopicFragment = new TopicFragment();
+    private DiscoverFragment DiscoverFragment = new DiscoverFragment();
     private MineFragment MineFragment = new MineFragment();
 
     @Override
@@ -61,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                     case 0:
                         return HomePageFragment;
                     case 1:
-                        return TopicFragment;
+                        return DiscoverFragment;
                     case 2:
                         return MineFragment;
                 }
@@ -88,25 +85,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * 两次返回退出程序
-     */
-    private long firstTime = 0;
+    private long firstPressedTime;
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        long secondTime = System.currentTimeMillis();
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (secondTime - firstTime < 2000) {
-                System.exit(0);
+    public void onBackPressed() {
+        if (Jzvd.backPress()) {
+            return;
+        } else {
+            // System.currentTimeMillis() 当前系统的时间
+            if (System.currentTimeMillis() - firstPressedTime < 2000) {
+                super.onBackPressed();
             } else {
                 MyToast.errorBig("再按一次退出应用");
-                firstTime = System.currentTimeMillis();
+                firstPressedTime = System.currentTimeMillis();
             }
-            return true;
         }
-        return super.onKeyDown(keyCode, event);
     }
-
 
     /**
      * 监听ViewPager页面变化事件

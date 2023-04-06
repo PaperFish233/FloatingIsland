@@ -10,12 +10,24 @@ import com.example.floatingisland.R;
 import com.example.floatingisland.fragment.mineCollectionPostsFragment;
 import com.example.floatingisland.fragment.minePostsFragment;
 
+import cn.jzvd.Jzvd;
+import es.dmoral.toasty.MyToast;
+
 public class ThereActivity extends AppCompatActivity {
 
     @Override
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_from_right);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (Jzvd.backPress()) {
+            return;
+        } else {
+           super.onBackPressed();
+        }
     }
 
     @Override

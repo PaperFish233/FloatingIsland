@@ -1,46 +1,28 @@
 package com.example.floatingisland.fragment;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
-import com.example.floatingisland.activity.MainActivity;
-import com.example.floatingisland.activity.ThereActivity;
-import com.example.floatingisland.utils.Constant;
 import com.example.floatingisland.R;
 import com.example.floatingisland.activity.OneActivity;
+import com.example.floatingisland.utils.Constant;
 import com.example.floatingisland.utils.net.OkCallback;
 import com.example.floatingisland.utils.net.OkHttp;
 import com.example.floatingisland.utils.net.Result;
-import com.example.floatingisland.entity.Posts;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.jem.fliptabs.FlipTab;
-import com.scwang.smart.refresh.footer.ClassicsFooter;
-import com.scwang.smart.refresh.header.ClassicsHeader;
-import com.scwang.smart.refresh.layout.api.RefreshLayout;
-import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
+import com.wyt.searchbox.SearchFragment;
+import com.wyt.searchbox.custom.IOnSearchClickListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,7 +52,7 @@ public class HomePageFragment extends Fragment {
         HomePageFragment = inflater.inflate(R.layout.fragment_homepage,container,false);
 
         getChildFragmentManager().beginTransaction()
-                .replace(R.id.imagevideoLayout, new HomePageImageFragment())
+                .replace(R.id.imagevideoLayout, new HomePageIVflowFragment())
                 .commit();
 
         //tab选择卡
@@ -81,12 +63,12 @@ public class HomePageFragment extends Fragment {
                 if(isLeftTab==true){
                     getChildFragmentManager().beginTransaction()
                             .setCustomAnimations(R.anim.slide_in_from_left, R.anim.slide_out_from_right)
-                            .replace(R.id.imagevideoLayout, new HomePageImageFragment())
+                            .replace(R.id.imagevideoLayout, new HomePageIVflowFragment())
                             .commit();
                 }else{
                     getChildFragmentManager().beginTransaction()
                             .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_from_left)
-                            .replace(R.id.imagevideoLayout, new HomePageVideoFragment())
+                            .replace(R.id.imagevideoLayout, new HomePageFPflowFragment())
                             .commit();
                 }
             }
@@ -94,6 +76,22 @@ public class HomePageFragment extends Fragment {
             @Override
             public void onTabReselected(boolean isLeftTab, String tabTextValue) {
 
+            }
+        });
+
+        //点赞按钮点击事件
+        ImageView search = HomePageFragment.findViewById(R.id.search);
+        search.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                SearchFragment searchFragment = SearchFragment.newInstance();
+                searchFragment.setOnSearchClickListener(new IOnSearchClickListener() {
+                    @Override
+                    public void OnSearchClick(String keyword) {
+                        //这里处理逻辑
+
+                    }
+                });
+                searchFragment.showFragment(getFragmentManager(),SearchFragment.TAG);
             }
         });
 

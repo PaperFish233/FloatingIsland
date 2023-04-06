@@ -3,8 +3,8 @@ package com.example.floatingisland.fragment;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -21,7 +21,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.floatingisland.R;
-import com.example.floatingisland.activity.MainActivity;
 import com.example.floatingisland.entity.Posts;
 import com.example.floatingisland.utils.Constant;
 import com.example.floatingisland.utils.net.OkCallback;
@@ -36,26 +35,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.jzvd.Jzvd;
+import cn.jzvd.JzvdStd;
 import es.dmoral.toasty.MyToast;
 
-public class HomePageImageFragment extends Fragment {
+public class HomePageIVflowFragment extends Fragment {
 
-    private View HomePageImageFragment;
+    private View HomePageIVflowFragment;
 
     //将数据封装成数据源
     List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
 
-    //getActivity()可能会抛出空指针异常
-    private Activity activity;
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.activity = (Activity) context;
+    @Override
+    public void onPause() {
+        super.onPause();
+        Jzvd.releaseAllVideos();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        HomePageImageFragment = inflater.inflate(R.layout.fragment_homepageimage, container, false);
+        HomePageIVflowFragment = inflater.inflate(R.layout.fragment_homepageivflow, container, false);
 
         MyToast.init((Application) requireContext().getApplicationContext(),false,true);
 
@@ -75,8 +75,8 @@ public class HomePageImageFragment extends Fragment {
                     list.add(map);
 
                 }
-                ListView listview=(ListView) HomePageImageFragment.findViewById(R.id.listView);
-                listview.setAdapter(new HomePageImageFragment.MyAdapter());
+                ListView listview=(ListView) HomePageIVflowFragment.findViewById(R.id.listView);
+                listview.setAdapter(new HomePageIVflowFragment.MyAdapter());
             }
 
             @Override
@@ -85,7 +85,7 @@ public class HomePageImageFragment extends Fragment {
             }
         });
 
-        final RefreshLayout refreshLayout = HomePageImageFragment.findViewById(R.id.refreshLayout);
+        final RefreshLayout refreshLayout = HomePageIVflowFragment.findViewById(R.id.refreshLayout);
         //设置 Header 为 经典 样式
         refreshLayout.setRefreshHeader(new ClassicsHeader(getContext()));
 
@@ -93,13 +93,13 @@ public class HomePageImageFragment extends Fragment {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.imagevideoLayout, new HomePageImageFragment())
+                        .replace(R.id.imagevideoLayout, new HomePageIVflowFragment())
                         .commit();
 
             }
         });
 
-        return HomePageImageFragment;
+        return HomePageIVflowFragment;
     }
 
     class MyAdapter extends BaseAdapter {
@@ -124,7 +124,7 @@ public class HomePageImageFragment extends Fragment {
             View view;
             ViewHolder mHolder;
             if(convertView==null){
-                view= LayoutInflater.from(HomePageImageFragment.getContext()).inflate(R.layout.list_item,null);
+                view= LayoutInflater.from(HomePageIVflowFragment.getContext()).inflate(R.layout.list_item,null);
                 mHolder=new ViewHolder();
                 mHolder.card_pid=(TextView)view.findViewById(R.id.pid);
                 mHolder.card_avatar=(ImageView)view.findViewById(R.id.avatar);
@@ -138,6 +138,7 @@ public class HomePageImageFragment extends Fragment {
                 mHolder.like=(ImageView)view.findViewById(R.id.like);
                 mHolder.comment=(ImageView)view.findViewById(R.id.comment);
                 mHolder.focus=(ImageView)view.findViewById(R.id.focus);
+                mHolder.jz_video=(JzvdStd)view.findViewById(R.id.jz_video);
                 view.setTag(mHolder);  //将ViewHolder存储在View中
             }else {
                 view=convertView;
@@ -154,8 +155,22 @@ public class HomePageImageFragment extends Fragment {
             mHolder.card_nickname.setText("  "+list.get(position).get("nickname").toString());
             mHolder.card_datetime.setText("  发布于 "+list.get(position).get("datetime").toString());
             mHolder.card_content.setText(list.get(position).get("content").toString());
-            Glide.with(getContext()).load(list.get(position).get("imageurl")).apply(RequestOptions.bitmapTransform(new RoundedCorners(20)).override(1280, 720)).into(mHolder.card_image);
             mHolder.card_topic.setText("#"+list.get(position).get("topicname").toString());
+
+            //图文或视频检测
+            String url = list.get(position).get("imageurl").toString();
+            if(url.endsWith(".gif") || url.endsWith(".jpg") || url.endsWith(".png")) {
+                mHolder.jz_video.setVisibility(View.GONE);
+                mHolder.card_image.setVisibility(View.VISIBLE);
+                Glide.with(getContext()).load(list.get(position).get("imageurl")).apply(RequestOptions.bitmapTransform(new RoundedCorners(20)).override(1280, 720)).into(mHolder.card_image);
+            } else if(url.endsWith(".mp4") || url.endsWith(".avi") || url.endsWith(".mov")) {
+                mHolder.card_image.setVisibility(View.GONE);
+                mHolder.jz_video.setVisibility(View.VISIBLE);
+                Glide.with(getContext()).load(url).centerCrop().into(mHolder.jz_video.posterImageView);
+                mHolder.jz_video.setUp(url, "");
+
+            }
+
 
             //关注状态检测
             HashMap<String, String> params2 = new HashMap<>();
@@ -338,5 +353,6 @@ public class HomePageImageFragment extends Fragment {
         ImageView collection;
         ImageView comment;
         ImageView focus;
+        JzvdStd jz_video;
     }
 }
