@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.jzvd.JzvdStd;
 import es.dmoral.toasty.MyToast;
 
 public class HomePageFragment extends Fragment {
@@ -43,6 +44,17 @@ public class HomePageFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         this.activity = (Activity) context;
+    }
+
+    //通过 ViewPager 进行滑动切换时暂停播放器
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            JzvdStd.goOnPlayOnResume(); // 恢复播放
+        } else {
+            JzvdStd.goOnPlayOnPause(); // 暂停播放
+        }
     }
 
     @Nullable

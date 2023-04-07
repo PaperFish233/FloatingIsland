@@ -1,14 +1,19 @@
 package com.example.floatingisland.fragment;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +50,8 @@ import es.dmoral.toasty.MyToast;
 public class mineCollectionPostsFragment extends Fragment {
 
     private View mineCollectionPostsFragment;
+    private RecyclerView recyclerView;
+    private MyAdapter adapter;
 
     //将数据封装成数据源
     List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
@@ -98,10 +105,21 @@ public class mineCollectionPostsFragment extends Fragment {
                     map.put("imageurl",datum.getImageurl());
                     map.put("topicname",datum.getTopicname());
                     list.add(map);
-
                 }
-                ListView listview=(ListView) mineCollectionPostsFragment.findViewById(R.id.listView);
-                listview.setAdapter(new mineCollectionPostsFragment.MyAdapter());
+                // 获取 RecyclerView 控件
+                recyclerView = mineCollectionPostsFragment.findViewById(R.id.recycler_view);
+                // 创建 LinearLayoutManager 对象，设置为垂直方向
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                // 绑定 LayoutManager
+                recyclerView.setLayoutManager(layoutManager);
+                // 初始化 RecyclerView 适配器和数据
+                adapter = new mineCollectionPostsFragment.MyAdapter(list);
+                recyclerView.setAdapter(adapter);
+                // 创建 SpaceItemDecoration 实例，设置5dp的间距
+                SpaceItemDecoration decoration = new SpaceItemDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
+                // 添加
+                recyclerView.addItemDecoration(decoration);
             }
 
             @Override
@@ -128,85 +146,141 @@ public class mineCollectionPostsFragment extends Fragment {
         return mineCollectionPostsFragment;
     }
 
-    class MyAdapter extends BaseAdapter {
+    public class MyAdapter extends RecyclerView.Adapter<mineCollectionPostsFragment.MyAdapter.ViewHolder> {
 
-        @Override
-        public int getCount() {
-            return list.size();
-        }
+        private List<Map<String, Object>> list;
 
-        @Override
-        public Object getItem(int position) {
-            return list.get(position);
-        }
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            // 定义ViewHolder中的控件
+            TextView card_pid;
+            ImageView card_avatar;
+            TextView card_nickname;
+            TextView card_datetime;
+            ImageView card_image;
+            TextView card_content;
+            TextView card_topic;
+            TextView likenum;
+            ImageView like;
+            ImageView collection;
+            ImageView comment;
+            ImageView focus;
+            JzvdStd jz_video;
 
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view;
-            mineCollectionPostsFragment.ViewHolder mHolder;
-            if(convertView==null){
-                view= LayoutInflater.from(mineCollectionPostsFragment.getContext()).inflate(R.layout.list_item,null);
-                mHolder=new mineCollectionPostsFragment.ViewHolder();
-                mHolder.card_pid=(TextView)view.findViewById(R.id.pid);
-                mHolder.card_avatar=(ImageView)view.findViewById(R.id.avatar);
-                mHolder.card_nickname=(TextView)view.findViewById(R.id.nickname);
-                mHolder.card_datetime=(TextView)view.findViewById(R.id.datetime);
-                mHolder.card_image=(ImageView)view.findViewById(R.id.image);
-                mHolder.card_content=(TextView)view.findViewById(R.id.content);
-                mHolder.card_topic=(TextView)view.findViewById(R.id.topic);
-                mHolder.collection=(ImageView)view.findViewById(R.id.collection);
-                mHolder.likenum=(TextView)view.findViewById(R.id.likenum);
-                mHolder.like=(ImageView)view.findViewById(R.id.like);
-                mHolder.comment=(ImageView)view.findViewById(R.id.comment);
-                mHolder.focus=(ImageView)view.findViewById(R.id.focus);
-                mHolder.jz_video=(JzvdStd)view.findViewById(R.id.jz_video);
-                view.setTag(mHolder);  //将ViewHolder存储在View中
-            }else {
-                view=convertView;
-                mHolder=(mineCollectionPostsFragment.ViewHolder)view.getTag();  //重新获得ViewHolder
+            public ViewHolder(View itemView) {
+                super(itemView);
+                // 初始化ViewHolder中的控件
+                card_pid = (TextView) itemView.findViewById(R.id.pid);
+                card_avatar = (ImageView) itemView.findViewById(R.id.avatar);
+                card_nickname = (TextView) itemView.findViewById(R.id.nickname);
+                card_datetime = (TextView) itemView.findViewById(R.id.datetime);
+                card_image = (ImageView) itemView.findViewById(R.id.image);
+                card_content = (TextView) itemView.findViewById(R.id.content);
+                card_topic = (TextView) itemView.findViewById(R.id.topic);
+                likenum = (TextView) itemView.findViewById(R.id.likenum);
+                like = (ImageView) itemView.findViewById(R.id.like);
+                collection = (ImageView) itemView.findViewById(R.id.collection);
+                comment = (ImageView) itemView.findViewById(R.id.comment);
+                focus = (ImageView) itemView.findViewById(R.id.focus);
+                jz_video = (JzvdStd) itemView.findViewById(R.id.jz_video);
             }
+        }
+
+        public MyAdapter(List<Map<String, Object>> list) {
+            this.list = list;
+        }
+
+        @Override
+        public mineCollectionPostsFragment.MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            // 加载ViewHolder的布局文件并创建ViewHolder
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+            mineCollectionPostsFragment.MyAdapter.ViewHolder vh = new mineCollectionPostsFragment.MyAdapter.ViewHolder(v);
+            return vh;
+        }
+
+        @Override
+        public void onBindViewHolder(mineCollectionPostsFragment.MyAdapter.ViewHolder holder, int position) {
 
             SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
             String loginInfo = sharedPreferences.getString("account", "");
 
-            mHolder.card_pid.setText(list.get(position).get("pid").toString());
-            mHolder.likenum.setText(list.get(position).get("likenum").toString());
-            Glide.with(getContext()).load(list.get(position).get("avatarurl")).apply(RequestOptions.bitmapTransform(new RoundedCorners(100)).override(100, 100)).into(mHolder.card_avatar);
-            mHolder.card_nickname.setText("  "+list.get(position).get("nickname").toString());
-            mHolder.card_datetime.setText("  发布于 "+list.get(position).get("datetime").toString());
-            mHolder.card_content.setText(list.get(position).get("content").toString());
-            mHolder.card_topic.setText("#"+list.get(position).get("topicname").toString());
+            // 获取数据并设置到ViewHolder中的控件上
+            holder.card_pid.setText(list.get(position).get("pid").toString());
+            holder.likenum.setText(list.get(position).get("likenum").toString());
+            Glide.with(getContext()).load(list.get(position).get("avatarurl")).apply(RequestOptions.bitmapTransform(new RoundedCorners(100)).override(100, 100)).into(holder.card_avatar);
+            holder.card_nickname.setText("  "+list.get(position).get("nickname").toString());
+            holder.card_datetime.setText("  发布于 "+list.get(position).get("datetime").toString());
+            holder.card_content.setText(list.get(position).get("content").toString());
+            holder.card_topic.setText("#"+list.get(position).get("topicname").toString());
+
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                private int mFirstVisibleItemPosition = -1;
+                private int mVisibleItemCount = -1;
+                private boolean mIsScrolling = false;
+
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    if (newState == RecyclerView.SCROLL_STATE_DRAGGING ||
+                            newState == RecyclerView.SCROLL_STATE_SETTLING) {
+                        // 正在拖拽或正在惯性滑动，暂停播放
+                        Jzvd.goOnPlayOnPause();
+                        mIsScrolling = true;
+                    } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        // 滑动停止，恢复播放
+                        LinearLayoutManager layoutManager =
+                                (LinearLayoutManager) recyclerView.getLayoutManager();
+                        mFirstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                        mVisibleItemCount = layoutManager.getChildCount();
+                        int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+                        if (mFirstVisibleItemPosition >= 0 && lastVisibleItemPosition >= 0) {
+                            for (int i = mFirstVisibleItemPosition; i <= lastVisibleItemPosition; i++) {
+                                View itemView = layoutManager.findViewByPosition(i);
+                                if (itemView != null) {
+                                    JzvdStd player = (JzvdStd) itemView.findViewById(R.id.jz_video);
+                                    if (player != null &&
+                                            i >= mFirstVisibleItemPosition &&
+                                            i < mFirstVisibleItemPosition + mVisibleItemCount) {
+                                        // 当前视频可见，恢复播放
+                                        if (player != null && player.state == Jzvd.STATE_PAUSE) {
+                                            player.startVideo();
+                                        }
+                                    } else {
+                                        // 当前视频不可见，释放资源
+                                        player.releaseAllVideos();
+                                    }
+                                }
+                            }
+                        }
+                        mIsScrolling = false;
+                    }
+                }
+            });
 
             //图文或视频检测
             String url = list.get(position).get("imageurl").toString();
             if(url.endsWith(".gif") || url.endsWith(".jpg") || url.endsWith(".png")) {
-                mHolder.jz_video.setVisibility(View.GONE);
-                mHolder.card_image.setVisibility(View.VISIBLE);
-                Glide.with(getContext()).load(list.get(position).get("imageurl")).apply(RequestOptions.bitmapTransform(new RoundedCorners(20)).override(1280, 720)).into(mHolder.card_image);
+                holder.jz_video.setVisibility(View.GONE);
+                holder.card_image.setVisibility(View.VISIBLE);
+                Glide.with(getContext()).load(list.get(position).get("imageurl")).apply(RequestOptions.bitmapTransform(new RoundedCorners(20)).override(1280, 720)).into(holder.card_image);
             } else if(url.endsWith(".mp4") || url.endsWith(".avi") || url.endsWith(".mov")) {
-                mHolder.card_image.setVisibility(View.GONE);
-                mHolder.jz_video.setVisibility(View.VISIBLE);
-                Glide.with(getContext()).load(url).centerCrop().into(mHolder.jz_video.posterImageView);
-                mHolder.jz_video.setUp(url, "");
+                holder.card_image.setVisibility(View.GONE);
+                holder.jz_video.setVisibility(View.VISIBLE);
+                Glide.with(getContext()).load(url).centerCrop().into(holder.jz_video.posterImageView);
+                holder.jz_video.setUp(url, "");
             }
 
             //关注状态检测
             HashMap<String, String> params2 = new HashMap<>();
-            int pid2=Integer.parseInt(mHolder.card_pid.getText().toString());
+            int pid2=Integer.parseInt(holder.card_pid.getText().toString());
             params2.put("pid", String.valueOf(pid2));
             params2.put("uaccount", loginInfo);
             OkHttp.post(getContext(), Constant.selectfocus, params2, new OkCallback<Result>() {
                 @Override
                 public void onResponse(Result response) {
                     if(response.getMessage().equals("已关注")){
-                        mHolder.focus.setVisibility(View.INVISIBLE);//设置不可见
+                        holder.focus.setVisibility(View.INVISIBLE);//设置不可见
                     }else{
-                        mHolder.focus.setVisibility(View.VISIBLE);//设置可见
+                        holder.focus.setVisibility(View.VISIBLE);//设置可见
                     }
                 }
 
@@ -218,16 +292,16 @@ public class mineCollectionPostsFragment extends Fragment {
 
             //点赞状态检测
             HashMap<String, String> params = new HashMap<>();
-            int pid=Integer.parseInt(mHolder.card_pid.getText().toString());
+            int pid=Integer.parseInt(holder.card_pid.getText().toString());
             params.put("pid", String.valueOf(pid));
             params.put("uaccount", loginInfo);
             OkHttp.post(getContext(), Constant.selectlike, params, new OkCallback<Result>() {
                 @Override
                 public void onResponse(Result response) {
                     if(response.getMessage().equals("已点赞")){
-                        mHolder.like.setImageResource(R.mipmap.like1);
+                        holder.like.setImageResource(R.mipmap.like1);
                     }else if(response.getMessage().equals("未点赞")){
-                        mHolder.like.setImageResource(R.mipmap.like2);
+                        holder.like.setImageResource(R.mipmap.like2);
                     }
                 }
 
@@ -239,16 +313,16 @@ public class mineCollectionPostsFragment extends Fragment {
 
             //收藏状态检测
             HashMap<String, String> params1 = new HashMap<>();
-            int pid1=Integer.parseInt(mHolder.card_pid.getText().toString());
+            int pid1=Integer.parseInt(holder.card_pid.getText().toString());
             params1.put("pid", String.valueOf(pid1));
             params1.put("uaccount", loginInfo);
             OkHttp.post(getContext(), Constant.selectcollection, params1, new OkCallback<Result>() {
                 @Override
                 public void onResponse(Result response) {
                     if(response.getMessage().equals("已收藏")){
-                        mHolder.collection.setImageResource(R.mipmap.collection1);
+                        holder.collection.setImageResource(R.mipmap.collection1);
                     }else if(response.getMessage().equals("未收藏")){
-                        mHolder.collection.setImageResource(R.mipmap.collection2);
+                        holder.collection.setImageResource(R.mipmap.collection2);
                     }
                 }
 
@@ -259,9 +333,9 @@ public class mineCollectionPostsFragment extends Fragment {
             });
 
             //关注按钮点击事件
-            mHolder.focus.setOnClickListener(new View.OnClickListener() {
+            holder.focus.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    int pid=Integer.parseInt(mHolder.card_pid.getText().toString());
+                    int pid=Integer.parseInt(holder.card_pid.getText().toString());
                     HashMap<String, String> params = new HashMap<>();
                     params.put("pid", String.valueOf(pid));
                     params.put("uaccount", loginInfo);
@@ -270,7 +344,7 @@ public class mineCollectionPostsFragment extends Fragment {
                         public void onResponse(Result response) {
                             if(response.getMessage().equals("关注成功")){
                                 MyToast.successBig(response.getMessage());
-                                mHolder.focus.setVisibility(View.INVISIBLE);//设置不可见
+                                holder.focus.setVisibility(View.INVISIBLE);//设置不可见
                             }else{
                                 MyToast.errorBig(response.getMessage());
                             }
@@ -286,9 +360,9 @@ public class mineCollectionPostsFragment extends Fragment {
             });
 
             //点赞按钮点击事件
-            mHolder.like.setOnClickListener(new View.OnClickListener() {
+            holder.like.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    int pid=Integer.parseInt(mHolder.card_pid.getText().toString());
+                    int pid=Integer.parseInt(holder.card_pid.getText().toString());
                     HashMap<String, String> params = new HashMap<>();
                     params.put("pid", String.valueOf(pid));
                     params.put("uaccount", loginInfo);
@@ -296,13 +370,13 @@ public class mineCollectionPostsFragment extends Fragment {
                         @Override
                         public void onResponse(Result response) {
                             if(response.getMessage().equals("点赞成功")){
-                                mHolder.like.setImageResource(R.mipmap.like1);
-                                String i = String.valueOf(Integer.parseInt(mHolder.likenum.getText().toString()) + 1);
-                                mHolder.likenum.setText(i);
+                                holder.like.setImageResource(R.mipmap.like1);
+                                String i = String.valueOf(Integer.parseInt(holder.likenum.getText().toString()) + 1);
+                                holder.likenum.setText(i);
                             }else if(response.getMessage().equals("取消点赞成功")){
-                                mHolder.like.setImageResource(R.mipmap.like2);
-                                String i = String.valueOf(Integer.parseInt(mHolder.likenum.getText().toString()) - 1);
-                                mHolder.likenum.setText(i);
+                                holder.like.setImageResource(R.mipmap.like2);
+                                String i = String.valueOf(Integer.parseInt(holder.likenum.getText().toString()) - 1);
+                                holder.likenum.setText(i);
 
                             }
 
@@ -318,9 +392,9 @@ public class mineCollectionPostsFragment extends Fragment {
             });
 
             //收藏按钮点击事件
-            mHolder.collection.setOnClickListener(new View.OnClickListener() {
+            holder.collection.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    int pid=Integer.parseInt(mHolder.card_pid.getText().toString());
+                    int pid=Integer.parseInt(holder.card_pid.getText().toString());
                     HashMap<String, String> params = new HashMap<>();
                     params.put("pid", String.valueOf(pid));
                     params.put("uaccount", loginInfo);
@@ -329,9 +403,9 @@ public class mineCollectionPostsFragment extends Fragment {
                         public void onResponse(Result response) {
                             MyToast.successBig(response.getMessage());
                             if(response.getMessage().equals("收藏成功")){
-                                mHolder.collection.setImageResource(R.mipmap.collection1);
+                                holder.collection.setImageResource(R.mipmap.collection1);
                             }else if(response.getMessage().equals("取消收藏成功")){
-                                mHolder.collection.setImageResource(R.mipmap.collection2);
+                                holder.collection.setImageResource(R.mipmap.collection2);
                             }
 
                         }
@@ -346,7 +420,7 @@ public class mineCollectionPostsFragment extends Fragment {
             });
 
             //评论按钮点击事件
-            mHolder.comment.setOnClickListener(new View.OnClickListener() {
+            holder.comment.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
                     // 创建MyBottomSheetDialogFragment的实例
@@ -357,24 +431,29 @@ public class mineCollectionPostsFragment extends Fragment {
                 }
             });
 
-            return view;
+        }
+
+        @Override
+        public int getItemCount() {
+            // 返回数据项的数量
+            return list.size();
         }
     }
 
-    class ViewHolder{
-        TextView card_pid;
-        ImageView card_avatar;
-        TextView card_nickname;
-        TextView card_datetime;
-        ImageView card_image;
-        TextView card_content;
-        TextView card_topic;
-        TextView likenum;
-        ImageView like;
-        ImageView collection;
-        ImageView comment;
-        ImageView focus;
-        JzvdStd jz_video;
+    public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
+        private int space;
+
+        public SpaceItemDecoration(int space) {
+            this.space = space;
+        }
+
+        // 设置第二个 item 和后续 item 之间的间距
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            if (parent.getChildAdapterPosition(view) > 0) {
+                outRect.top = space;
+            }
+        }
     }
 
 }
