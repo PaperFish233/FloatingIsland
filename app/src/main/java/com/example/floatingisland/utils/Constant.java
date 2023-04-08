@@ -29,4 +29,8 @@ public class Constant {
 
     public static String getUsers = IP+"FloatingIslandService/UsersServlet?action=GetUsers";
 
+
+
+    public static String getCommentPosts = IP+"FloatingIslandService/PostsCommentServlet?action=GetPostsComment";
+
 }

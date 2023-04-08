@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.allen.library.SuperTextView;
 import com.bumptech.glide.Glide;
@@ -31,9 +32,11 @@ import com.example.floatingisland.activity.ThereActivity;
 import com.example.floatingisland.activity.WelcomeActivity;
 import com.example.floatingisland.entity.Users;
 import com.example.floatingisland.utils.Constant;
+import com.example.floatingisland.utils.MyPagerAdapter;
 import com.example.floatingisland.utils.net.OkCallback;
 import com.example.floatingisland.utils.net.OkHttp;
 import com.example.floatingisland.utils.net.Result;
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 import java.util.HashMap;
 import java.util.List;
@@ -61,6 +64,8 @@ public class MineFragment extends Fragment {
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
         String loginInfo = sharedPreferences.getString("account", "");
+
+
 
         SuperTextView avatar = MineFragment.findViewById(R.id.avatar);
         SuperTextView nickname = MineFragment.findViewById(R.id.nickname);

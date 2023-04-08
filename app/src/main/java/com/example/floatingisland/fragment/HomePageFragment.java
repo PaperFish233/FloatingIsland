@@ -2,7 +2,6 @@ package com.example.floatingisland.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,25 +11,17 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.floatingisland.R;
-import com.example.floatingisland.activity.OneActivity;
-import com.example.floatingisland.utils.Constant;
-import com.example.floatingisland.utils.net.OkCallback;
-import com.example.floatingisland.utils.net.OkHttp;
-import com.example.floatingisland.utils.net.Result;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.jem.fliptabs.FlipTab;
+import com.example.floatingisland.utils.MyPagerAdapter;
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.wyt.searchbox.SearchFragment;
 import com.wyt.searchbox.custom.IOnSearchClickListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import cn.jzvd.JzvdStd;
-import es.dmoral.toasty.MyToast;
 
 public class HomePageFragment extends Fragment {
 
@@ -46,50 +37,18 @@ public class HomePageFragment extends Fragment {
         this.activity = (Activity) context;
     }
 
-    //通过 ViewPager 进行滑动切换时暂停播放器
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            JzvdStd.goOnPlayOnResume(); // 恢复播放
-        } else {
-            JzvdStd.goOnPlayOnPause(); // 暂停播放
-        }
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,@Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
 
         HomePageFragment = inflater.inflate(R.layout.fragment_homepage,container,false);
 
-        getChildFragmentManager().beginTransaction()
-                .replace(R.id.imagevideoLayout, new HomePageIVflowFragment())
-                .commit();
+        SmartTabLayout tabLayout = HomePageFragment.findViewById(R.id.tab_layout);
+        ViewPager viewPager = HomePageFragment.findViewById(R.id.view_pager);
 
-        //tab选择卡
-        FlipTab fliptab = HomePageFragment.findViewById(R.id.ft1);
-        fliptab.setTabSelectedListener(new FlipTab.TabSelectedListener() {
-            @Override
-            public void onTabSelected(boolean isLeftTab, String tabTextValue) {
-                if(isLeftTab==true){
-                    getChildFragmentManager().beginTransaction()
-                            .setCustomAnimations(R.anim.slide_in_from_left, R.anim.slide_out_from_right)
-                            .replace(R.id.imagevideoLayout, new HomePageIVflowFragment())
-                            .commit();
-                }else{
-                    getChildFragmentManager().beginTransaction()
-                            .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_from_left)
-                            .replace(R.id.imagevideoLayout, new HomePageFPflowFragment())
-                            .commit();
-                }
-            }
-
-            @Override
-            public void onTabReselected(boolean isLeftTab, String tabTextValue) {
-
-            }
-        });
+        MyPagerAdapter adapter = new MyPagerAdapter(getChildFragmentManager());
+        viewPager.setAdapter(adapter);
+        tabLayout.setViewPager(viewPager);
 
         //点赞按钮点击事件
         ImageView search = HomePageFragment.findViewById(R.id.search);
@@ -107,20 +66,7 @@ public class HomePageFragment extends Fragment {
             }
         });
 
-        //发布新贴按钮
-        FloatingActionButton fab = HomePageFragment.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), OneActivity.class);
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
-                }
-        });
-
         return HomePageFragment;
     }
-
-
 
 }

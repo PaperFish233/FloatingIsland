@@ -59,16 +59,16 @@ dependencies {
     implementation  'io.github.scwang90:refresh-header-classics:2.0.5'    //经典刷新头
     implementation  'io.github.scwang90:refresh-footer-classics:2.0.5'    //经典加载
 
-    //Toasty
+    //Toasty吐司消息框
     implementation 'com.github.hss01248:Toasty:2.0.6'
-
-    //FlipTabs
-    implementation 'com.github.Chrisvin:FlipTabs:v1.5'
 
     //JZPlayer视频播放器
     implementation 'cn.jzvd:jiaozivideoplayer:7.7.0'
 
     //searchbox搜索框
     implementation 'com.wenwenwen888:searchbox:1.0.1'
+
+    //
+    implementation 'com.ogaclejapan.smarttablayout:library:2.0.0@aar'
 
 }
