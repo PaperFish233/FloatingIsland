@@ -90,6 +90,7 @@
     <Button
         android:id="@+id/register"
         android:text="注册"
+        android:textColor="@color/white"
         android:layout_gravity="center"
         android:layout_width="350dp"
         android:layout_height="wrap_content"/>

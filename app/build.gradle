@@ -68,7 +68,11 @@ dependencies {
     //searchbox搜索框
     implementation 'com.wenwenwen888:searchbox:1.0.1'
 
-    //
+    //smarttablayout
     implementation 'com.ogaclejapan.smarttablayout:library:2.0.0@aar'
+
+    //大图显示imageview扩展版
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+
 
 }

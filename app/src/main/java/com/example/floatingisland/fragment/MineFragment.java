@@ -180,32 +180,30 @@ public class MineFragment extends Fragment {
             public void onClick(View view) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setMessage("确认退出改账号吗？"); // 消息正文
+                builder.setMessage("确定退出该账号吗？")
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 点击确定按钮后的操作
+                                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.clear();
+                                editor.apply();
 
-                // 设置确认按钮
-                builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.clear();
-                        editor.apply();
-
-                        Intent intent = new Intent(getContext(), WelcomeActivity.class);
-                        startActivity(intent);
-                        getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                        activity.onBackPressed();//销毁自己
-                    }
-                });
-
-                // 设置取消按钮
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // 点击取消后执行的操作
-                        dialog.cancel(); // 关闭对话框
-                    }
-                });
-
-                // 创建并显示对话框
+                                Intent intent = new Intent(getContext(), WelcomeActivity.class);
+                                startActivity(intent);
+                                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                                MineFragment mineFragment = new MineFragment();
+                                getActivity().finish();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 点击取消按钮后的操作
+                                dialog.cancel(); // 关闭对话框
+                            }
+                        });
                 AlertDialog dialog = builder.create();
                 dialog.show();
 

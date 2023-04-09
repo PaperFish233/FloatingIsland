@@ -37,7 +37,6 @@ public class WelcomeFragment extends Fragment {
 
         WelcomeFragment = inflater.inflate(R.layout.fragment_welcome,container,false);
 
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

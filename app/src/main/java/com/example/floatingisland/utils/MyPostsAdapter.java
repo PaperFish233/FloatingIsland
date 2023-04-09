@@ -1,7 +1,10 @@
 package com.example.floatingisland.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -21,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.floatingisland.R;
+import com.example.floatingisland.activity.PhotoActivity;
 import com.example.floatingisland.entity.Posts;
 import com.example.floatingisland.fragment.CommentBottomDialog;
 import com.example.floatingisland.fragment.HomePageIVflowFragment;
@@ -32,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.jzvd.JZDataSource;
 import cn.jzvd.Jzvd;
 import cn.jzvd.JzvdStd;
 import es.dmoral.toasty.MyToast;
@@ -41,6 +46,7 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
     private List<Map<String, Object>> list;
     private Context mContext;
     private RecyclerView mRecyclerView;
+    private Activity mActivity;
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
         // 定义ViewHolder中的控件
@@ -77,10 +83,11 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
         }
     }
 
-    public MyPostsAdapter(Context context, List<Map<String, Object>> list, RecyclerView recyclerView) {
+    public MyPostsAdapter(Context context, List<Map<String, Object>> list, RecyclerView recyclerView, Activity Activity) {
         this.mContext = context;
         this.list = list;
         this.mRecyclerView = recyclerView;
+        this.mActivity = Activity;
     }
 
     public static FragmentManager getFragmentManager(Context context) {
@@ -339,6 +346,18 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
 
             }
         });
+
+
+        holder.card_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, PhotoActivity.class);
+                intent.setData(Uri.parse(url));
+                mContext.startActivity(intent);
+                mActivity.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+            }
+        });
+
 
     }
 

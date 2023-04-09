@@ -50,7 +50,7 @@ public class HomePageFragment extends Fragment {
         viewPager.setAdapter(adapter);
         tabLayout.setViewPager(viewPager);
 
-        //点赞按钮点击事件
+        //搜索按钮点击事件
         ImageView search = HomePageFragment.findViewById(R.id.search);
         search.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

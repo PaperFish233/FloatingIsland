@@ -45,6 +45,37 @@ public class mineCollectionPostsFragment extends Fragment {
     //将数据封装成数据源
     List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
 
+    private void getmineCollectionPostsDate(String account) {
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("uaccount", account);
+        OkHttp.post(getContext(), Constant.getmineCollectionPosts, params, new OkCallback<Result<List<Posts>>>() {
+            @Override
+            public void onResponse(Result<List<Posts>> response) {
+                for (Posts datum : response.getData()) {
+                    Map<String,Object> map=new HashMap<String, Object>();
+                    map.put("pid",datum.getPid());
+                    map.put("likenum",datum.getLikenum());
+                    map.put("avatarurl",datum.getAvatarurl());
+                    map.put("nickname",datum.getNickname());
+                    map.put("datetime",datum.getDate());
+                    map.put("content",datum.getContent());
+                    map.put("imageurl",datum.getImageurl());
+                    map.put("topicname",datum.getTopicname());
+                    list.add(map);
+                }
+                // 绑定数据适配器MyAdapter
+                MyPostsAdapter MyPostsAdapter = new MyPostsAdapter(getContext(),list,recyclerView,getActivity());
+                recyclerView.setAdapter(MyPostsAdapter);
+            }
+
+            @Override
+            public void onFailure(String state, String msg) {
+                MyToast.errorBig("连接服务器超时！");
+            }
+        });
+    }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -104,7 +135,7 @@ public class mineCollectionPostsFragment extends Fragment {
                 recyclerView.setLayoutManager(layoutManager);
 
                 // 绑定数据适配器MyAdapter
-                MyPostsAdapter MyPostsAdapter = new MyPostsAdapter(getContext(),list,recyclerView);
+                MyPostsAdapter MyPostsAdapter = new MyPostsAdapter(getContext(),list,recyclerView,getActivity());
                 recyclerView.setAdapter(MyPostsAdapter);
 
                 // 创建 SpaceItemDecoration 实例，设置5dp的间距
@@ -127,9 +158,8 @@ public class mineCollectionPostsFragment extends Fragment {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 refreshlayout.finishRefresh();//传入false表示刷新失败
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.thereLayout, new mineCollectionPostsFragment())
-                        .commit();
+                list.clear();
+                getmineCollectionPostsDate(loginInfo);
 
             }
         });

@@ -14,6 +14,11 @@ public class Constant {
     public static String getPosts = IP+"FloatingIslandService/PostsServlet?action=GetPosts";
     public static String insertPosts = IP+"FloatingIslandService/PostsServlet?action=InsertPosts";
 
+    public static String getMineCollectionUserPosts = IP+"FloatingIslandService/PostsServlet?action=GetMineCollectionUserPosts";
+
+    public static String getCommentPosts = IP+"FloatingIslandService/PostsCommentServlet?action=GetPostsComment";
+    public static String insertCommentPosts = IP+"FloatingIslandService/PostsCommentServlet?action=InsertPostsComment";
+
     public static String getminePosts = IP+"FloatingIslandService/PostsServlet?action=GetMinePosts";
 
     public static String getmineCollectionPosts = IP+"FloatingIslandService/PostsServlet?action=GetMineCollectionPosts";
@@ -31,6 +36,6 @@ public class Constant {
 
 
 
-    public static String getCommentPosts = IP+"FloatingIslandService/PostsCommentServlet?action=GetPostsComment";
+
 
 }

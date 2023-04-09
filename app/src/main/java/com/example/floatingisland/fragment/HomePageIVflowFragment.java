@@ -4,18 +4,17 @@ import android.app.Application;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.floatingisland.R;
-import com.example.floatingisland.activity.MainActivity;
 import com.example.floatingisland.activity.OneActivity;
 import com.example.floatingisland.entity.Posts;
 import com.example.floatingisland.utils.Constant;
@@ -45,6 +44,37 @@ public class HomePageIVflowFragment extends Fragment {
     //将数据封装成数据源
     List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
 
+    //获取帖子数据
+    private void getPostsDate() {
+
+        OkHttp.post(getContext(), Constant.getPosts, null, new OkCallback<Result<List<Posts>>>() {
+            @Override
+            public void onResponse(Result<List<Posts>> response) {
+                for (Posts datum : response.getData()) {
+                    Map<String,Object> map=new HashMap<String, Object>();
+                    map.put("pid",datum.getPid());
+                    map.put("likenum",datum.getLikenum());
+                    map.put("avatarurl",datum.getAvatarurl());
+                    map.put("nickname",datum.getNickname());
+                    map.put("datetime",datum.getDate());
+                    map.put("content",datum.getContent());
+                    map.put("imageurl",datum.getImageurl());
+                    map.put("topicname",datum.getTopicname());
+                    list.add(map);
+                }
+                // 绑定数据适配器MyAdapter
+                MyPostsAdapter MyPostsAdapter = new MyPostsAdapter(getContext(),list,recyclerView,getActivity());
+                recyclerView.setAdapter(MyPostsAdapter);
+            }
+
+            @Override
+            public void onFailure(String state, String msg) {
+                MyToast.errorBig("连接服务器超时！");
+            }
+        });
+
+    }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -69,6 +99,9 @@ public class HomePageIVflowFragment extends Fragment {
 
         MyToast.init((Application) requireContext().getApplicationContext(),false,true);
 
+        // 获取 RecyclerView 控件
+        recyclerView = HomePageIVflowFragment.findViewById(R.id.recycler_view);
+
         OkHttp.post(getContext(), Constant.getPosts, null, new OkCallback<Result<List<Posts>>>() {
             @Override
             public void onResponse(Result<List<Posts>> response) {
@@ -84,8 +117,7 @@ public class HomePageIVflowFragment extends Fragment {
                     map.put("topicname",datum.getTopicname());
                     list.add(map);
                 }
-                // 获取 RecyclerView 控件
-                recyclerView = HomePageIVflowFragment.findViewById(R.id.recycler_view);
+
                 // 创建 LinearLayoutManager 对象，设置为垂直方向
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -93,7 +125,7 @@ public class HomePageIVflowFragment extends Fragment {
                 recyclerView.setLayoutManager(layoutManager);
 
                 // 绑定数据适配器MyAdapter
-                MyPostsAdapter MyPostsAdapter = new MyPostsAdapter(getContext(),list,recyclerView);
+                MyPostsAdapter MyPostsAdapter = new MyPostsAdapter(getContext(),list,recyclerView,getActivity());
                 recyclerView.setAdapter(MyPostsAdapter);
 
                 // 创建 SpaceItemDecoration 实例，设置5dp的间距
@@ -116,9 +148,8 @@ public class HomePageIVflowFragment extends Fragment {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 refreshlayout.finishRefresh();//传入false表示刷新失败
-                Intent intent = new Intent(getContext(), MainActivity.class);
-                startActivity(intent);
-                getActivity().overridePendingTransition(0, 0);
+                list.clear();
+                getPostsDate();
             }
         });
 
@@ -132,6 +163,25 @@ public class HomePageIVflowFragment extends Fragment {
                 getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
                 }
         });
+
+        // RecyclerView滚动事件监听器
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                // 向下滑动超过 30 像素时隐藏 FloatingActionButton
+                if (dy > 30 && fab.isShown()) {
+                    fab.hide();
+                }
+
+                // 向上滑动超过 30 像素时显示 FloatingActionButton
+                if (dy < -30 && !fab.isShown()) {
+                    fab.show();
+                }
+            }
+        });
+
 
         return HomePageIVflowFragment;
     }
