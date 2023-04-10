@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 
 import com.example.floatingisland.R;
-import com.example.floatingisland.fragment.CommentBottomDialog;
+import com.example.floatingisland.fragment.searchFragment;
 import com.example.floatingisland.fragment.addPostsFragment;
 
 public class OneActivity extends AppCompatActivity {
@@ -23,26 +23,31 @@ public class OneActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_one);
 
-        //获取FragmentManager
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        //开始事务
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        //将MyFragment添加到容器视图中
-        addPostsFragment addpostsFragment = new addPostsFragment();
-        fragmentTransaction.add(R.id.oneLayout, addpostsFragment);
-        CommentBottomDialog commentBottomDialog = new CommentBottomDialog();
-        fragmentTransaction.add(R.id.oneLayout, commentBottomDialog);
-        //提交事务
-        fragmentTransaction.commit();
-
-
-
-
+        int jumpcode = getIntent().getIntExtra("jumpcode", 0);
+        if (jumpcode == 1) {
+            //获取FragmentManager
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            //开始事务
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            //将MyFragment添加到容器视图中
+            addPostsFragment addpostsFragment = new addPostsFragment();
+            fragmentTransaction.add(R.id.oneLayout, addpostsFragment);
+            //提交事务
+            fragmentTransaction.commit();
+        }
+        if (jumpcode == 2) {
+            //获取FragmentManager
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            //开始事务
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            //将MyFragment添加到容器视图中
+            searchFragment searchFragment = new searchFragment();
+            fragmentTransaction.add(R.id.oneLayout, searchFragment);
+            //提交事务
+            fragmentTransaction.commit();
+        }
 
 
     }
-
-
-
 
 }

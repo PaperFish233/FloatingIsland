@@ -2,6 +2,8 @@ package com.example.floatingisland.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.floatingisland.R;
+import com.example.floatingisland.activity.OneActivity;
 import com.example.floatingisland.utils.MyPagerAdapter;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.wyt.searchbox.SearchFragment;
@@ -59,7 +62,15 @@ public class HomePageFragment extends Fragment {
                     @Override
                     public void OnSearchClick(String keyword) {
                         //这里处理逻辑
+                        SharedPreferences sharedPreferences = activity.getSharedPreferences("searchInfo", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("keyword", keyword);
+                        editor.apply();
 
+                        Intent intent = new Intent(getContext(), OneActivity.class);
+                        intent.putExtra("jumpcode",2);
+                        startActivity(intent);
+                        activity.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
                     }
                 });
                 searchFragment.showFragment(getFragmentManager(),SearchFragment.TAG);

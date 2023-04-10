@@ -10,6 +10,8 @@ public class Constant {
     public static String register = IP+"FloatingIslandService/UsersServlet?action=Register";
 
 
+    public static String getSearchPosts = IP+"FloatingIslandService/PostsServlet?action=GetSearchPosts";
+
 
     public static String getPosts = IP+"FloatingIslandService/PostsServlet?action=GetPosts";
     public static String insertPosts = IP+"FloatingIslandService/PostsServlet?action=InsertPosts";

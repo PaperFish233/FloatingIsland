@@ -88,17 +88,14 @@ public class HomePageFPflowFragment extends Fragment {
         Jzvd.releaseAllVideos();
     }
 
-    //通过 ViewPager 进行滑动切换时暂停播放器
+    //通过 ViewPager 进行滑动切换时释放资源
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            JzvdStd.goOnPlayOnResume(); // 恢复播放
-        } else {
-            JzvdStd.goOnPlayOnPause(); // 暂停播放
+        if (!isVisibleToUser) {
+            Jzvd.releaseAllVideos(); // 释放资源
         }
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -144,7 +141,6 @@ public class HomePageFPflowFragment extends Fragment {
                     isempty1.setVisibility(View.VISIBLE);
                 }else{
                     isempty1.setVisibility(View.GONE);
-                    // 绑定数据适配器MyAdapter
                     // 绑定数据适配器MyAdapter
                     MyPostsAdapter MyPostsAdapter = new MyPostsAdapter(getContext(),list,recyclerView,getActivity());
                     recyclerView.setAdapter(MyPostsAdapter);

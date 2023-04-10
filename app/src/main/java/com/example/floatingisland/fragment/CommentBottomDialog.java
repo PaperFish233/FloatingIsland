@@ -174,7 +174,6 @@ public class CommentBottomDialog extends BottomSheetDialogFragment {
             @Override
             public void onClick(View view) {
 
-
                 if(commentinfo.getText().toString().equals("")){
                     MyToast.errorBig("评论内容不能为空！");
                 }else{

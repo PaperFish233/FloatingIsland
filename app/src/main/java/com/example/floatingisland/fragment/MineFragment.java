@@ -65,8 +65,6 @@ public class MineFragment extends Fragment {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
         String loginInfo = sharedPreferences.getString("account", "");
 
-
-
         SuperTextView avatar = MineFragment.findViewById(R.id.avatar);
         SuperTextView nickname = MineFragment.findViewById(R.id.nickname);
         SuperTextView account = MineFragment.findViewById(R.id.account);
@@ -107,6 +105,12 @@ public class MineFragment extends Fragment {
                 nickname.setRightString(Unickname);
                 account.setRightString(Uaccount);
                 signature.setRightString(Usignature);
+
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("lastuserInfo", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("lastaccount", Uaccount);
+                editor.putString("lastavatarurl", Uavatarurl);
+                editor.apply();
 
             }
 
@@ -187,13 +191,11 @@ public class MineFragment extends Fragment {
                                 // 点击确定按钮后的操作
                                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.clear();
-                                editor.apply();
+                                editor.clear().apply();
 
                                 Intent intent = new Intent(getContext(), WelcomeActivity.class);
                                 startActivity(intent);
                                 getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                                MineFragment mineFragment = new MineFragment();
                                 getActivity().finish();
                             }
                         })

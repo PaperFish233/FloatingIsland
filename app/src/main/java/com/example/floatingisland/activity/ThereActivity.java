@@ -36,8 +36,6 @@ public class ThereActivity extends AppCompatActivity {
         setContentView(R.layout.activity_there);
 
 
-
-
         int jumpcode = getIntent().getIntExtra("jumpcode", 0);
         if (jumpcode == 1) {
             //获取FragmentManager

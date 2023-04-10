@@ -81,14 +81,12 @@ public class HomePageIVflowFragment extends Fragment {
         Jzvd.releaseAllVideos();
     }
 
-    //通过 ViewPager 进行滑动切换时暂停播放器
+    //通过 ViewPager 进行滑动切换时释放资源
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            JzvdStd.goOnPlayOnResume(); // 恢复播放
-        } else {
-            JzvdStd.goOnPlayOnPause(); // 暂停播放
+        if (!isVisibleToUser) {
+            Jzvd.releaseAllVideos(); // 释放资源
         }
     }
 
@@ -159,6 +157,7 @@ public class HomePageIVflowFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), OneActivity.class);
+                intent.putExtra("jumpcode",1);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
                 }

@@ -5,6 +5,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,14 +14,23 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.floatingisland.R;
 import com.example.floatingisland.activity.MainActivity;
 import com.example.floatingisland.activity.WelcomeActivity;
@@ -58,6 +69,44 @@ public class loginFragment extends Fragment {
         CheckBox agree = LoginFragment.findViewById(R.id.agree);
         TextView protocol = LoginFragment.findViewById(R.id.protocol);
         TextView register = LoginFragment.findViewById(R.id.register);
+        ImageView avatar = LoginFragment.findViewById(R.id.avatar);
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("lastuserInfo", Context.MODE_PRIVATE);
+        String lastaccount = sharedPreferences.getString("lastaccount", "");
+        String lastavatarurl = sharedPreferences.getString("lastavatarurl", "");
+        if(!TextUtils.isEmpty(lastaccount) && !TextUtils.isEmpty(lastavatarurl)){
+            Glide.with(getContext())
+                    .load(lastavatarurl)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(200))
+                            .override(400, 400))
+                    .into(avatar);
+
+            account.setText(lastaccount);
+
+            TextWatcher mTextWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    // 文本变化前的回调，可以不做处理
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    // 文本变化时的回调
+                    String input = s.toString();  // 获取输入内容
+                    // 在此处添加您需要执行的操作
+                    avatar.setImageResource(R.mipmap.avatar);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    // 文本变化后的回调，可以不做处理
+                }
+            };
+            account.addTextChangedListener(mTextWatcher);
+
+        }else{
+            avatar.setImageResource(R.mipmap.avatar);
+        }
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +129,10 @@ public class loginFragment extends Fragment {
                                     SharedPreferences.Editor editor = sharedPreferences.edit();
                                     editor.putString("account", account1);
                                     editor.apply();
+
+                                    SharedPreferences sharedPreferences1 = getActivity().getSharedPreferences("lastuserInfo", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor1 = sharedPreferences1.edit();
+                                    editor1.clear().apply();
 
                                     Intent intent = new Intent(getContext(), MainActivity.class);
                                     startActivity(intent);
