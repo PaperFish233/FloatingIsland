@@ -10,6 +10,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -44,38 +45,6 @@ public class minePostsFragment extends Fragment {
     //将数据封装成数据源
     List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
 
-    private void getminePostsDate(String account) {
-
-        HashMap<String, String> params = new HashMap<>();
-        params.put("uaccount", account);
-        OkHttp.post(getContext(), Constant.getminePosts, params, new OkCallback<Result<List<Posts>>>() {
-            @Override
-            public void onResponse(Result<List<Posts>> response) {
-                for (Posts datum : response.getData()) {
-                    Map<String,Object> map=new HashMap<String, Object>();
-                    map.put("pid",datum.getPid());
-                    map.put("likenum",datum.getLikenum());
-                    map.put("avatarurl",datum.getAvatarurl());
-                    map.put("nickname",datum.getNickname());
-                    map.put("datetime",datum.getDate());
-                    map.put("content",datum.getContent());
-                    map.put("imageurl",datum.getImageurl());
-                    map.put("topicname",datum.getTopicname());
-                    list.add(map);
-
-                }
-                // 绑定数据适配器MyAdapter
-                MyPostsAdapter MyPostsAdapter = new MyPostsAdapter(getContext(),list,recyclerView,getActivity());
-                recyclerView.setAdapter(MyPostsAdapter);
-            }
-
-            @Override
-            public void onFailure(String state, String msg) {
-                MyToast.errorBig("连接服务器超时！");
-            }
-        });
-    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -95,18 +64,10 @@ public class minePostsFragment extends Fragment {
 
         MyToast.init((Application) requireContext().getApplicationContext(),false,true);
 
+        ImageView isempty = minePostsFragment.findViewById(R.id.isempty);
+
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
         String loginInfo = sharedPreferences.getString("account", "");
-
-        Toolbar toolbar = minePostsFragment.findViewById(R.id.Toolbar_mineposts);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 处理左上角按钮点击事件
-                activity.onBackPressed();//销毁自己，用全局变量activity代替getActivity()
-
-            }
-        });
 
         HashMap<String, String> params = new HashMap<>();
         params.put("uaccount", loginInfo);
@@ -134,9 +95,15 @@ public class minePostsFragment extends Fragment {
                 // 绑定 LayoutManager
                 recyclerView.setLayoutManager(layoutManager);
 
-                // 绑定数据适配器MyAdapter
-                MyPostsAdapter MyPostsAdapter = new MyPostsAdapter(getContext(),list,recyclerView,getActivity());
-                recyclerView.setAdapter(MyPostsAdapter);
+                //无发布页面显示标语
+                if(list.isEmpty()){
+                    isempty.setVisibility(View.VISIBLE);
+                }else{
+                    isempty.setVisibility(View.GONE);
+                    // 绑定数据适配器MyAdapter
+                    MyPostsAdapter MyPostsAdapter = new MyPostsAdapter(getContext(),list,recyclerView,getActivity());
+                    recyclerView.setAdapter(MyPostsAdapter);
+                }
 
                 // 创建 SpaceItemDecoration 实例，设置5dp的间距
                 SpaceItemDecoration decoration = new SpaceItemDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
@@ -147,18 +114,6 @@ public class minePostsFragment extends Fragment {
             @Override
             public void onFailure(String state, String msg) {
                 MyToast.errorBig("连接服务器超时！");
-            }
-        });
-
-        final RefreshLayout refreshLayout = minePostsFragment.findViewById(R.id.refreshLayout);
-        //设置 Header 为 经典 样式
-        refreshLayout.setRefreshHeader(new ClassicsHeader(getContext()));
-        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                refreshlayout.finishRefresh();//传入false表示刷新失败
-                list.clear();
-                getminePostsDate(loginInfo);
             }
         });
 

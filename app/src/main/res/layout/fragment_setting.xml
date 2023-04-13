@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/Toolbar_setting"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:navigationIcon="@mipmap/logo_setting"
+        android:background="@color/purple_700"
+        app:subtitleTextColor="@color/white"
+        app:titleTextColor="@color/white"/>
+
+    <com.example.floatingisland.utils.ReboundScrollView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="#F4F3F3"
+        android:scrollbars="none"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.allen.library.SuperTextView
+                android:id="@+id/editinfo"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:sLeftTextString="头像与个人信息"
+                app:sRightIconRes="@mipmap/toright"
+                app:sDividerLineType="both"/>
+
+            <com.allen.library.SuperTextView
+                android:id="@+id/agreement"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:sLeftTextString="用户协议"
+                app:sRightIconRes="@mipmap/toright"
+                app:sDividerLineType="both"/>
+
+            <com.allen.library.SuperTextView
+                android:id="@+id/about"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:sLeftTextString="关于"
+                app:sRightIconRes="@mipmap/toright"
+                app:sDividerLineType="both"/>
+
+            <com.allen.library.SuperTextView
+                android:id="@+id/exit"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                app:sCenterTextColor="#F44336"
+                app:sCenterTextString="退出该账号"
+                app:sDividerLineType="both"/>
+
+        </LinearLayout>
+
+    </com.example.floatingisland.utils.ReboundScrollView>
+
+</LinearLayout>

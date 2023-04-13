@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +57,9 @@ public class addPostsFragment extends Fragment {
             }
         });
 
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
+        String loginInfo = sharedPreferences.getString("account", "");
+
         MaterialEditText connect = addpostsFragment.findViewById(R.id.connect);
         MaterialEditText imageurl = addpostsFragment.findViewById(R.id.imageurl);
         Button git = addpostsFragment.findViewById(R.id.git);
@@ -63,11 +67,12 @@ public class addPostsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 HashMap<String, String> params = new HashMap<>();
-                String pconnect1 = connect.getText().toString();
-                String pimageurl1 = imageurl.getText().toString();
-                params.put("pconnect", pconnect1);
-                params.put("pimageurl", pimageurl1);
-                if(pconnect1.equals("") || pimageurl1.equals("")) {
+                String pconnect = connect.getText().toString();
+                String pimageurl = imageurl.getText().toString();
+                params.put("uaccount", loginInfo);
+                params.put("pconnect", pconnect);
+                params.put("pimageurl", pimageurl);
+                if(pconnect.equals("")) {
                     MyToast.errorBig("不能发布空的内容哦！");
                 }else{
                 OkHttp.post(getContext(), Constant.insertPosts, params, new OkCallback<Result>() {

@@ -1,5 +1,7 @@
 package com.example.floatingisland.activity;
 
+import static com.example.floatingisland.utils.PermissionHelper.requestCameraPermission;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/Toolbar_editinfo"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:navigationIcon="@mipmap/logo_editinfo"
+        android:background="@color/purple_700"
+        app:subtitleTextColor="@color/white"
+        app:titleTextColor="@color/white"/>
+
+    <com.example.floatingisland.utils.ReboundScrollView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="#F4F3F3"
+        android:scrollbars="none"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp">
+
+                <ImageView
+                    android:id="@+id/background"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:scaleType="centerCrop" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:background="#884C4C4C" />
+
+                <ImageView
+                    android:id="@+id/update"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="95dp"
+                    android:src="@mipmap/update" />
+
+            </RelativeLayout>
+
+            <com.allen.library.SuperTextView
+                android:id="@+id/avatar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:sLeftTextString="头像"
+                app:sRightTvDrawableRight="@mipmap/avatar"
+                app:sRightIconRes="@mipmap/toright"
+                app:sDividerLineType="both" />
+
+            <com.allen.library.SuperTextView
+                android:id="@+id/account"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:sLeftTextString="账号"
+                app:sRightTextColor="#ACACAC"
+                app:sRightIconRes="@mipmap/toright"
+                app:sDividerLineType="both"/>
+
+            <com.allen.library.SuperTextView
+                android:id="@+id/nickname"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:sLeftTextString="昵称"
+                app:sRightTextColor="#ACACAC"
+                app:sRightIconRes="@mipmap/toright"
+                app:sDividerLineType="both"/>
+
+            <com.allen.library.SuperTextView
+                android:id="@+id/signature"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:sLeftTextString="个人简介"
+                app:sRightTextColor="#ACACAC"
+                app:sRightIconRes="@mipmap/toright"
+                app:sDividerLineType="both"/>
+
+        </LinearLayout>
+
+    </com.example.floatingisland.utils.ReboundScrollView>
+
+</LinearLayout>

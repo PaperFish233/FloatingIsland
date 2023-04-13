@@ -82,13 +82,17 @@
         android:layout_width="match_parent"
         android:layout_height="15px"/>
 
-    <TextView
+
+    <kr.co.prnd.readmore.ReadMoreTextView
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="内容占位"
         android:textSize="15sp"
         android:textColor="#000000"
-        android:text="内容占位"/>
+        app:readMoreColor="#2196F3"
+        app:readMoreMaxLine="3"
+        app:readMoreText="...更多" />
 
     <View
         android:layout_width="match_parent"

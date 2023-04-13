@@ -34,6 +34,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     implementation 'org.jetbrains:annotations:15.0'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -74,5 +75,10 @@ dependencies {
     //大图显示imageview扩展版
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
+    //ReadMoreTextView可展开textview
+    implementation 'kr.co.prnd:readmore-textview:1.0.0'
+
+    //EasyPermissions动态获取权限框架
+    implementation 'pub.devrel:easypermissions:3.0.0'
 
 }

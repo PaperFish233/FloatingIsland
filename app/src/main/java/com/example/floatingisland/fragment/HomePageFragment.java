@@ -1,5 +1,8 @@
 package com.example.floatingisland.fragment;
 
+import static com.example.floatingisland.utils.PermissionHelper.requestCameraPermission;
+import static com.example.floatingisland.utils.PermissionHelper.requestReanAndWritePermission;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.floatingisland.R;
+import com.example.floatingisland.activity.MainActivity;
 import com.example.floatingisland.activity.OneActivity;
 import com.example.floatingisland.utils.MyPagerAdapter;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;

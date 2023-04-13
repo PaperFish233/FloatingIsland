@@ -17,22 +17,21 @@
         app:subtitleTextColor="@color/white"
         app:titleTextColor="@color/white"/>
 
-    <com.scwang.smart.refresh.layout.SmartRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/refreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <com.scwang.smart.refresh.header.ClassicsHeader
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#F4F3F3"
         android:paddingTop="5dp"
         android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:background="#F4F3F3">
+        android:paddingRight="5dp">
+
+        <ImageView
+            android:id="@+id/isempty"
+            android:src="@mipmap/isempty3"
+            android:visibility="gone"
+            android:layout_marginTop="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -42,7 +41,5 @@
         android:overScrollMode="never"/>
 
     </RelativeLayout>
-
-    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
 </LinearLayout>

@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/Toolbar3"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        app:navigationIcon="@mipmap/logo3"
         android:background="@color/purple_700"
+        app:navigationIcon="@mipmap/logo3"
         app:subtitleTextColor="@color/white"
-        app:titleTextColor="@color/white"/>
+        app:titleTextColor="@color/white">
+
+        <ImageView
+            android:id="@+id/setting"
+            android:layout_gravity="right"
+            android:layout_marginRight="10dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@mipmap/setting"/>
+
+    </androidx.appcompat.widget.Toolbar>
 
     <com.example.floatingisland.utils.ReboundScrollView
         android:layout_height="match_parent"
@@ -21,84 +31,116 @@
         android:scrollbars="none"
         android:overScrollMode="never">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:id="@+id/fragment_mine">
-
-    <com.allen.library.SuperTextView
-        android:id="@+id/avatar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:sLeftTextString="头像"
-        android:layout_marginTop="20dp"
-        app:sRightIconRes="@mipmap/avatar"
-        app:sDividerLineType="both" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <com.allen.library.SuperTextView
-        android:id="@+id/account"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:sLeftTextString="账号"
-        app:sRightTextColor="#ACACAC"
-        app:sRightIconRes="@mipmap/toright"
-        app:sDividerLineType="both"/>
+        <com.allen.library.SuperTextView
+            android:id="@+id/nickname"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:sLeftTopTextString="昵称"
+            app:sLeftTopTextIsBold="true"
+            app:sLeftBottomTextString="进入个人主页"
+            app:sLeftBottomTextColor="#B6B6B6"
+            app:sLeftViewGravity="left_center"
+            app:sLeftIconRes="@mipmap/avatar"
+            app:sRightIconRes="@mipmap/toright"
+            app:sUseShape="true"
+            app:sShapeSelectorNormalColor="@color/white"
+            app:sShapeSelectorPressedColor="#DFDFDF"
+            app:sShapeCornersRadius="10dp"
+            app:sDividerLineType="both" />
 
-    <com.allen.library.SuperTextView
-        android:id="@+id/nickname"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:sLeftTextString="昵称"
-        app:sRightTextColor="#ACACAC"
-        app:sRightIconRes="@mipmap/toright"
-        app:sDividerLineType="both"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal">
 
-    <com.allen.library.SuperTextView
-        android:id="@+id/signature"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:sLeftTextString="个人简介"
-        app:sRightTextColor="#ACACAC"
-        app:sRightIconRes="@mipmap/toright"
-        app:sDividerLineType="both"/>
+        <com.allen.library.SuperTextView
+            android:id="@+id/postsnum"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            app:sCenterTopTextString="0"
+            app:sCenterBottomTextString="发布"
+            app:sCenterTopTextIsBold="true"
+            app:sCenterBottomTextColor="#B6B6B6"
+            app:sUseShape="true"
+            app:sShapeSelectorNormalColor="@color/white"
+            app:sShapeSelectorPressedColor="#DFDFDF"
+            app:sShapeCornersTopLeftRadius="10dp"
+            app:sShapeCornersBottomLeftRadius="10dp"
+            app:sDividerLineType="both"/>
 
-    <com.allen.library.SuperTextView
-        android:id="@+id/mineposts"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="20dp"
-        app:sLeftTextString="我的帖子"
-        app:sRightIconRes="@mipmap/toright"
-        app:sDividerLineType="both"/>
+            <com.allen.library.SuperTextView
+                android:id="@+id/ffocusnum"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                app:sCenterTopTextString="0"
+                app:sCenterBottomTextString="关注"
+                app:sCenterTopTextIsBold="true"
+                app:sCenterBottomTextColor="#B6B6B6"
+                app:sUseShape="true"
+                app:sShapeSelectorNormalColor="@color/white"
+                app:sShapeSelectorPressedColor="#DFDFDF"
+                app:sDividerLineType="both"/>
 
-    <com.allen.library.SuperTextView
-        android:id="@+id/minecollection"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:sLeftTextString="我的收藏"
-        app:sRightIconRes="@mipmap/toright"
-        app:sDividerLineType="both"/>
+            <com.allen.library.SuperTextView
+                android:id="@+id/ufocusnum"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                app:sCenterTopTextString="0"
+                app:sCenterBottomTextString="粉丝"
+                app:sCenterTopTextIsBold="true"
+                app:sCenterBottomTextColor="#B6B6B6"
+                app:sUseShape="true"
+                app:sShapeSelectorNormalColor="@color/white"
+                app:sShapeSelectorPressedColor="#DFDFDF"
+                app:sShapeCornersTopRightRadius="10dp"
+                app:sShapeCornersBottomRightRadius="10dp"
+                app:sDividerLineType="both"/>
 
-    <com.allen.library.SuperTextView
-        android:id="@+id/minecollectionpeople"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:sLeftTextString="关注的人"
-        app:sRightIconRes="@mipmap/toright"
-        app:sDividerLineType="both"/>
+        </LinearLayout>
 
-    <com.allen.library.SuperTextView
-        android:id="@+id/exit"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="20dp"
-        app:sCenterTextColor="#F44336"
-        app:sCenterTextString="退出该账号"
-        app:sDividerLineType="both"/>
+        <com.allen.library.SuperTextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:sLeftTextString="发帖前请阅读「用户协议」哦！"
+            app:sLeftIconRes="@mipmap/horn"
+            app:sUseShape="true"
+            app:sShapeSelectorNormalColor="@color/white"
+            app:sShapeCornersRadius="10dp"
+            app:sDividerLineType="both"/>
 
-</LinearLayout>
+        <GridView
+            android:id="@+id/gridview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:numColumns="4"
+            android:columnWidth="100dp"
+            android:verticalSpacing="10dp"
+            android:horizontalSpacing="10dp"
+            android:drawSelectorOnTop="false"
+            android:background="@drawable/gridview_style" />
+
+
+    </LinearLayout>
 
 </com.example.floatingisland.utils.ReboundScrollView>
 

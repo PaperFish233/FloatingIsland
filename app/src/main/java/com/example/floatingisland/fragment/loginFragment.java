@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Bundle;
@@ -27,7 +28,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -40,6 +45,7 @@ import com.example.floatingisland.utils.net.OkHttp;
 import com.example.floatingisland.utils.net.Result;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import java.security.MessageDigest;
 import java.util.HashMap;
 
 import es.dmoral.toasty.MyToast;
@@ -47,12 +53,20 @@ import es.dmoral.toasty.MyToast;
 public class loginFragment extends Fragment {
 
     private View LoginFragment;
+    private RequestManager glideRequests;
 
     //getActivity()可能会抛出空指针异常
     private Activity activity;
     public void onAttach(Context context) {
         super.onAttach(context);
         this.activity = (Activity) context;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // 初始化 Glide 请求管理器
+        glideRequests = Glide.with(this);
     }
 
     @Nullable
@@ -75,10 +89,10 @@ public class loginFragment extends Fragment {
         String lastaccount = sharedPreferences.getString("lastaccount", "");
         String lastavatarurl = sharedPreferences.getString("lastavatarurl", "");
         if(!TextUtils.isEmpty(lastaccount) && !TextUtils.isEmpty(lastavatarurl)){
-            Glide.with(getContext())
-                    .load(lastavatarurl)
+            glideRequests.load(lastavatarurl)
                     .apply(RequestOptions.bitmapTransform(new RoundedCorners(200))
                             .override(400, 400))
+                    .transform(new CircleTransformation())
                     .into(avatar);
 
             account.setText(lastaccount);
@@ -180,6 +194,34 @@ public class loginFragment extends Fragment {
 
 
         return LoginFragment;
+    }
+
+    // 定义自定义的 CircleTransformation
+    public class CircleTransformation extends BitmapTransformation {
+        @Override
+        protected Bitmap transform(@NonNull BitmapPool pool, @NonNull Bitmap toTransform, int outWidth, int outHeight) {
+            Bitmap bitmap = TransformationUtils.circleCrop(pool, toTransform, outWidth, outHeight);
+            return bitmap;
+        }
+
+        @Override
+        public void updateDiskCacheKey(@NonNull MessageDigest messageDigest) {
+            // do nothing
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // 暂停 Glide 加载任务
+        glideRequests.pauseRequests();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // 恢复 Glide 加载任务
+        glideRequests.resumeRequests();
     }
 
 }

@@ -1,5 +1,8 @@
 package com.example.floatingisland.fragment;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
@@ -7,11 +10,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,23 +30,28 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.allen.library.SuperTextView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.floatingisland.R;
-import com.example.floatingisland.activity.MainActivity;
 import com.example.floatingisland.activity.OneActivity;
 import com.example.floatingisland.activity.ThereActivity;
 import com.example.floatingisland.activity.WelcomeActivity;
 import com.example.floatingisland.entity.Users;
 import com.example.floatingisland.utils.Constant;
-import com.example.floatingisland.utils.MyPagerAdapter;
+import com.example.floatingisland.utils.MyMineAdapter;
 import com.example.floatingisland.utils.net.OkCallback;
 import com.example.floatingisland.utils.net.OkHttp;
 import com.example.floatingisland.utils.net.Result;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
+import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -49,6 +63,7 @@ public class MineFragment extends Fragment {
 
     //getActivity()可能会抛出空指针异常
     private Activity activity;
+
     public void onAttach(Context context) {
         super.onAttach(context);
         this.activity = (Activity) context;
@@ -56,23 +71,21 @@ public class MineFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,@Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        MineFragment = inflater.inflate(R.layout.fragment_mine,container,false);
+        MineFragment = inflater.inflate(R.layout.fragment_mine, container, false);
 
-        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
+        SuperTextView nickname = MineFragment.findViewById(R.id.nickname);
+        ImageView setting = MineFragment.findViewById(R.id.setting);
+        GridView gridview = MineFragment.findViewById(R.id.gridview);
+        SuperTextView postsnum = MineFragment.findViewById(R.id.postsnum);
+        SuperTextView ffocusnum = MineFragment.findViewById(R.id.ffocusnum);
+        SuperTextView ufocusnum = MineFragment.findViewById(R.id.ufocusnum);
+
+        gridview.setAdapter(new MyGridViewAdapter());
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
         String loginInfo = sharedPreferences.getString("account", "");
-
-        SuperTextView avatar = MineFragment.findViewById(R.id.avatar);
-        SuperTextView nickname = MineFragment.findViewById(R.id.nickname);
-        SuperTextView account = MineFragment.findViewById(R.id.account);
-        SuperTextView signature = MineFragment.findViewById(R.id.signature);
-        SuperTextView mineposts = MineFragment.findViewById(R.id.mineposts);
-        SuperTextView minecollection = MineFragment.findViewById(R.id.minecollection);
-        SuperTextView minecollectionpeople = MineFragment.findViewById(R.id.minecollectionpeople);
-        SuperTextView exit = MineFragment.findViewById(R.id.exit);
 
         //获取登录用户信息
         HashMap<String, String> params = new HashMap<>();
@@ -81,30 +94,36 @@ public class MineFragment extends Fragment {
             @Override
             public void onResponse(Result<List<Users>> response) {
                 String Uavatarurl="";
-                String Unickname="";
                 String Uaccount="";
-                String Usignature="";
+                String Unickname="";
+                String Upostsnum="";
+                String Uffocusnum="";
+                String Uufocusnum="";
                 for (Users users : response.getData()) {
                     Uavatarurl = users.getUavatarurl();
-                    Unickname = users.getUnickname();
                     Uaccount = users.getUaccount();
-                    Usignature = users.getUsignature();
+                    Unickname = users.getUnickname();
+                    Upostsnum = String.valueOf(users.getPostsnum());
+                    Uffocusnum = String.valueOf(users.getFfocusnum());
+                    Uufocusnum = String.valueOf(users.getUfocusnum());
                 }
 
                 Glide.with(getContext())
                         .load(Uavatarurl)
                         .apply(RequestOptions.bitmapTransform(new RoundedCorners(100))
-                        .override(100, 100))
+                                .override(100, 100))
+                        .transform(new CircleTransformation())
                         .into(new SimpleTarget<Drawable>() {
                             @Override
                             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                                avatar.setRightIcon(resource);
+                                nickname.setLeftIcon(resource);
                             }
                         });
 
-                nickname.setRightString(Unickname);
-                account.setRightString(Uaccount);
-                signature.setRightString(Usignature);
+                nickname.setLeftTopString(Unickname);
+                postsnum.setCenterTopString(Upostsnum);
+                ffocusnum.setCenterTopString(Uffocusnum);
+                ufocusnum.setCenterTopString(Uufocusnum);
 
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("lastuserInfo", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -122,93 +141,23 @@ public class MineFragment extends Fragment {
 
 
 
-        avatar.setOnClickListener(new View.OnClickListener() {
+        setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MyToast.successBig("点击头像！");
-
-            }
-        });
-
-        account.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MyToast.successBig("点击账号！");
-
+                Intent intent = new Intent(getContext(), ThereActivity.class);
+                intent.putExtra("jumpcode", 2);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
             }
         });
 
         nickname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MyToast.successBig("点击昵称！");
-            }
-        });
-
-        signature.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MyToast.successBig("点击简介！");
-            }
-        });
-
-        mineposts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
                 Intent intent = new Intent(getContext(), ThereActivity.class);
-                intent.putExtra("jumpcode",1);
+                intent.putExtra("jumpcode", 1);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
-            }
-        });
-
-        minecollection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), ThereActivity.class);
-                intent.putExtra("jumpcode",2);
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
-            }
-        });
-
-        minecollectionpeople.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MyToast.successBig("点击关注的人！");
-            }
-        });
-
-        exit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setMessage("确定退出该账号吗？")
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // 点击确定按钮后的操作
-                                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.clear().apply();
-
-                                Intent intent = new Intent(getContext(), WelcomeActivity.class);
-                                startActivity(intent);
-                                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                                getActivity().finish();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // 点击取消按钮后的操作
-                                dialog.cancel(); // 关闭对话框
-                            }
-                        });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-
             }
         });
 
@@ -216,4 +165,127 @@ public class MineFragment extends Fragment {
         return MineFragment;
     }
 
+    // 定义自定义的 CircleTransformation
+    public class CircleTransformation extends BitmapTransformation {
+        @Override
+        protected Bitmap transform(@NonNull BitmapPool pool, @NonNull Bitmap toTransform, int outWidth, int outHeight) {
+            Bitmap bitmap = TransformationUtils.circleCrop(pool, toTransform, outWidth, outHeight);
+            return bitmap;
+        }
+
+        @Override
+        public void updateDiskCacheKey(@NonNull MessageDigest messageDigest) {
+            // do nothing
+        }
+    }
+
+    private class MyGridViewAdapter extends BaseAdapter {
+
+        // 记录每个 item 的可点状态
+        private boolean[] mClickableArray = {true, false, false, false, false, false, false, false};
+
+        private final List<Item> mData = Arrays.asList(
+                new Item(R.mipmap.collection1, "我的收藏"),
+                new Item(0, ""),
+                new Item(0, ""),
+                new Item(0, ""),
+                new Item(0, ""),
+                new Item(0, ""),
+                new Item(0, ""),
+                new Item(0, "")
+
+        );
+
+        @Override
+        public int getCount() {
+            return mData.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mData.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder viewHolder;
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext())
+                        .inflate(R.layout.grid_item, parent, false);
+                viewHolder = new ViewHolder(convertView);
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+            Item item = mData.get(position);
+            viewHolder.mImageView.setImageResource(item.imageResId);
+            viewHolder.mTextView.setText(item.text);
+
+            // 设置可点状态
+            if (mClickableArray[position]) {
+                convertView.setClickable(true);
+                convertView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 添加自定义的点击效果，比如修改背景颜色或者添加缩放效果等
+                        v.setBackgroundResource(R.drawable.grid_item_bg);
+
+                        switch (position){
+                            case 0:
+                                Intent intent = new Intent(getContext(), ThereActivity.class);
+                                intent.putExtra("jumpcode", 3);
+                                startActivity(intent);
+                                getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
+                                break;
+                            case 1:
+                                break;
+                            case 2:
+                                break;
+                            case 4:
+                                break;
+                            case 5:
+                                break;
+                            case 6:
+                                break;
+                            case 7:
+                                break;
+                            case 8:
+                                break;
+                        }
+                    }
+                });
+            } else {
+                convertView.setClickable(false);
+                convertView.setOnClickListener(null);
+                convertView.setBackgroundResource(0);
+            }
+
+            return convertView;
+        }
+
+        private class ViewHolder {
+            final ImageView mImageView;
+            final TextView mTextView;
+
+            ViewHolder(View view) {
+                mImageView = view.findViewById(R.id.grid_item_image);
+                mTextView = view.findViewById(R.id.grid_item_text);
+            }
+        }
+    }
+
+    private static class Item {
+        final int imageResId;
+        final String text;
+
+        Item(int imageResId, String text) {
+            this.imageResId = imageResId;
+            this.text = text;
+        }
+    }
 }

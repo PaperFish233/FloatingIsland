@@ -1,23 +1,18 @@
 package com.example.floatingisland.activity;
 
+import static com.example.floatingisland.utils.PermissionHelper.requestCameraPermission;
+import static com.example.floatingisland.utils.PermissionHelper.requestReanAndWritePermission;
+
+import android.os.Bundle;
+import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.viewpager.widget.ViewPager;
-
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-
 import com.example.floatingisland.R;
+import com.example.floatingisland.fragment.DiscoverFragment;
 import com.example.floatingisland.fragment.HomePageFragment;
 import com.example.floatingisland.fragment.MineFragment;
-import com.example.floatingisland.fragment.DiscoverFragment;
-import com.example.floatingisland.fragment.registerFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import cn.jzvd.Jzvd;
@@ -34,6 +29,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        //动态获取权限
+//        requestCameraPermission(MainActivity.this);
+//        requestReanAndWritePermission(MainActivity.this);
 
         MyToast.init(getApplication(),false,true);
 

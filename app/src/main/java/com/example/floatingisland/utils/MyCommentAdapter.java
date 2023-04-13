@@ -2,6 +2,7 @@ package com.example.floatingisland.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.floatingisland.R;
+import com.example.floatingisland.fragment.editInfoFragment;
 
+import java.security.MessageDigest;
 import java.util.List;
 import java.util.Map;
+
+import kr.co.prnd.readmore.ReadMoreTextView;
 
 public class MyCommentAdapter extends RecyclerView.Adapter<MyCommentAdapter.MyViewHolder>{
 
@@ -34,7 +42,7 @@ public class MyCommentAdapter extends RecyclerView.Adapter<MyCommentAdapter.MyVi
         ImageView avatar;
         TextView nickname;
         TextView datetime;
-        TextView content;
+        ReadMoreTextView content;
         TextView empty_view;
 
 
@@ -44,7 +52,7 @@ public class MyCommentAdapter extends RecyclerView.Adapter<MyCommentAdapter.MyVi
             avatar = (ImageView) itemView.findViewById(R.id.avatar);
             nickname = (TextView) itemView.findViewById(R.id.nickname);
             datetime = (TextView) itemView.findViewById(R.id.datetime);
-            content = (TextView) itemView.findViewById(R.id.content);
+            content = (ReadMoreTextView) itemView.findViewById(R.id.content);
             empty_view = (TextView) itemView.findViewById(R.id.empty_view);
 
         }
@@ -66,7 +74,7 @@ public class MyCommentAdapter extends RecyclerView.Adapter<MyCommentAdapter.MyVi
         String loginInfo = sharedPreferences.getString("account", "");
 
         // 获取数据并设置到ViewHolder中的控件上
-        Glide.with(mContext).load(list.get(position).get("avatarurl").toString()).apply(RequestOptions.bitmapTransform(new RoundedCorners(100)).override(100, 100)).into(holder.avatar);
+        Glide.with(mContext).load(list.get(position).get("avatarurl").toString()).apply(RequestOptions.bitmapTransform(new RoundedCorners(100)).override(100, 100)).transform(new CircleTransformation()).into(holder.avatar);
         holder.nickname.setText(list.get(position).get("nickname").toString());
         holder.datetime.setText(" 发布于 " + list.get(position).get("cdate").toString());
         holder.content.setText(list.get(position).get("content").toString());
@@ -79,5 +87,17 @@ public class MyCommentAdapter extends RecyclerView.Adapter<MyCommentAdapter.MyVi
         return list.size();
     }
 
+    public class CircleTransformation extends BitmapTransformation {
+        @Override
+        protected Bitmap transform(@NonNull BitmapPool pool, @NonNull Bitmap toTransform, int outWidth, int outHeight) {
+            Bitmap bitmap = TransformationUtils.circleCrop(pool, toTransform, outWidth, outHeight);
+            return bitmap;
+        }
+
+        @Override
+        public void updateDiskCacheKey(@NonNull MessageDigest messageDigest) {
+            // do nothing
+        }
+    }
 
 }

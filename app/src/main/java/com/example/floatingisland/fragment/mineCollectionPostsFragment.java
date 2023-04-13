@@ -15,10 +15,13 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.floatingisland.R;
 import com.example.floatingisland.entity.Posts;
 import com.example.floatingisland.utils.Constant;
+import com.example.floatingisland.utils.MyCommentAdapter;
 import com.example.floatingisland.utils.MyPostsAdapter;
 import com.example.floatingisland.utils.net.OkCallback;
 import com.example.floatingisland.utils.net.OkHttp;
@@ -45,37 +48,6 @@ public class mineCollectionPostsFragment extends Fragment {
     //将数据封装成数据源
     List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
 
-    private void getmineCollectionPostsDate(String account) {
-
-        HashMap<String, String> params = new HashMap<>();
-        params.put("uaccount", account);
-        OkHttp.post(getContext(), Constant.getmineCollectionPosts, params, new OkCallback<Result<List<Posts>>>() {
-            @Override
-            public void onResponse(Result<List<Posts>> response) {
-                for (Posts datum : response.getData()) {
-                    Map<String,Object> map=new HashMap<String, Object>();
-                    map.put("pid",datum.getPid());
-                    map.put("likenum",datum.getLikenum());
-                    map.put("avatarurl",datum.getAvatarurl());
-                    map.put("nickname",datum.getNickname());
-                    map.put("datetime",datum.getDate());
-                    map.put("content",datum.getContent());
-                    map.put("imageurl",datum.getImageurl());
-                    map.put("topicname",datum.getTopicname());
-                    list.add(map);
-                }
-                // 绑定数据适配器MyAdapter
-                MyPostsAdapter MyPostsAdapter = new MyPostsAdapter(getContext(),list,recyclerView,getActivity());
-                recyclerView.setAdapter(MyPostsAdapter);
-            }
-
-            @Override
-            public void onFailure(String state, String msg) {
-                MyToast.errorBig("连接服务器超时！");
-            }
-        });
-    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -96,8 +68,7 @@ public class mineCollectionPostsFragment extends Fragment {
 
         MyToast.init((Application) requireContext().getApplicationContext(),false,true);
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
-        String loginInfo = sharedPreferences.getString("account", "");
+        ImageView isempty = mineCollectionPostsFragment.findViewById(R.id.isempty);
 
         Toolbar toolbar = mineCollectionPostsFragment.findViewById(R.id.Toolbar_minecollectionposts);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -108,6 +79,9 @@ public class mineCollectionPostsFragment extends Fragment {
 
             }
         });
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
+        String loginInfo = sharedPreferences.getString("account", "");
 
         HashMap<String, String> params = new HashMap<>();
         params.put("uaccount", loginInfo);
@@ -134,9 +108,15 @@ public class mineCollectionPostsFragment extends Fragment {
                 // 绑定 LayoutManager
                 recyclerView.setLayoutManager(layoutManager);
 
-                // 绑定数据适配器MyAdapter
-                MyPostsAdapter MyPostsAdapter = new MyPostsAdapter(getContext(),list,recyclerView,getActivity());
-                recyclerView.setAdapter(MyPostsAdapter);
+                //无收藏页面显示标语
+                if(list.isEmpty()){
+                    isempty.setVisibility(View.VISIBLE);
+                }else{
+                    isempty.setVisibility(View.GONE);
+                    // 绑定数据适配器MyAdapter
+                    MyPostsAdapter MyPostsAdapter = new MyPostsAdapter(getContext(),list,recyclerView,getActivity());
+                    recyclerView.setAdapter(MyPostsAdapter);
+                }
 
                 // 创建 SpaceItemDecoration 实例，设置5dp的间距
                 SpaceItemDecoration decoration = new SpaceItemDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
@@ -147,20 +127,6 @@ public class mineCollectionPostsFragment extends Fragment {
             @Override
             public void onFailure(String state, String msg) {
                 MyToast.errorBig("连接服务器超时！");
-            }
-        });
-
-
-        final RefreshLayout refreshLayout = mineCollectionPostsFragment.findViewById(R.id.refreshLayout);
-        //设置 Header 为 经典 样式
-        refreshLayout.setRefreshHeader(new ClassicsHeader(getContext()));
-        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                refreshlayout.finishRefresh();//传入false表示刷新失败
-                list.clear();
-                getmineCollectionPostsDate(loginInfo);
-
             }
         });
 

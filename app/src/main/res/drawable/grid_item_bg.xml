@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 点击时的背景颜色 -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#DFDFDF" />
+        </shape>
+    </item>
+    <!-- 默认背景颜色 -->
+    <item android:drawable="@android:color/transparent" />
+</selector>

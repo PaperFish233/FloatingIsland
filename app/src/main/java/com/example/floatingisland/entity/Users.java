@@ -7,6 +7,7 @@ public class Users {
     private String upassword;
     private String unickname;
     private String usignature;
+    private String ubackgroundurl;
     private String uavatarurl;
     private int upermissions;
     private int ustate;
@@ -73,5 +74,41 @@ public class Users {
 
     public void setUstate(int ustate) {
         this.ustate = ustate;
+    }
+
+    public String getUbackgroundurl() {
+        return ubackgroundurl;
+    }
+
+    public void setUbackgroundurl(String ubackgroundurl) {
+        this.ubackgroundurl = ubackgroundurl;
+    }
+
+    private int postsnum;
+    private int ffocusnum;
+    private int ufocusnum;
+
+    public int getPostsnum() {
+        return postsnum;
+    }
+
+    public void setPostsnum(int postsnum) {
+        this.postsnum = postsnum;
+    }
+
+    public int getFfocusnum() {
+        return ffocusnum;
+    }
+
+    public void setFfocusnum(int ffocusnum) {
+        this.ffocusnum = ffocusnum;
+    }
+
+    public int getUfocusnum() {
+        return ufocusnum;
+    }
+
+    public void setUfocusnum(int ufocusnum) {
+        this.ufocusnum = ufocusnum;
     }
 }

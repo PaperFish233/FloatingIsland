@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -21,17 +22,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.floatingisland.R;
 import com.example.floatingisland.activity.PhotoActivity;
 import com.example.floatingisland.entity.Posts;
 import com.example.floatingisland.fragment.CommentBottomDialog;
 import com.example.floatingisland.fragment.HomePageIVflowFragment;
+import com.example.floatingisland.fragment.editInfoFragment;
 import com.example.floatingisland.utils.net.OkCallback;
 import com.example.floatingisland.utils.net.OkHttp;
 import com.example.floatingisland.utils.net.Result;
 
+import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +46,7 @@ import cn.jzvd.JZDataSource;
 import cn.jzvd.Jzvd;
 import cn.jzvd.JzvdStd;
 import es.dmoral.toasty.MyToast;
+import kr.co.prnd.readmore.ReadMoreTextView;
 
 public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHolder> {
 
@@ -55,7 +62,7 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
         TextView card_nickname;
         TextView card_datetime;
         ImageView card_image;
-        TextView card_content;
+        ReadMoreTextView card_content;
         TextView card_topic;
         TextView likenum;
         ImageView like;
@@ -72,7 +79,7 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
             card_nickname = (TextView) itemView.findViewById(R.id.nickname);
             card_datetime = (TextView) itemView.findViewById(R.id.datetime);
             card_image = (ImageView) itemView.findViewById(R.id.image);
-            card_content = (TextView) itemView.findViewById(R.id.content);
+            card_content = (ReadMoreTextView) itemView.findViewById(R.id.content);
             card_topic = (TextView) itemView.findViewById(R.id.topic);
             likenum = (TextView) itemView.findViewById(R.id.likenum);
             like = (ImageView) itemView.findViewById(R.id.like);
@@ -117,7 +124,7 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
         // 获取数据并设置到ViewHolder中的控件上
         holder.card_pid.setText(list.get(position).get("pid").toString());
         holder.likenum.setText(list.get(position).get("likenum").toString());
-        Glide.with(mContext).load(list.get(position).get("avatarurl").toString()).apply(RequestOptions.bitmapTransform(new RoundedCorners(100)).override(100, 100)).into(holder.card_avatar);
+        Glide.with(mContext).load(list.get(position).get("avatarurl").toString()).apply(RequestOptions.bitmapTransform(new RoundedCorners(100)).override(100, 100)).transform(new CircleTransformation()).into(holder.card_avatar);
         holder.card_nickname.setText("  " + list.get(position).get("nickname").toString());
         holder.card_datetime.setText("  发布于 " + list.get(position).get("datetime").toString());
         holder.card_content.setText(list.get(position).get("content").toString());
@@ -169,15 +176,21 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
 
         //图文或视频检测
         String url = list.get(position).get("imageurl").toString();
-        if (url.endsWith(".gif") || url.endsWith(".jpg") || url.endsWith(".png")) {
+
+        if(url.equals("")){
             holder.jz_video.setVisibility(View.GONE);
-            holder.card_image.setVisibility(View.VISIBLE);
-            Glide.with(mContext).load(list.get(position).get("imageurl").toString()).apply(RequestOptions.bitmapTransform(new RoundedCorners(20)).override(1280, 720)).into(holder.card_image);
-        } else if (url.endsWith(".mp4") || url.endsWith(".avi") || url.endsWith(".mov")) {
             holder.card_image.setVisibility(View.GONE);
-            holder.jz_video.setVisibility(View.VISIBLE);
-            Glide.with(mContext).load(url).centerCrop().into(holder.jz_video.posterImageView);
-            holder.jz_video.setUp(url, "");
+        }else{
+            if (url.endsWith(".gif") || url.endsWith(".jpg") || url.endsWith(".png")) {
+                holder.jz_video.setVisibility(View.GONE);
+                holder.card_image.setVisibility(View.VISIBLE);
+                Glide.with(mContext).load(list.get(position).get("imageurl").toString()).apply(RequestOptions.bitmapTransform(new RoundedCorners(20)).override(1280, 720)).into(holder.card_image);
+            } else if (url.endsWith(".mp4") || url.endsWith(".avi") || url.endsWith(".mov")) {
+                holder.card_image.setVisibility(View.GONE);
+                holder.jz_video.setVisibility(View.VISIBLE);
+                Glide.with(mContext).load(url).centerCrop().into(holder.jz_video.posterImageView); //.placeholder(R.mipmap.placeholder)占位符
+                holder.jz_video.setUp(url, "");
+            }
         }
 
         //关注状态检测
@@ -365,6 +378,20 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
     public int getItemCount() {
         // 返回数据项的数量
         return list.size();
+    }
+
+    // 定义自定义的 CircleTransformation
+    public class CircleTransformation extends BitmapTransformation {
+        @Override
+        protected Bitmap transform(@NonNull BitmapPool pool, @NonNull Bitmap toTransform, int outWidth, int outHeight) {
+            Bitmap bitmap = TransformationUtils.circleCrop(pool, toTransform, outWidth, outHeight);
+            return bitmap;
+        }
+
+        @Override
+        public void updateDiskCacheKey(@NonNull MessageDigest messageDigest) {
+            // do nothing
+        }
     }
 
 }
