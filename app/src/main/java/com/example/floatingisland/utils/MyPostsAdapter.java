@@ -1,10 +1,12 @@
 package com.example.floatingisland.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -12,27 +14,37 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.allen.library.SuperTextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.floatingisland.R;
+import com.example.floatingisland.activity.OneActivity;
 import com.example.floatingisland.activity.PhotoActivity;
+import com.example.floatingisland.activity.TwoActivity;
 import com.example.floatingisland.entity.Posts;
 import com.example.floatingisland.fragment.CommentBottomDialog;
 import com.example.floatingisland.fragment.HomePageIVflowFragment;
 import com.example.floatingisland.fragment.editInfoFragment;
+import com.example.floatingisland.fragment.userInfoFragment;
 import com.example.floatingisland.utils.net.OkCallback;
 import com.example.floatingisland.utils.net.OkHttp;
 import com.example.floatingisland.utils.net.Result;
@@ -63,13 +75,13 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
         TextView card_datetime;
         ImageView card_image;
         ReadMoreTextView card_content;
-        TextView card_topic;
+        SuperTextView card_topic;
         TextView likenum;
         ImageView like;
         ImageView collection;
         ImageView comment;
-        ImageView focus;
         JzvdStd jz_video;
+        RelativeLayout userinfo;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -80,13 +92,13 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
             card_datetime = (TextView) itemView.findViewById(R.id.datetime);
             card_image = (ImageView) itemView.findViewById(R.id.image);
             card_content = (ReadMoreTextView) itemView.findViewById(R.id.content);
-            card_topic = (TextView) itemView.findViewById(R.id.topic);
+            card_topic = (SuperTextView) itemView.findViewById(R.id.topic);
             likenum = (TextView) itemView.findViewById(R.id.likenum);
             like = (ImageView) itemView.findViewById(R.id.like);
             collection = (ImageView) itemView.findViewById(R.id.collection);
             comment = (ImageView) itemView.findViewById(R.id.comment);
-            focus = (ImageView) itemView.findViewById(R.id.focus);
             jz_video = (JzvdStd) itemView.findViewById(R.id.jz_video);
+            userinfo = (RelativeLayout) itemView.findViewById(R.id.userinfo);
         }
     }
 
@@ -116,7 +128,7 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
         SharedPreferences sharedPreferences = mContext.getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
         String loginInfo = sharedPreferences.getString("account", "");
@@ -128,7 +140,35 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
         holder.card_nickname.setText("  " + list.get(position).get("nickname").toString());
         holder.card_datetime.setText("  发布于 " + list.get(position).get("datetime").toString());
         holder.card_content.setText(list.get(position).get("content").toString());
-        holder.card_topic.setText("#" + list.get(position).get("topicname").toString());
+
+        holder.card_topic.setLeftString("#" + list.get(position).get("topicname").toString());
+
+        int cornerRadius = 20;
+        RequestOptions requestOptions = new RequestOptions();
+        requestOptions.transforms(new CenterCrop(), new RoundedCorners(cornerRadius));
+        requestOptions.override(80, 80);
+        Glide.with(mContext)
+                .load(list.get(position).get("topicimageurl").toString())
+                .apply(requestOptions)
+                .into(new SimpleTarget<Drawable>() {
+                    @Override
+                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                        holder.card_topic.setLeftIcon(resource);
+                    }
+                });
+
+        holder.card_topic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String tid=list.get(position).get("topicid").toString();
+                Intent intent = new Intent(mContext, TwoActivity.class);
+                intent.putExtra("jumpcode", 1);
+                intent.putExtra("tid", tid);
+                mContext.startActivity(intent);
+                mActivity.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
+            }
+        });
+
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             private int mFirstVisibleItemPosition = -1;
@@ -160,7 +200,7 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
                                         i < mFirstVisibleItemPosition + mVisibleItemCount) {
                                     // 当前视频可见，恢复播放
                                     if (player != null && player.state == Jzvd.STATE_PAUSE) {
-                                        player.startVideo();
+                                        //player.startVideo();
                                     }
                                 } else {
                                     // 当前视频不可见，释放资源
@@ -192,27 +232,6 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
                 holder.jz_video.setUp(url, "");
             }
         }
-
-        //关注状态检测
-        HashMap<String, String> params2 = new HashMap<>();
-        int pid2 = Integer.parseInt(holder.card_pid.getText().toString());
-        params2.put("pid", String.valueOf(pid2));
-        params2.put("uaccount", loginInfo);
-        OkHttp.post(mContext, Constant.selectfocus, params2, new OkCallback<Result>() {
-            @Override
-            public void onResponse(Result response) {
-                if (response.getMessage().equals("已关注")) {
-                    holder.focus.setVisibility(View.INVISIBLE);//设置不可见
-                } else {
-                    holder.focus.setVisibility(View.VISIBLE);//设置可见
-                }
-            }
-
-            @Override
-            public void onFailure(String state, String msg) {
-                MyToast.errorBig("连接服务器超时！");
-            }
-        });
 
         //点赞状态检测
         HashMap<String, String> params = new HashMap<>();
@@ -256,30 +275,20 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
             }
         });
 
-        //关注按钮点击事件
-        holder.focus.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        //进入用户主页
+        holder.userinfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 int pid=Integer.parseInt(holder.card_pid.getText().toString());
-                HashMap<String, String> params = new HashMap<>();
-                params.put("pid", String.valueOf(pid));
-                params.put("uaccount", loginInfo);
-                OkHttp.post(mContext, Constant.focus, params, new OkCallback<Result>() {
-                    @Override
-                    public void onResponse(Result response) {
-                        if(response.getMessage().equals("关注成功")){
-                            MyToast.successBig(response.getMessage());
-                            holder.focus.setVisibility(View.INVISIBLE);//设置不可见
-                        }else{
-                            MyToast.errorBig(response.getMessage());
-                        }
-                    }
+                SharedPreferences sharedPreferences = mActivity.getSharedPreferences("userInfoPid", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("pid", String.valueOf(pid));
+                editor.apply();
 
-                    @Override
-                    public void onFailure(String state, String msg) {
-                        MyToast.errorBig("连接服务器超时！");
-                    }
-                });
-
+                Intent intent = new Intent(mContext, OneActivity.class);
+                intent.putExtra("jumpcode", 3);
+                mActivity.startActivity(intent);
+                mActivity.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
             }
         });
 

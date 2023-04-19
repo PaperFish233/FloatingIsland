@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#F4F3F3"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/Toolbar_about"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/purple_700"
+        app:navigationIcon="@mipmap/logo_about"
+        app:subtitleTextColor="@color/white"
+        app:titleTextColor="@color/white"/>
+
+        <RelativeLayout
+            android:layout_marginTop="140dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/icon" />
+
+            <TextView
+                android:id="@+id/versionCodeName"
+                android:text="0.0.0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imageView"
+                android:layout_marginTop="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:text="拓展你的社交圈"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/versionCodeName"
+                android:layout_marginTop="10dp"
+                android:textSize="16sp"
+                android:textColor="#B6B6B6"
+                android:layout_centerHorizontal="true"/>
+
+        </RelativeLayout>
+
+</LinearLayout>

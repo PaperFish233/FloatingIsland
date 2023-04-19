@@ -19,25 +19,11 @@
         app:titleTextColor="@color/white"/>
 
     <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/avatarurl"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:paddingLeft="10dp"
-        android:hint="头像"
-        android:maxLines="1"
-        android:textSize="16sp"
-        android:layout_marginTop="70dp"
-        app:met_clearButton="true"
-        app:met_primaryColor="@color/purple_700"
-        app:met_floatingLabel="normal"
-        />
-
-    <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/account"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="70dp"
         android:paddingLeft="10dp"
         android:hint="账号"
         android:maxLines="1"

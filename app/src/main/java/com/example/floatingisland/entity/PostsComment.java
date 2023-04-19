@@ -66,4 +66,14 @@ public class PostsComment {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
+
+    private String uaccount;
+
+    public String getUaccount() {
+        return uaccount;
+    }
+
+    public void setUaccount(String uaccount) {
+        this.uaccount = uaccount;
+    }
 }

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".fragment.topicPostsFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/Toolbar_topicposts"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/purple_700"
+        app:navigationIcon="@mipmap/logo_topicposts"
+        app:subtitleTextColor="@color/white"
+        app:titleTextColor="@color/white" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- 顶部背景图 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp">
+
+                <ImageView
+                    android:id="@+id/background"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:scaleType="centerCrop" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#884C4C4C" />
+
+                <ImageView
+                    android:id="@+id/tbg"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="45dp"
+                    android:layout_marginBottom="45dp"
+                    android:src="@mipmap/avatar" />
+
+                <TextView
+                    android:id="@+id/tname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/tbg"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="45dp"
+                    android:layout_marginBottom="85dp"
+                    android:text="话题名占位"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tsignature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/tbg"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="70dp"
+                    android:layout_marginBottom="65dp"
+                    android:maxLines="1"
+                    android:maxEms="80"
+                    android:text="简介占位"
+                    android:textColor="#DDDDDD"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+
+            <com.allen.library.SuperTextView
+                android:id="@+id/postsnum"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                app:sLeftTextString="话题帖子"
+                app:sLeftTextSize="14sp"
+                app:sUseRipple="false"
+                app:sDividerLineType="both"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#F4F3F3"
+                android:orientation="vertical"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp">
+
+                <ImageView
+                    android:id="@+id/isempty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:src="@mipmap/isempty2"
+                    android:visibility="gone" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never"
+                    android:scrollbars="none" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

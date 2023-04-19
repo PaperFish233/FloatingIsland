@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_editposts"
+    android:orientation="vertical"
+    tools:context=".fragment.editPostsFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/Toolbar_editposts"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/purple_700"
+        app:navigationIcon="@mipmap/logo_editposts"
+        app:subtitleTextColor="@color/white"
+        app:titleTextColor="@color/white">
+
+        <TextView
+            android:id="@+id/git"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="10dp"
+            android:text="更新"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <com.example.floatingisland.utils.ReboundScrollView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:scrollbars="none"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/connect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="编辑你此刻的心情..."
+                android:minLines="4"
+                android:maxLines="6"
+                android:maxLength="255"
+                app:met_maxCharacters="255"
+                android:textSize="16sp"
+                android:gravity="top|left"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                app:met_primaryColor="@color/purple_700"
+                app:met_floatingLabel="normal"
+                />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/imageurl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="图片链接"
+                android:maxLines="1"
+                android:textSize="16sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                app:met_primaryColor="@color/purple_700"
+                />
+
+            <com.allen.library.SuperTextView
+                android:id="@+id/topic"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                app:sLeftIconWidth="50px"
+                app:sLeftIconHeight="50px"
+                app:sLeftTextString="#选择话题板块"
+                app:sLeftTextColor="#2196F3"
+                app:sUseShape="true"
+                app:sShapeCornersRadius="10dp"
+                app:sShapeSelectorNormalColor="#F4F3F3"
+                app:sShapeSelectorPressedColor="#DFDFDF"
+                app:sLeftIconRes="@mipmap/test"
+                app:sRightIconRes="@mipmap/toright"
+                />
+
+        </LinearLayout>
+
+    </com.example.floatingisland.utils.ReboundScrollView>
+
+</LinearLayout>

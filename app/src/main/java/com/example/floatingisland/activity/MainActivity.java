@@ -13,6 +13,7 @@ import com.example.floatingisland.R;
 import com.example.floatingisland.fragment.DiscoverFragment;
 import com.example.floatingisland.fragment.HomePageFragment;
 import com.example.floatingisland.fragment.MineFragment;
+import com.example.floatingisland.fragment.settingFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import cn.jzvd.Jzvd;

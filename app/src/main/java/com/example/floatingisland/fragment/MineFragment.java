@@ -1,32 +1,23 @@
 package com.example.floatingisland.fragment;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Application;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import com.allen.library.SuperTextView;
 import com.bumptech.glide.Glide;
@@ -38,19 +29,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.floatingisland.R;
-import com.example.floatingisland.activity.OneActivity;
 import com.example.floatingisland.activity.ThereActivity;
-import com.example.floatingisland.activity.WelcomeActivity;
 import com.example.floatingisland.entity.Users;
 import com.example.floatingisland.utils.Constant;
-import com.example.floatingisland.utils.MyMineAdapter;
 import com.example.floatingisland.utils.net.OkCallback;
 import com.example.floatingisland.utils.net.OkHttp;
 import com.example.floatingisland.utils.net.Result;
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 import java.security.MessageDigest;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -63,7 +49,6 @@ public class MineFragment extends Fragment {
 
     //getActivity()可能会抛出空指针异常
     private Activity activity;
-
     public void onAttach(Context context) {
         super.onAttach(context);
         this.activity = (Activity) context;
@@ -111,7 +96,7 @@ public class MineFragment extends Fragment {
                 Glide.with(getContext())
                         .load(Uavatarurl)
                         .apply(RequestOptions.bitmapTransform(new RoundedCorners(100))
-                                .override(100, 100))
+                                .override(128, 128))
                         .transform(new CircleTransformation())
                         .into(new SimpleTarget<Drawable>() {
                             @Override
@@ -126,11 +111,14 @@ public class MineFragment extends Fragment {
                 ufocusnum.setCenterTopString(Uufocusnum);
 
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("lastuserInfo", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("lastaccount", Uaccount);
-                editor.putString("lastavatarurl", Uavatarurl);
-                editor.apply();
-
+                String lastAccount = sharedPreferences.getString("lastaccount", null);
+                String lastAvatarUrl = sharedPreferences.getString("lastavatarurl", null);
+                if (lastAccount == null && lastAvatarUrl == null) {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("lastaccount", Uaccount);
+                    editor.putString("lastavatarurl", Uavatarurl);
+                    editor.apply();
+                }
             }
 
             @Override
@@ -138,8 +126,6 @@ public class MineFragment extends Fragment {
                 MyToast.errorBig("连接服务器超时！");
             }
         });
-
-
 
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,6 +142,38 @@ public class MineFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), ThereActivity.class);
                 intent.putExtra("jumpcode", 1);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
+            }
+        });
+
+        postsnum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), ThereActivity.class);
+                intent.putExtra("jumpcode", 1);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
+            }
+        });
+
+        ffocusnum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), ThereActivity.class);
+                intent.putExtra("jumpcode", 7);
+                intent.putExtra("isFacusUser", true);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
+            }
+        });
+
+        ufocusnum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), ThereActivity.class);
+                intent.putExtra("jumpcode", 7);
+                intent.putExtra("isFacusUser", false);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
             }

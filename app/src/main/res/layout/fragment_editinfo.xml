@@ -43,8 +43,8 @@
 
                 <ImageView
                     android:id="@+id/update"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
@@ -65,15 +65,6 @@
                 app:sDividerLineType="both" />
 
             <com.allen.library.SuperTextView
-                android:id="@+id/account"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                app:sLeftTextString="账号"
-                app:sRightTextColor="#ACACAC"
-                app:sRightIconRes="@mipmap/toright"
-                app:sDividerLineType="both"/>
-
-            <com.allen.library.SuperTextView
                 android:id="@+id/nickname"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
@@ -87,6 +78,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 app:sLeftTextString="个人简介"
+                app:sRightTextColor="#ACACAC"
+                app:sRightIconRes="@mipmap/toright"
+                app:sDividerLineType="both"/>
+
+            <TextView
+                android:text="密码修改后需要重新登陆哦！"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="14sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <com.allen.library.SuperTextView
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:sLeftTextString="密码"
+                app:sRightTextString="点击修改密码"
                 app:sRightTextColor="#ACACAC"
                 app:sRightIconRes="@mipmap/toright"
                 app:sDividerLineType="both"/>

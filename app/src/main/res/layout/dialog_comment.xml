@@ -46,9 +46,9 @@
             android:layout_marginLeft="10dp"
             android:hint="良言一句三冬暖，恶语伤人六月寒..."
             android:layout_gravity="center_horizontal"
-            android:maxLines="1"
             android:textSize="12sp"
-            app:met_clearButton="true"
+            android:maxLength="255"
+            android:singleLine="true"
             app:met_primaryColor="@color/purple_700"
             android:layout_weight="1"
             />

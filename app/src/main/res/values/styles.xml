@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- BottomDialog -->
     <style name="BottomSheetStyle" parent="Theme.AppCompat.Dialog">
         <!-- 背景透明 -->
@@ -14,6 +14,5 @@
         <item name="android:windowEnterAnimation">@anim/popup_in</item>
         <item name="android:windowExitAnimation">@anim/popup_out</item>
     </style>
-
 
 </resources>

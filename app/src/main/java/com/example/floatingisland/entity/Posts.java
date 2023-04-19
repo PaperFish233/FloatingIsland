@@ -93,4 +93,23 @@ public class Posts {
     public void setLikenum(int likenum) {
         this.likenum = likenum;
     }
+
+    private int topicid;
+    private String topicimageurl;
+
+    public int getTopicid() {
+        return topicid;
+    }
+
+    public void setTopicid(int topicid) {
+        this.topicid = topicid;
+    }
+
+    public String getTopicimageurl() {
+        return topicimageurl;
+    }
+
+    public void setTopicimageurl(String topicimageurl) {
+        this.topicimageurl = topicimageurl;
+    }
 }

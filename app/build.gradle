@@ -81,4 +81,9 @@ dependencies {
     //EasyPermissions动态获取权限框架
     implementation 'pub.devrel:easypermissions:3.0.0'
 
+    //顶部banner
+    implementation 'io.github.youth5201314:banner:2.2.2'
+
+
+
 }

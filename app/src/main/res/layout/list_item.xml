@@ -8,6 +8,7 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/userinfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -47,15 +48,6 @@
             android:textSize="14sp"
             android:textColor="#000000"
             android:text=" pid占位" />
-
-        <ImageView
-            android:id="@+id/focus"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/focus2"
-            />
 
     </RelativeLayout>
 
@@ -105,15 +97,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+        <com.allen.library.SuperTextView
             android:id="@+id/topic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:textSize="14sp"
-            android:textColor="#2196F3"
-            android:text="#话题占位" />
+            android:layout_width="180dp"
+            android:layout_height="35dp"
+            app:sLeftTextSize="14sp"
+            app:sLeftIconWidth="45px"
+            app:sLeftIconHeight="45px"
+            app:sLeftTextString="#话题占位"
+            app:sLeftTextColor="#2196F3"
+            app:sUseShape="true"
+            app:sShapeCornersRadius="10dp"
+            app:sShapeSelectorNormalColor="#F4F3F3"
+            app:sShapeSelectorPressedColor="#DFDFDF"
+            app:sRightIconRes="@mipmap/toright"
+            />
 
      <LinearLayout
          android:layout_width="match_parent"

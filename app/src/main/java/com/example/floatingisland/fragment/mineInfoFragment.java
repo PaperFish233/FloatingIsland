@@ -3,7 +3,6 @@ package com.example.floatingisland.fragment;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
@@ -13,9 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -24,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.allen.library.SuperTextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
@@ -31,16 +31,14 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.floatingisland.R;
-import com.example.floatingisland.activity.ThereActivity;
 import com.example.floatingisland.entity.Posts;
 import com.example.floatingisland.entity.Users;
 import com.example.floatingisland.utils.Constant;
-import com.example.floatingisland.utils.MyMineAdapter;
+import com.example.floatingisland.utils.MyInfoPostsAdapter;
 import com.example.floatingisland.utils.MyPostsAdapter;
 import com.example.floatingisland.utils.net.OkCallback;
 import com.example.floatingisland.utils.net.OkHttp;
 import com.example.floatingisland.utils.net.Result;
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -54,6 +52,17 @@ import es.dmoral.toasty.MyToast;
 public class mineInfoFragment extends Fragment {
 
     private View mineInfoFragment;
+    private RecyclerView recyclerView;
+    private MyPostsAdapter adapter;
+
+    //将数据封装成数据源
+    List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Jzvd.releaseAllVideos();
+    }
 
     //getActivity()可能会抛出空指针异常
     private Activity activity;
@@ -88,10 +97,10 @@ public class mineInfoFragment extends Fragment {
         TextView nickname = mineInfoFragment.findViewById(R.id.nickname);
         TextView signature = mineInfoFragment.findViewById(R.id.signature);
         TextView account = mineInfoFragment.findViewById(R.id.account);
-        ImageView focus = mineInfoFragment.findViewById(R.id.focus);
-        TextView postsnum = mineInfoFragment.findViewById(R.id.postsnum);
+        SuperTextView postsnum = mineInfoFragment.findViewById(R.id.postsnum);
         TextView ffocusnum = mineInfoFragment.findViewById(R.id.ffocusnum);
         TextView ufocusnum = mineInfoFragment.findViewById(R.id.ufocusnum);
+        ImageView isempty = mineInfoFragment.findViewById(R.id.isempty);
 
         //获取登录用户信息
         HashMap<String, String> params = new HashMap<>();
@@ -133,7 +142,7 @@ public class mineInfoFragment extends Fragment {
                 nickname.setText(Unickname);
                 account.setText(Uaccount);
                 signature.setText(Usignature);
-                postsnum.setText(Upostsnum+"发布");
+                postsnum.setLeftString("我的发布（"+Upostsnum+"）");
                 ffocusnum.setText(Uffocusnum+"关注");
                 ufocusnum.setText(Uufocusnum+"粉丝");
 
@@ -145,22 +154,76 @@ public class mineInfoFragment extends Fragment {
             }
         });
 
-        SmartTabLayout tabLayout = mineInfoFragment.findViewById(R.id.tab_layout);
-        ViewPager viewPager = mineInfoFragment.findViewById(R.id.view_pager);
-
-        MyMineAdapter adapter = new MyMineAdapter(getChildFragmentManager());
-        viewPager.setAdapter(adapter);
-        tabLayout.setViewPager(viewPager);
-
-        focus.setOnClickListener(new View.OnClickListener() {
+        //加载我的帖子
+        HashMap<String, String> params1 = new HashMap<>();
+        params1.put("uaccount", loginInfo);
+        OkHttp.post(getContext(), Constant.getminePosts, params1, new OkCallback<Result<List<Posts>>>() {
             @Override
-            public void onClick(View view) {
+            public void onResponse(Result<List<Posts>> response) {
+                for (Posts datum : response.getData()) {
+                    Map<String,Object> map=new HashMap<String, Object>();
+                    map.put("pid",datum.getPid());
+                    map.put("likenum",datum.getLikenum());
+                    map.put("avatarurl",datum.getAvatarurl());
+                    map.put("nickname",datum.getNickname());
+                    map.put("datetime",datum.getDate());
+                    map.put("content",datum.getContent());
+                    map.put("imageurl",datum.getImageurl());
+                    map.put("topicid",datum.getTopicid());
+                    map.put("topicname",datum.getTopicname());
+                    map.put("topicimageurl",datum.getTopicimageurl());
+                    list.add(map);
 
+                }
+                // 获取 RecyclerView 控件
+                recyclerView = mineInfoFragment.findViewById(R.id.recycler_view);
+                // 创建 LinearLayoutManager 对象，设置为垂直方向
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                // 绑定 LayoutManager
+                recyclerView.setLayoutManager(layoutManager);
+
+                //无发布页面显示标语
+                if(list.isEmpty()){
+                    isempty.setVisibility(View.VISIBLE);
+                }else{
+                    isempty.setVisibility(View.GONE);
+                    // 绑定数据适配器MyAdapter
+                    MyInfoPostsAdapter MyInfoPostsAdapter = new MyInfoPostsAdapter(getContext(),list,recyclerView,getActivity());
+                    recyclerView.setAdapter(MyInfoPostsAdapter);
+                }
+
+                // 创建 SpaceItemDecoration 实例，设置5dp的间距
+                SpaceItemDecoration decoration = new SpaceItemDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
+                // 添加
+                recyclerView.addItemDecoration(decoration);
+            }
+
+            @Override
+            public void onFailure(String state, String msg) {
+                MyToast.errorBig("连接服务器超时！");
             }
         });
 
         return mineInfoFragment;
     }
+
+    public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
+        private int space;
+
+        public SpaceItemDecoration(int space) {
+            this.space = space;
+        }
+
+        // 设置第二个 item 和后续 item 之间的间距
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            if (parent.getChildAdapterPosition(view) > 0) {
+                outRect.top = space;
+            }
+        }
+    }
+
     // 定义自定义的 CircleTransformation
     public class CircleTransformation extends BitmapTransformation {
         @Override

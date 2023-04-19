@@ -43,6 +43,8 @@
             android:layout_marginTop="20dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            app:sLeftIconWidth="100px"
+            app:sLeftIconHeight="100px"
             app:sLeftTopTextString="昵称"
             app:sLeftTopTextIsBold="true"
             app:sLeftBottomTextString="进入个人主页"
@@ -127,6 +129,7 @@
 
         <GridView
             android:id="@+id/gridview"
+            android:scrollbars="none"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"

@@ -34,9 +34,6 @@ public class HomePageFragment extends Fragment {
 
     private View HomePageFragment;
 
-    //将数据封装成数据源
-    List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
-
     //getActivity()可能会抛出空指针异常
     private Activity activity;
     public void onAttach(Context context) {
@@ -56,6 +53,10 @@ public class HomePageFragment extends Fragment {
         MyPagerAdapter adapter = new MyPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
         tabLayout.setViewPager(viewPager);
+
+        // 设置默认选项卡为第二个页面
+        int defaultTabIndex = 1;
+        viewPager.setCurrentItem(defaultTabIndex);
 
         //搜索按钮点击事件
         ImageView search = HomePageFragment.findViewById(R.id.search);

@@ -5,19 +5,30 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import com.allen.library.SuperTextView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.floatingisland.R;
 import com.example.floatingisland.activity.MainActivity;
+import com.example.floatingisland.activity.TwoActivity;
 import com.example.floatingisland.utils.Constant;
 import com.example.floatingisland.utils.net.OkCallback;
 import com.example.floatingisland.utils.net.OkHttp;
@@ -62,17 +73,31 @@ public class addPostsFragment extends Fragment {
 
         MaterialEditText connect = addpostsFragment.findViewById(R.id.connect);
         MaterialEditText imageurl = addpostsFragment.findViewById(R.id.imageurl);
-        Button git = addpostsFragment.findViewById(R.id.git);
+        TextView git = addpostsFragment.findViewById(R.id.git);
+        SuperTextView topic = addpostsFragment.findViewById(R.id.topic);
+
+        topic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), TwoActivity.class);
+                intent.putExtra("jumpcode", 2);
+                getContext().startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
+            }
+        });
+
         git.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("TopicChooseInfo", Context.MODE_PRIVATE);
+                String tid = sharedPreferences.getString("tid", "");
+
                 HashMap<String, String> params = new HashMap<>();
-                String pconnect = connect.getText().toString();
-                String pimageurl = imageurl.getText().toString();
+                params.put("tid", tid);
                 params.put("uaccount", loginInfo);
-                params.put("pconnect", pconnect);
-                params.put("pimageurl", pimageurl);
-                if(pconnect.equals("")) {
+                params.put("pconnect", connect.getText().toString());
+                params.put("pimageurl", imageurl.getText().toString());
+                if(connect.getText().toString().equals("")) {
                     MyToast.errorBig("不能发布空的内容哦！");
                 }else{
                 OkHttp.post(getContext(), Constant.insertPosts, params, new OkCallback<Result>() {
@@ -80,9 +105,11 @@ public class addPostsFragment extends Fragment {
                     public void onResponse(Result response) {
                         if(response.getMessage().equals("发布成功")){
                             MyToast.successBig(response.getMessage());
-                            Toast.makeText(getContext(), response.getMessage(), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getContext(), MainActivity.class);
                             startActivity(intent);
+                            SharedPreferences sharedPreferences1 = getActivity().getSharedPreferences("TopicChooseInfo", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor1 = sharedPreferences1.edit();
+                            editor1.clear().apply();
                             activity.onBackPressed();//销毁自己
                         }else{
                             MyToast.errorBig(response.getMessage());

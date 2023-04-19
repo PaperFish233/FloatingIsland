@@ -57,10 +57,13 @@ public class CommentBottomDialog extends BottomSheetDialogFragment {
             public void onResponse(Result<List<PostsComment>> response) {
                 for (PostsComment datum : response.getData()) {
                     Map<String, Object> map = new HashMap<String, Object>();
+                    map.put("cid", datum.getCid());
+                    map.put("uaccount", datum.getUaccount());
                     map.put("avatarurl", datum.getAvatarurl());
                     map.put("nickname", datum.getNickname());
                     map.put("cdate", datum.getCdate());
                     map.put("content", datum.getContent());
+                    map.put("pid", pid);
                     list.add(map);
                 }
                 // 绑定数据适配器MyAdapter
@@ -126,15 +129,19 @@ public class CommentBottomDialog extends BottomSheetDialogFragment {
         //获取评论数据
         HashMap<String, String> params1 = new HashMap<>();
         params1.put("pid", String.valueOf(pid));
+        int finalPid1 = pid;
         OkHttp.post(getContext(), Constant.getCommentPosts, params1, new OkCallback<Result<List<PostsComment>>>() {
             @Override
             public void onResponse(Result<List<PostsComment>> response) {
                 for (PostsComment datum : response.getData()) {
                     Map<String, Object> map = new HashMap<String, Object>();
+                    map.put("cid", datum.getCid());
+                    map.put("uaccount", datum.getUaccount());
                     map.put("avatarurl", datum.getAvatarurl());
                     map.put("nickname", datum.getNickname());
                     map.put("cdate", datum.getCdate());
                     map.put("content", datum.getContent());
+                    map.put("pid", finalPid1);
                     list.add(map);
                 }
                 // 获取 RecyclerView 控件

@@ -44,8 +44,7 @@
         app:stl_defaultTabTextSize="12sp"
         app:stl_defaultTabTextHorizontalPadding="16dp"
         app:stl_defaultTabTextMinWidth="0dp"
-        app:stl_titleOffset="24dp"
-        app:stl_distributeEvenly="true"/>
+        app:stl_titleOffset="24dp" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"

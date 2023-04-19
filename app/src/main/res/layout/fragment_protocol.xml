@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#F4F3F3"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -10,43 +11,39 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="@color/purple_700"
-        app:navigationIcon="@mipmap/close"
+        app:navigationIcon="@mipmap/logo_protocol"
         app:subtitleTextColor="@color/white"
         app:titleTextColor="@color/white"/>
 
     <com.example.floatingisland.utils.ReboundScrollView
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:background="#F4F3F3"
         android:overScrollMode="never">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/fragment_protocol"
-    android:orientation="vertical"
-    tools:context=".fragment.protocolFragment">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <TextView
-        android:text="浮游岛用户服务协议"
-        android:textSize="28sp"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"></TextView>
+            <TextView
+                android:text="浮游岛用户服务协议"
+                android:textSize="28sp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"></TextView>
 
-    <TextView
-        android:text="@string/protocol"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:textSize="16sp"
-        android:gravity="left"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"></TextView>
+            <TextView
+                android:text="@string/protocol"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textSize="16sp"
+                android:gravity="left"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></TextView>
 
-</LinearLayout>
+        </LinearLayout>
 
 </com.example.floatingisland.utils.ReboundScrollView>
 

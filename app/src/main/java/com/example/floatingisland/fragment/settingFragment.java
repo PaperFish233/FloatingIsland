@@ -27,6 +27,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.floatingisland.R;
+import com.example.floatingisland.activity.ThereActivity;
 import com.example.floatingisland.activity.WelcomeActivity;
 import com.example.floatingisland.entity.Users;
 import com.example.floatingisland.utils.Constant;
@@ -87,14 +88,20 @@ public class settingFragment extends Fragment {
         agreement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MyToast.successBig("点击用户协议！");
+                Intent intent = new Intent(getContext(), ThereActivity.class);
+                intent.putExtra("jumpcode", 5);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
             }
         });
 
         about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MyToast.successBig("点击关于！");
+                Intent intent = new Intent(getContext(), ThereActivity.class);
+                intent.putExtra("jumpcode", 6);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
             }
         });
 
@@ -113,6 +120,7 @@ public class settingFragment extends Fragment {
                                 editor.clear().apply();
 
                                 Intent intent = new Intent(getContext(), WelcomeActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                                 getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                                 getActivity().finish();

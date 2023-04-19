@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/card_style"
+    android:padding="10dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/userinfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/avatar"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/avatar"
+            />
+
+        <TextView
+            android:id="@+id/nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/avatar"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:text=" 用户昵称占位" />
+
+        <TextView
+            android:id="@+id/datetime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/nickname"
+            android:layout_toRightOf="@id/avatar"
+            android:textSize="12sp"
+            android:textColor="#ACACAC"
+            android:text=" 发布时间占位" />
+
+        <TextView
+            android:id="@+id/pid"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:text=" pid占位" />
+
+        <ImageView
+            android:id="@+id/more"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/more"
+            />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="#DCDCDC"/>
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_alignParentRight="true"
+        />
+
+    <cn.jzvd.JzvdStd
+        android:id="@+id/jz_video"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="15px"/>
+
+
+    <kr.co.prnd.readmore.ReadMoreTextView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="内容占位"
+        android:textSize="15sp"
+        android:textColor="#000000"
+        app:readMoreColor="#2196F3"
+        app:readMoreMaxLine="3"
+        app:readMoreText="...更多" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="#DCDCDC"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.allen.library.SuperTextView
+            android:id="@+id/topic"
+            android:layout_width="180dp"
+            android:layout_height="35dp"
+            app:sLeftTextSize="14sp"
+            app:sLeftIconWidth="45px"
+            app:sLeftIconHeight="45px"
+            app:sLeftTextString="#话题占位"
+            app:sLeftTextColor="#2196F3"
+            app:sUseShape="true"
+            app:sShapeCornersRadius="10dp"
+            app:sShapeSelectorNormalColor="#F4F3F3"
+            app:sShapeSelectorPressedColor="#DFDFDF"
+            app:sRightIconRes="@mipmap/toright"
+            />
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_centerVertical="true"
+         android:gravity="right">
+
+         <ImageView
+             android:id="@+id/like"
+             android:layout_width="25dp"
+             android:layout_height="25dp"
+             android:layout_marginLeft="15dp"
+             android:gravity="center_vertical"
+             android:src="@mipmap/like2"
+             />
+
+         <TextView
+             android:id="@+id/likenum"
+             android:layout_width="35dp"
+             android:layout_height="25dp"
+             android:text="占位"
+             android:textColor="@color/black"
+             android:gravity="center"
+             android:layout_centerVertical="true"
+             android:textSize="12sp"/>
+
+         <ImageView
+             android:id="@+id/collection"
+             android:layout_width="25dp"
+             android:layout_height="25dp"
+             android:layout_marginLeft="5dp"
+             android:gravity="center_vertical"
+             android:src="@mipmap/collection2"
+             />
+
+         <ImageView
+             android:id="@+id/comment"
+             android:layout_width="25dp"
+             android:layout_height="25dp"
+             android:layout_marginLeft="15dp"
+             android:gravity="center_vertical"
+             android:src="@mipmap/comment"
+             />
+
+     </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

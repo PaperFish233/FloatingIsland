@@ -87,7 +87,9 @@ public class searchPostsFragment extends Fragment {
                     map.put("datetime",datum.getDate());
                     map.put("content",datum.getContent());
                     map.put("imageurl",datum.getImageurl());
+                    map.put("topicid",datum.getTopicid());
                     map.put("topicname",datum.getTopicname());
+                    map.put("topicimageurl",datum.getTopicimageurl());
                     list.add(map);
                 }
 

@@ -18,11 +18,12 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
 
     public MyPagerAdapter(FragmentManager fm) {
         super(fm);
-        fragmentList.add(new HomePageIVflowFragment());
         fragmentList.add(new HomePageFPflowFragment());
+        fragmentList.add(new HomePageIVflowFragment());
 
-        titleList.add("推荐内容");
         titleList.add("关注的人");
+        titleList.add("推荐内容");
+
     }
 
     @Override
