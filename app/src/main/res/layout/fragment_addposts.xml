@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_addposts"
     android:orientation="vertical"
+    android:background="#F4F3F3"
     tools:context=".fragment.addPostsFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -83,7 +84,7 @@
         app:sLeftTextColor="#2196F3"
         app:sUseShape="true"
         app:sShapeCornersRadius="10dp"
-        app:sShapeSelectorNormalColor="#F4F3F3"
+        app:sShapeSelectorNormalColor="@color/white"
         app:sShapeSelectorPressedColor="#DFDFDF"
         app:sLeftIconRes="@mipmap/test"
         app:sRightIconRes="@mipmap/toright"

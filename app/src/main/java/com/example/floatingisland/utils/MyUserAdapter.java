@@ -37,7 +37,6 @@ public class MyUserAdapter extends RecyclerView.Adapter<MyUserAdapter.MyViewHold
     private Context mContext;
     private RecyclerView mRecyclerView;
     private Activity mActivity;
-    private boolean mIsSearch;
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
         // 定义ViewHolder中的控件
@@ -52,12 +51,11 @@ public class MyUserAdapter extends RecyclerView.Adapter<MyUserAdapter.MyViewHold
         }
     }
 
-    public MyUserAdapter(Context context, List<Map<String, Object>> list, RecyclerView recyclerView, Activity Activity, boolean IsSearch) {
+    public MyUserAdapter(Context context, List<Map<String, Object>> list, RecyclerView recyclerView, Activity Activity) {
         this.mContext = context;
         this.list = list;
         this.mRecyclerView = recyclerView;
         this.mActivity = Activity;
-        this.mIsSearch = IsSearch;
     }
 
     @Override
@@ -85,43 +83,24 @@ public class MyUserAdapter extends RecyclerView.Adapter<MyUserAdapter.MyViewHold
                     }
                 });
 
+        //点击事件
+        holder.tpview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-        if(mIsSearch){
-            //点击事件
-            holder.tpview.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                String faccount = list.get(position).get("uaccount").toString();
+                SharedPreferences sharedPreferences = mActivity.getSharedPreferences("userInfoPid", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("faccount", faccount);
+                editor.apply();
 
-                    String faccount = list.get(position).get("uaccount").toString();
-                    SharedPreferences sharedPreferences = mActivity.getSharedPreferences("userInfoPid", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("faccount", faccount);
-                    editor.apply();
+                Intent intent = new Intent(mContext, OneActivity.class);
+                intent.putExtra("jumpcode", 3);
+                mActivity.startActivity(intent);
+                mActivity.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
+            }
+        });
 
-                    Intent intent = new Intent(mContext, OneActivity.class);
-                    intent.putExtra("jumpcode", 3);
-                    mActivity.startActivity(intent);
-                    mActivity.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
-                }
-            });
-        }else{
-            //点击事件
-            holder.tpview.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int pid= Integer.parseInt(list.get(position).get("pid").toString());
-                    SharedPreferences sharedPreferences = mActivity.getSharedPreferences("userInfoPid", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("pid", String.valueOf(pid));
-                    editor.apply();
-
-                    Intent intent = new Intent(mContext, OneActivity.class);
-                    intent.putExtra("jumpcode", 3);
-                    mActivity.startActivity(intent);
-                    mActivity.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_left);
-                }
-            });
-        }
 
         }
 

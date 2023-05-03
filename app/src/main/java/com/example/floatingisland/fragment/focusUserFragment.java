@@ -92,7 +92,7 @@ public class focusUserFragment extends Fragment {
                         Map<String,Object> map=new HashMap<String, Object>();
                         map.put("nickname",datum.getUnickname());
                         map.put("avatarurl",datum.getUavatarurl());
-                        map.put("pid",datum.getPid());
+                        map.put("uaccount",datum.getUaccount());
                         list.add(map);
                     }
 
@@ -109,7 +109,7 @@ public class focusUserFragment extends Fragment {
                     }else {
                         isempty.setVisibility(View.GONE);
                         // 绑定数据适配器MyAdapter
-                        MyUserAdapter MyFocusUserAdapter = new MyUserAdapter(getContext(), list, recyclerView, getActivity(),false);
+                        MyUserAdapter MyFocusUserAdapter = new MyUserAdapter(getContext(), list, recyclerView, getActivity());
                         recyclerView.setAdapter(MyFocusUserAdapter);
                     }
                 }
@@ -131,7 +131,7 @@ public class focusUserFragment extends Fragment {
                         Map<String,Object> map=new HashMap<String, Object>();
                         map.put("nickname",datum.getUnickname());
                         map.put("avatarurl",datum.getUavatarurl());
-                        map.put("pid",datum.getPid());
+                        map.put("uaccount",datum.getUaccount());
                         list.add(map);
                     }
 
@@ -148,7 +148,7 @@ public class focusUserFragment extends Fragment {
                     }else {
                         isempty.setVisibility(View.GONE);
                         // 绑定数据适配器MyAdapter
-                        MyUserAdapter MyUserAdapter = new MyUserAdapter(getContext(), list, recyclerView, getActivity(),false);
+                        MyUserAdapter MyUserAdapter = new MyUserAdapter(getContext(), list, recyclerView, getActivity());
                         recyclerView.setAdapter(MyUserAdapter);
                     }
                 }

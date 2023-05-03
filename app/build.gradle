@@ -84,6 +84,6 @@ dependencies {
     //顶部banner
     implementation 'io.github.youth5201314:banner:2.2.2'
 
-
-
+    //更新框架
+    implementation 'com.teprinciple:updateapputilsx:2.3.0'
 }

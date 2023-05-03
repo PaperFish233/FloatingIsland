@@ -215,16 +215,15 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
         });
 
         //图文或视频检测
-        String url = list.get(position).get("imageurl").toString();
-
-        if(url.equals("")){
+        String url = (String) list.get(position).get("imageurl");
+        if (url == null || url.isEmpty()) {
             holder.jz_video.setVisibility(View.GONE);
             holder.card_image.setVisibility(View.GONE);
-        }else{
+        } else {
             if (url.endsWith(".gif") || url.endsWith(".jpg") || url.endsWith(".png")) {
                 holder.jz_video.setVisibility(View.GONE);
                 holder.card_image.setVisibility(View.VISIBLE);
-                Glide.with(mContext).load(list.get(position).get("imageurl").toString()).apply(RequestOptions.bitmapTransform(new RoundedCorners(20)).override(1280, 720)).into(holder.card_image);
+                Glide.with(mContext).load(url).apply(RequestOptions.bitmapTransform(new RoundedCorners(20)).override(1280, 720)).into(holder.card_image);
             } else if (url.endsWith(".mp4") || url.endsWith(".avi") || url.endsWith(".mov")) {
                 holder.card_image.setVisibility(View.GONE);
                 holder.jz_video.setVisibility(View.VISIBLE);

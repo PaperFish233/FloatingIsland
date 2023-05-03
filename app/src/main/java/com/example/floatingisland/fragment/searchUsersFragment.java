@@ -60,7 +60,7 @@ public class searchUsersFragment extends Fragment {
 
         TextView_keyword.setText("关键词："+keyword);
 
-        //获取关注用户信息
+        //获取用户信息
         HashMap<String, String> params = new HashMap<>();
         params.put("unickname", keyword);
         OkHttp.post(getContext(), Constant.getSearchUser, params, new OkCallback<Result<List<Users>>>() {
@@ -80,14 +80,13 @@ public class searchUsersFragment extends Fragment {
                 // 绑定 LayoutManager
                 recyclerView.setLayoutManager(layoutManager);
 
-                //无关注页面显示标语
+                //无搜索页面显示标语
                 if(list.isEmpty()){
-                    isempty.setImageResource(R.mipmap.isempty1);
                     isempty.setVisibility(View.VISIBLE);
                 }else {
                     isempty.setVisibility(View.GONE);
                     // 绑定数据适配器MyAdapter
-                    MyUserAdapter MyUserAdapter = new MyUserAdapter(getContext(), list, recyclerView, getActivity(),true);
+                    MyUserAdapter MyUserAdapter = new MyUserAdapter(getContext(), list, recyclerView, getActivity());
                     recyclerView.setAdapter(MyUserAdapter);
                 }
             }

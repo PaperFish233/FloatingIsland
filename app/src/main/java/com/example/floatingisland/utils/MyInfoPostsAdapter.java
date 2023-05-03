@@ -134,8 +134,8 @@ public class MyInfoPostsAdapter extends RecyclerView.Adapter<MyInfoPostsAdapter.
         SharedPreferences sharedPreferences = mContext.getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
         String loginInfo = sharedPreferences.getString("account", "");
 
-        String lastcontent = list.get(position).get("content").toString();
-        String lastimageurl = list.get(position).get("imageurl").toString();
+        String lastcontent = (String) list.get(position).get("content");
+        String lastimageurl = (String) list.get(position).get("imageurl");
 
         // 获取数据并设置到ViewHolder中的控件上
         holder.card_pid.setText(list.get(position).get("pid").toString());
@@ -219,16 +219,15 @@ public class MyInfoPostsAdapter extends RecyclerView.Adapter<MyInfoPostsAdapter.
         });
 
         //图文或视频检测
-        String url = list.get(position).get("imageurl").toString();
-
-        if(url.equals("")){
+        String url = (String) list.get(position).get("imageurl");
+        if (url == null || url.isEmpty()) {
             holder.jz_video.setVisibility(View.GONE);
             holder.card_image.setVisibility(View.GONE);
-        }else{
+        } else {
             if (url.endsWith(".gif") || url.endsWith(".jpg") || url.endsWith(".png")) {
                 holder.jz_video.setVisibility(View.GONE);
                 holder.card_image.setVisibility(View.VISIBLE);
-                Glide.with(mContext).load(list.get(position).get("imageurl").toString()).apply(RequestOptions.bitmapTransform(new RoundedCorners(20)).override(1280, 720)).into(holder.card_image);
+                Glide.with(mContext).load(url).apply(RequestOptions.bitmapTransform(new RoundedCorners(20)).override(1280, 720)).into(holder.card_image);
             } else if (url.endsWith(".mp4") || url.endsWith(".avi") || url.endsWith(".mov")) {
                 holder.card_image.setVisibility(View.GONE);
                 holder.jz_video.setVisibility(View.VISIBLE);

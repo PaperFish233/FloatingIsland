@@ -76,9 +76,10 @@ public class ThereActivity extends AppCompatActivity {
         }
         if (jumpcode == 4) {
             //接收传递值
-            String lastpid = getIntent().getStringExtra("lastpid");
+            String lastpid = String.valueOf(getIntent().getIntExtra("lastpid",0));
             String lastcontent = getIntent().getStringExtra("lastcontent");
             String lastimageurl = getIntent().getStringExtra("lastimageurl");
+            System.out.println(lastpid+lastcontent+lastimageurl);
 
             //发送传递值
             Bundle bundle = new Bundle();
