@@ -61,6 +61,7 @@ public class HomePageIVflowFragment extends Fragment {
     private View HomePageIVflowFragment;
     private RecyclerView recyclerView;
     private Intent noticeintent;
+    private Banner banner;
 
     //将数据封装成数据源
     List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
@@ -79,6 +80,8 @@ public class HomePageIVflowFragment extends Fragment {
                     Map<String,Object> map=new HashMap<String, Object>();
                     map.put("pid",datum.getPid());
                     map.put("likenum",datum.getLikenum());
+                    map.put("collectionnum",datum.getCollectionnum());
+                    map.put("commentnum",datum.getCommentnum());
                     map.put("avatarurl",datum.getAvatarurl());
                     map.put("nickname",datum.getNickname());
                     map.put("datetime",datum.getDate());
@@ -92,6 +95,39 @@ public class HomePageIVflowFragment extends Fragment {
                 // 绑定数据适配器MyAdapter
                 MyPostsAdapter MyPostsAdapter = new MyPostsAdapter(getContext(),list,recyclerView,getActivity());
                 recyclerView.setAdapter(MyPostsAdapter);
+            }
+
+            @Override
+            public void onFailure(String state, String msg) {
+                MyToast.errorBig("连接服务器超时！");
+            }
+        });
+
+        //获取轮播图信息
+        OkHttp.post(getContext(), Constant.getNotice, null, new OkCallback<Result<List<Notice>>>() {
+            @Override
+            public void onResponse(Result<List<Notice>> response) {
+                for (Notice notice : response.getData()) {
+                    int nid = notice.getNid();
+                    nidList.add(nid);
+                    String imageurl = notice.getNimageurl();
+                    imageurlsList.add(imageurl);
+                }
+                banner.setAdapter(new BannerImageAdapter<String>(imageurlsList) {
+                            @Override
+                            public void onBindView(BannerImageHolder holder, String data, int position, int size) {
+                                Glide.with(holder.itemView)
+                                        .load(data)
+                                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(10)))
+                                        .into(holder.imageView);
+                            }})
+                        .setIndicator(new CircleIndicator(getContext()))
+                        .setIndicatorSelectedColor(Color.WHITE)
+                        .setBannerGalleryEffect(20,20,0)
+                        .addBannerLifecycleObserver(getActivity())
+                        .setOnBannerListener(
+                                (OnBannerListener<String>)(data, position) -> handleBannerClick(position));
+
             }
 
             @Override
@@ -168,7 +204,7 @@ public class HomePageIVflowFragment extends Fragment {
 
         // 获取控件
         recyclerView = HomePageIVflowFragment.findViewById(R.id.recycler_view);
-        Banner banner = HomePageIVflowFragment.findViewById(R.id.banner);
+        banner = HomePageIVflowFragment.findViewById(R.id.banner);
 
         OkHttp.post(getContext(), Constant.getPosts, null, new OkCallback<Result<List<Posts>>>() {
             @Override
@@ -177,6 +213,8 @@ public class HomePageIVflowFragment extends Fragment {
                     Map<String,Object> map=new HashMap<String, Object>();
                     map.put("pid",datum.getPid());
                     map.put("likenum",datum.getLikenum());
+                    map.put("collectionnum",datum.getCollectionnum());
+                    map.put("commentnum",datum.getCommentnum());
                     map.put("avatarurl",datum.getAvatarurl());
                     map.put("nickname",datum.getNickname());
                     map.put("datetime",datum.getDate());
@@ -245,8 +283,6 @@ public class HomePageIVflowFragment extends Fragment {
             }
         });
 
-
-
         final RefreshLayout refreshLayout = HomePageIVflowFragment.findViewById(R.id.refreshLayout);
         //设置 Header 为 经典 样式
         refreshLayout.setRefreshHeader(new ClassicsHeader(getContext()));
@@ -256,6 +292,8 @@ public class HomePageIVflowFragment extends Fragment {
             public void onRefresh(RefreshLayout refreshlayout) {
                 refreshlayout.finishRefresh();//传入false表示刷新失败
                 list.clear();
+                imageurlsList.clear();
+                nidList.clear();
                 getPostsDate();
                 banner.setDatas(imageurlsList);
             }

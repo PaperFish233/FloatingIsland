@@ -40,10 +40,23 @@ public class HomePageFPflowFragment extends Fragment {
 
     private View HomePageFPflowFragment;
     private RecyclerView recyclerView;
+    private ImageView isempty1;
 
     //将数据封装成数据源
     List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Jzvd.releaseAllVideos();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        list.clear();
+        getPostsDate();
+    }
 
     //获取帖子数据
     private void getPostsDate() {
@@ -61,68 +74,8 @@ public class HomePageFPflowFragment extends Fragment {
                     Map<String,Object> map=new HashMap<String, Object>();
                     map.put("pid",datum.getPid());
                     map.put("likenum",datum.getLikenum());
-                    map.put("avatarurl",datum.getAvatarurl());
-                    map.put("nickname",datum.getNickname());
-                    map.put("datetime",datum.getDate());
-                    map.put("content",datum.getContent());
-                    map.put("imageurl",datum.getImageurl());
-                    map.put("topicid",datum.getTopicid());
-                    map.put("topicname",datum.getTopicname());
-                    map.put("topicimageurl",datum.getTopicimageurl());
-                    list.add(map);
-                }
-                // 绑定数据适配器MyAdapter
-                MyPostsAdapter MyPostsAdapter = new MyPostsAdapter(getContext(),list,recyclerView,getActivity());
-                recyclerView.setAdapter(MyPostsAdapter);
-            }
-
-            @Override
-            public void onFailure(String state, String msg) {
-                MyToast.errorBig("连接服务器超时！");
-            }
-        });
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Jzvd.releaseAllVideos();
-    }
-
-    //通过 ViewPager 进行滑动切换时释放资源
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (!isVisibleToUser) {
-            Jzvd.releaseAllVideos(); // 释放资源
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        HomePageFPflowFragment = inflater.inflate(R.layout.fragment_homepagefpflow, container, false);
-
-        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
-
-        // 获取控件
-        recyclerView = HomePageFPflowFragment.findViewById(R.id.recycler_view);
-        ImageView isempty1 = HomePageFPflowFragment.findViewById(R.id.isempty1);
-
-        //获取账号
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
-        String loginInfo = sharedPreferences.getString("account", "");
-
-        HashMap<String, String> params = new HashMap<>();
-        params.put("uaccount", loginInfo);
-        OkHttp.post(getContext(), Constant.getMineCollectionUserPosts, params, new OkCallback<Result<List<Posts>>>() {
-            @Override
-            public void onResponse(Result<List<Posts>> response) {
-                for (Posts datum : response.getData()) {
-                    Map<String,Object> map=new HashMap<String, Object>();
-                    map.put("pid",datum.getPid());
-                    map.put("likenum",datum.getLikenum());
+                    map.put("collectionnum",datum.getCollectionnum());
+                    map.put("commentnum",datum.getCommentnum());
                     map.put("avatarurl",datum.getAvatarurl());
                     map.put("nickname",datum.getNickname());
                     map.put("datetime",datum.getDate());
@@ -149,11 +102,6 @@ public class HomePageFPflowFragment extends Fragment {
                     MyPostsAdapter MyPostsAdapter = new MyPostsAdapter(getContext(),list,recyclerView,getActivity());
                     recyclerView.setAdapter(MyPostsAdapter);
                 }
-
-                // 创建 SpaceItemDecoration 实例，设置5dp的间距
-                SpaceItemDecoration decoration = new SpaceItemDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
-                // 添加
-                recyclerView.addItemDecoration(decoration);
             }
 
             @Override
@@ -161,6 +109,33 @@ public class HomePageFPflowFragment extends Fragment {
                 MyToast.errorBig("连接服务器超时！");
             }
         });
+
+    }
+
+    //通过 ViewPager 进行滑动切换时释放资源
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (!isVisibleToUser) {
+            Jzvd.releaseAllVideos(); // 释放资源
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        HomePageFPflowFragment = inflater.inflate(R.layout.fragment_homepagefpflow, container, false);
+
+        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
+
+        // 获取控件
+        recyclerView = HomePageFPflowFragment.findViewById(R.id.recycler_view);
+        isempty1 = HomePageFPflowFragment.findViewById(R.id.isempty1);
+
+        // 创建 SpaceItemDecoration 实例，设置5dp的间距
+        SpaceItemDecoration decoration = new SpaceItemDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
+        // 添加
+        recyclerView.addItemDecoration(decoration);
 
         final RefreshLayout refreshLayout = HomePageFPflowFragment.findViewById(R.id.refreshLayout);
         //设置 Header 为 经典 样式

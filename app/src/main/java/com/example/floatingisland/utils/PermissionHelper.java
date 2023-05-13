@@ -11,8 +11,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class PermissionHelper implements EasyPermissions.PermissionCallbacks {
 
-    private static final int PERMISSION_Camera_REQUEST_CODE = 100;
-    private static final int PERMISSION_ReanAndWrite_REQUEST_CODE = 101;
+    private static final int PERMISSION_ReanAndWrite_REQUEST_CODE = 100;
     
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -23,38 +22,18 @@ public class PermissionHelper implements EasyPermissions.PermissionCallbacks {
 
     @Override
     public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
-        // 权限已授予
-        if (requestCode == PERMISSION_Camera_REQUEST_CODE) {
-            // 执行需要相机权限的操作
-
-        }
         if (requestCode == PERMISSION_ReanAndWrite_REQUEST_CODE) {
             // 执行需要读写权限的操作
 
         }
-
     }
 
     @Override
     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
         // 权限已被拒绝
-        if (requestCode == PERMISSION_Camera_REQUEST_CODE) {
-            // 显示一条消息，提示用户为该应用程序启用所需的权限
-        }
         if (requestCode == PERMISSION_ReanAndWrite_REQUEST_CODE) {
             // 显示一条消息，提示用户为该应用程序启用所需的权限
         }
-    }
-
-    public static void requestCameraPermission(Activity activity) {
-
-        String[] perms = {Manifest.permission.CAMERA};
-        if (EasyPermissions.hasPermissions(activity, perms)) {
-            // 当前已有所需权限
-            return;
-        }
-        // 显示申请权限的提示
-        EasyPermissions.requestPermissions(activity,"需要相机权限以拍照",PERMISSION_Camera_REQUEST_CODE,perms);
     }
 
     public static void requestReanAndWritePermission(Activity activity) {
@@ -65,7 +44,7 @@ public class PermissionHelper implements EasyPermissions.PermissionCallbacks {
             return;
         }
         // 显示申请权限的提示
-        EasyPermissions.requestPermissions(activity,"需要读写权限以存取图片",PERMISSION_ReanAndWrite_REQUEST_CODE,perms);
+        EasyPermissions.requestPermissions(activity,"为了能成功保存图片以及上传和下载资源，应用需要请求权限以访问您的文件。",PERMISSION_ReanAndWrite_REQUEST_CODE,perms);
     }
 
 }

@@ -44,15 +44,10 @@ public class mineCollectionPostsFragment extends Fragment {
     private View mineCollectionPostsFragment;
     private RecyclerView recyclerView;
     private MyPostsAdapter adapter;
+    private ImageView isempty;
 
     //将数据封装成数据源
     List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Jzvd.releaseAllVideos();
-    }
 
     //getActivity()可能会抛出空指针异常
     private Activity activity;
@@ -62,23 +57,19 @@ public class mineCollectionPostsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onPause() {
+        super.onPause();
+        Jzvd.releaseAllVideos();
+    }
 
-        mineCollectionPostsFragment = inflater.inflate(R.layout.fragment_minecollectionposts, container, false);
+    @Override
+    public void onResume() {
+        super.onResume();
+        list.clear();
+        getmineCollectionPosts();
+    }
 
-        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
-
-        ImageView isempty = mineCollectionPostsFragment.findViewById(R.id.isempty);
-
-        Toolbar toolbar = mineCollectionPostsFragment.findViewById(R.id.Toolbar_minecollectionposts);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 处理左上角按钮点击事件
-                activity.onBackPressed();//销毁自己，用全局变量activity代替getActivity()
-
-            }
-        });
+    private void getmineCollectionPosts(){
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
         String loginInfo = sharedPreferences.getString("account", "");
@@ -92,6 +83,8 @@ public class mineCollectionPostsFragment extends Fragment {
                     Map<String,Object> map=new HashMap<String, Object>();
                     map.put("pid",datum.getPid());
                     map.put("likenum",datum.getLikenum());
+                    map.put("collectionnum",datum.getCollectionnum());
+                    map.put("commentnum",datum.getCommentnum());
                     map.put("avatarurl",datum.getAvatarurl());
                     map.put("nickname",datum.getNickname());
                     map.put("datetime",datum.getDate());
@@ -102,8 +95,7 @@ public class mineCollectionPostsFragment extends Fragment {
                     map.put("topicimageurl",datum.getTopicimageurl());
                     list.add(map);
                 }
-                // 获取 RecyclerView 控件
-                recyclerView = mineCollectionPostsFragment.findViewById(R.id.recycler_view);
+
                 // 创建 LinearLayoutManager 对象，设置为垂直方向
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -119,11 +111,6 @@ public class mineCollectionPostsFragment extends Fragment {
                     MyPostsAdapter MyPostsAdapter = new MyPostsAdapter(getContext(),list,recyclerView,getActivity());
                     recyclerView.setAdapter(MyPostsAdapter);
                 }
-
-                // 创建 SpaceItemDecoration 实例，设置5dp的间距
-                SpaceItemDecoration decoration = new SpaceItemDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
-                // 添加
-                recyclerView.addItemDecoration(decoration);
             }
 
             @Override
@@ -131,6 +118,33 @@ public class mineCollectionPostsFragment extends Fragment {
                 MyToast.errorBig("连接服务器超时！");
             }
         });
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        mineCollectionPostsFragment = inflater.inflate(R.layout.fragment_minecollectionposts, container, false);
+
+        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
+
+        // 获取 RecyclerView 控件
+        recyclerView = mineCollectionPostsFragment.findViewById(R.id.recycler_view);
+        isempty = mineCollectionPostsFragment.findViewById(R.id.isempty);
+
+        Toolbar toolbar = mineCollectionPostsFragment.findViewById(R.id.Toolbar_minecollectionposts);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 处理左上角按钮点击事件
+                activity.onBackPressed();//销毁自己，用全局变量activity代替getActivity()
+
+            }
+        });
+
+        // 创建 SpaceItemDecoration 实例，设置5dp的间距
+        SpaceItemDecoration decoration = new SpaceItemDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
+        // 添加
+        recyclerView.addItemDecoration(decoration);
 
         return mineCollectionPostsFragment;
     }

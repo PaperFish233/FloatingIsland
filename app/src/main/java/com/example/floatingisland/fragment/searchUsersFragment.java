@@ -34,6 +34,8 @@ public class searchUsersFragment extends Fragment {
 
     private View searchUsersFragment;
     private RecyclerView recyclerView;
+    private TextView TextView_keyword;
+    private ImageView isempty;
 
     //将数据封装成数据源
     List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
@@ -46,14 +48,13 @@ public class searchUsersFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onResume() {
+        super.onResume();
+        list.clear();
+        getSearchUsers();
+    }
 
-        searchUsersFragment = inflater.inflate(R.layout.fragment_searchusers, container, false);
-
-        // 获取控件
-        recyclerView = searchUsersFragment.findViewById(R.id.recycler_view);
-        TextView TextView_keyword = searchUsersFragment.findViewById(R.id.keyword);
-        ImageView isempty = searchUsersFragment.findViewById(R.id.isempty);
+    private void getSearchUsers(){
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("searchInfo", Context.MODE_PRIVATE);
         String keyword = sharedPreferences.getString("keyword", "");
@@ -96,7 +97,17 @@ public class searchUsersFragment extends Fragment {
                 MyToast.errorBig("连接服务器超时！");
             }
         });
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        searchUsersFragment = inflater.inflate(R.layout.fragment_searchusers, container, false);
+
+        // 获取控件
+        recyclerView = searchUsersFragment.findViewById(R.id.recycler_view);
+        TextView_keyword = searchUsersFragment.findViewById(R.id.keyword);
+        isempty = searchUsersFragment.findViewById(R.id.isempty);
 
         return searchUsersFragment;
     }

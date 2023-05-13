@@ -56,9 +56,9 @@ dependencies {
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
 
     //下拉刷新
-    implementation  'io.github.scwang90:refresh-layout-kernel:2.0.5'      //核心必须依赖
-    implementation  'io.github.scwang90:refresh-header-classics:2.0.5'    //经典刷新头
-    implementation  'io.github.scwang90:refresh-footer-classics:2.0.5'    //经典加载
+    implementation 'io.github.scwang90:refresh-layout-kernel:2.0.5'      //核心必须依赖
+    implementation 'io.github.scwang90:refresh-header-classics:2.0.5'    //经典刷新头
+    implementation 'io.github.scwang90:refresh-footer-classics:2.0.5'    //经典加载
 
     //Toasty吐司消息框
     implementation 'com.github.hss01248:Toasty:2.0.6'
@@ -86,4 +86,10 @@ dependencies {
 
     //更新框架
     implementation 'com.teprinciple:updateapputilsx:2.3.0'
+
+    //跑马灯效果
+    implementation 'com.sunfusheng:MarqueeView:1.4.0'
+
+    //上传图片框架
+    implementation 'com.zhihu.android:matisse:0.5.3-beta3'
 }

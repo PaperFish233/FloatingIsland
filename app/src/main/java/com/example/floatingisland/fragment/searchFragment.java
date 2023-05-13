@@ -47,8 +47,10 @@ public class searchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // 处理左上角按钮点击事件
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("searchInfo", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear().apply();
                 activity.onBackPressed();//销毁自己，用全局变量activity代替getActivity()
-
             }
         });
 

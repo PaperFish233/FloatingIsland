@@ -52,6 +52,12 @@ public class topicPostsFragment extends Fragment {
     private View topicPostsFragment;
     private RecyclerView recyclerView;
     private MyPostsAdapter adapter;
+    private ImageView background;
+    private ImageView tbg;
+    private TextView tname;
+    private TextView tsignature;
+    private SuperTextView postsnum;
+    private ImageView isempty;
 
     //将数据封装成数据源
     List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
@@ -69,32 +75,14 @@ public class topicPostsFragment extends Fragment {
         Jzvd.releaseAllVideos();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public void onResume() {
+        super.onResume();
+        list.clear();
+        getTopicPosts();
+    }
 
-        topicPostsFragment = inflater.inflate(R.layout.fragment_topicposts, container, false);
-
-        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
-
-        Toolbar toolbar = topicPostsFragment.findViewById(R.id.Toolbar_topicposts);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 处理左上角按钮点击事件
-                activity.onBackPressed();//销毁自己，用全局变量activity代替getActivity()
-
-            }
-        });
-
-        ImageView background = topicPostsFragment.findViewById(R.id.background);
-        ImageView tbg = topicPostsFragment.findViewById(R.id.tbg);
-        TextView tname = topicPostsFragment.findViewById(R.id.tname);
-        TextView tsignature = topicPostsFragment.findViewById(R.id.tsignature);
-        SuperTextView postsnum = topicPostsFragment.findViewById(R.id.postsnum);
-        ImageView isempty = topicPostsFragment.findViewById(R.id.isempty);
-
-
+    private void getTopicPosts(){
         //接收传递值
         Bundle bundle = getArguments();
         String tid = "";
@@ -135,10 +123,7 @@ public class topicPostsFragment extends Fragment {
 
                 tname.setText(Tname);
                 tsignature.setText(Tsignature);
-
                 postsnum.setLeftString("话题帖子（"+Tpostsnum+"）");
-
-
             }
 
             @Override
@@ -146,7 +131,6 @@ public class topicPostsFragment extends Fragment {
                 MyToast.errorBig("连接服务器超时！");
             }
         });
-
 
         //加载话题下帖子
         HashMap<String, String> params1 = new HashMap<>();
@@ -158,6 +142,8 @@ public class topicPostsFragment extends Fragment {
                     Map<String,Object> map=new HashMap<String, Object>();
                     map.put("pid",datum.getPid());
                     map.put("likenum",datum.getLikenum());
+                    map.put("collectionnum",datum.getCollectionnum());
+                    map.put("commentnum",datum.getCommentnum());
                     map.put("avatarurl",datum.getAvatarurl());
                     map.put("nickname",datum.getNickname());
                     map.put("datetime",datum.getDate());
@@ -167,10 +153,8 @@ public class topicPostsFragment extends Fragment {
                     map.put("topicname",datum.getTopicname());
                     map.put("topicimageurl",datum.getTopicimageurl());
                     list.add(map);
-
                 }
-                // 获取 RecyclerView 控件
-                recyclerView = topicPostsFragment.findViewById(R.id.recycler_view);
+
                 // 创建 LinearLayoutManager 对象，设置为垂直方向
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -186,11 +170,6 @@ public class topicPostsFragment extends Fragment {
                     MyPostsAdapter MyPostsAdapter = new MyPostsAdapter(getContext(),list,recyclerView,getActivity());
                     recyclerView.setAdapter(MyPostsAdapter);
                 }
-
-                // 创建 SpaceItemDecoration 实例，设置5dp的间距
-                SpaceItemDecoration decoration = new SpaceItemDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
-                // 添加
-                recyclerView.addItemDecoration(decoration);
             }
 
             @Override
@@ -198,7 +177,38 @@ public class topicPostsFragment extends Fragment {
                 MyToast.errorBig("连接服务器超时！");
             }
         });
+    }
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        topicPostsFragment = inflater.inflate(R.layout.fragment_topicposts, container, false);
+
+        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
+
+        Toolbar toolbar = topicPostsFragment.findViewById(R.id.Toolbar_topicposts);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 处理左上角按钮点击事件
+                activity.onBackPressed();//销毁自己，用全局变量activity代替getActivity()
+            }
+        });
+
+        // 获取 RecyclerView 控件
+        recyclerView = topicPostsFragment.findViewById(R.id.recycler_view);
+        background = topicPostsFragment.findViewById(R.id.background);
+        tbg = topicPostsFragment.findViewById(R.id.tbg);
+        tname = topicPostsFragment.findViewById(R.id.tname);
+        tsignature = topicPostsFragment.findViewById(R.id.tsignature);
+        postsnum = topicPostsFragment.findViewById(R.id.postsnum);
+        isempty = topicPostsFragment.findViewById(R.id.isempty);
+
+        // 创建 SpaceItemDecoration 实例，设置5dp的间距
+        SpaceItemDecoration decoration = new SpaceItemDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
+        // 添加
+        recyclerView.addItemDecoration(decoration);
 
         return topicPostsFragment;
     }

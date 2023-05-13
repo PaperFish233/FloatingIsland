@@ -96,6 +96,7 @@ public class Posts {
 
     private int topicid;
     private String topicimageurl;
+    private String uaccount;
 
     public int getTopicid() {
         return topicid;
@@ -111,5 +112,32 @@ public class Posts {
 
     public void setTopicimageurl(String topicimageurl) {
         this.topicimageurl = topicimageurl;
+    }
+
+    private int collectionnum;
+    private int commentnum;
+
+    public int getCollectionnum() {
+        return collectionnum;
+    }
+
+    public void setCollectionnum(int collectionnum) {
+        this.collectionnum = collectionnum;
+    }
+
+    public int getCommentnum() {
+        return commentnum;
+    }
+
+    public void setCommentnum(int commentnum) {
+        this.commentnum = commentnum;
+    }
+
+    public String getUaccount() {
+        return uaccount;
+    }
+
+    public void setUaccount(String uaccount) {
+        this.uaccount = uaccount;
     }
 }

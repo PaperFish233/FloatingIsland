@@ -54,6 +54,15 @@ public class mineInfoFragment extends Fragment {
     private View mineInfoFragment;
     private RecyclerView recyclerView;
     private MyPostsAdapter adapter;
+    private ImageView background;
+    private ImageView avatar;
+    private TextView nickname;
+    private TextView signature;
+    private TextView account;
+    private SuperTextView postsnum;
+    private TextView ffocusnum;
+    private TextView ufocusnum;
+    private ImageView isempty;
 
     //将数据封装成数据源
     List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
@@ -64,43 +73,17 @@ public class mineInfoFragment extends Fragment {
         Jzvd.releaseAllVideos();
     }
 
-    //getActivity()可能会抛出空指针异常
-    private Activity activity;
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.activity = (Activity) context;
+    @Override
+    public void onResume() {
+        super.onResume();
+        list.clear();
+        getUserAndPosts();
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        mineInfoFragment = inflater.inflate(R.layout.fragment_mineinfo,container,false);
-
-        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
-
-        Toolbar toolbar = mineInfoFragment.findViewById(R.id.Toolbar_mineinfo);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 处理左上角按钮点击事件
-                activity.onBackPressed();//销毁自己，用全局变量activity代替getActivity()
-
-            }
-        });
+    private void getUserAndPosts(){
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
         String loginInfo = sharedPreferences.getString("account", "");
-
-        ImageView background = mineInfoFragment.findViewById(R.id.background);
-        ImageView avatar = mineInfoFragment.findViewById(R.id.avatar);
-        TextView nickname = mineInfoFragment.findViewById(R.id.nickname);
-        TextView signature = mineInfoFragment.findViewById(R.id.signature);
-        TextView account = mineInfoFragment.findViewById(R.id.account);
-        SuperTextView postsnum = mineInfoFragment.findViewById(R.id.postsnum);
-        TextView ffocusnum = mineInfoFragment.findViewById(R.id.ffocusnum);
-        TextView ufocusnum = mineInfoFragment.findViewById(R.id.ufocusnum);
-        ImageView isempty = mineInfoFragment.findViewById(R.id.isempty);
 
         //获取登录用户信息
         HashMap<String, String> params = new HashMap<>();
@@ -164,6 +147,8 @@ public class mineInfoFragment extends Fragment {
                     Map<String,Object> map=new HashMap<String, Object>();
                     map.put("pid",datum.getPid());
                     map.put("likenum",datum.getLikenum());
+                    map.put("collectionnum",datum.getCollectionnum());
+                    map.put("commentnum",datum.getCommentnum());
                     map.put("avatarurl",datum.getAvatarurl());
                     map.put("nickname",datum.getNickname());
                     map.put("datetime",datum.getDate());
@@ -175,8 +160,7 @@ public class mineInfoFragment extends Fragment {
                     list.add(map);
 
                 }
-                // 获取 RecyclerView 控件
-                recyclerView = mineInfoFragment.findViewById(R.id.recycler_view);
+
                 // 创建 LinearLayoutManager 对象，设置为垂直方向
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -193,10 +177,6 @@ public class mineInfoFragment extends Fragment {
                     recyclerView.setAdapter(MyInfoPostsAdapter);
                 }
 
-                // 创建 SpaceItemDecoration 实例，设置5dp的间距
-                SpaceItemDecoration decoration = new SpaceItemDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
-                // 添加
-                recyclerView.addItemDecoration(decoration);
             }
 
             @Override
@@ -204,6 +184,49 @@ public class mineInfoFragment extends Fragment {
                 MyToast.errorBig("连接服务器超时！");
             }
         });
+    }
+
+    //getActivity()可能会抛出空指针异常
+    private Activity activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.activity = (Activity) context;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        mineInfoFragment = inflater.inflate(R.layout.fragment_mineinfo,container,false);
+
+        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
+
+        Toolbar toolbar = mineInfoFragment.findViewById(R.id.Toolbar_mineinfo);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 处理左上角按钮点击事件
+                activity.onBackPressed();//销毁自己，用全局变量activity代替getActivity()
+            }
+        });
+
+        // 获取 RecyclerView 控件
+        recyclerView = mineInfoFragment.findViewById(R.id.recycler_view);
+
+        background = mineInfoFragment.findViewById(R.id.background);
+        avatar = mineInfoFragment.findViewById(R.id.avatar);
+        nickname = mineInfoFragment.findViewById(R.id.nickname);
+        signature = mineInfoFragment.findViewById(R.id.signature);
+        account = mineInfoFragment.findViewById(R.id.account);
+        postsnum = mineInfoFragment.findViewById(R.id.postsnum);
+        ffocusnum = mineInfoFragment.findViewById(R.id.ffocusnum);
+        ufocusnum = mineInfoFragment.findViewById(R.id.ufocusnum);
+        isempty = mineInfoFragment.findViewById(R.id.isempty);
+
+        // 创建 SpaceItemDecoration 实例，设置5dp的间距
+        SpaceItemDecoration decoration = new SpaceItemDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
+        // 添加
+        recyclerView.addItemDecoration(decoration);
 
         return mineInfoFragment;
     }

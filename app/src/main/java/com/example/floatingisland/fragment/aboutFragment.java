@@ -1,6 +1,7 @@
 package com.example.floatingisland.fragment;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -93,6 +94,10 @@ public class aboutFragment extends Fragment {
 
         aboutFragment = inflater.inflate(R.layout.fragment_about, container, false);
 
+        UpdateAppUtils.init(getContext());
+
+        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
+
         Toolbar toolbar = aboutFragment.findViewById(R.id.Toolbar_about);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +121,7 @@ public class aboutFragment extends Fragment {
         }
 
         versionCodeName.setText(String.valueOf(packageInfo.versionCode)+"."+String.valueOf(packageInfo.versionName)+"（浮游岛）");
+        String versionCode = String.valueOf(packageInfo.versionCode)+"."+String.valueOf(packageInfo.versionName);
 
         update.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,7 +140,7 @@ public class aboutFragment extends Fragment {
                             Vcontent = version.getVcontent();
                             Vapkurl = version.getVapkurl();
                         }
-                        if(!versionCodeName.getText().toString().equals(Vnumber)){
+                        if(!versionCode.equals(Vnumber)){
                             apkUrl = Vapkurl;
                             updateTitle = Vupdatetittle;
                             updateContent = Vcontent;

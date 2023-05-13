@@ -19,9 +19,10 @@
             android:id="@+id/num"
             android:textColor="#F44336"
             android:textSize="18sp"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="2dp"
+            android:gravity="center"
             android:layout_width="0dp"
-            android:layout_weight="0.03"
+            android:layout_weight="0.06"
             android:layout_height="wrap_content"/>
 
         <TextView

@@ -77,6 +77,8 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
         ReadMoreTextView card_content;
         SuperTextView card_topic;
         TextView likenum;
+        TextView collectionnum;
+        TextView commentnum;
         ImageView like;
         ImageView collection;
         ImageView comment;
@@ -94,6 +96,8 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
             card_content = (ReadMoreTextView) itemView.findViewById(R.id.content);
             card_topic = (SuperTextView) itemView.findViewById(R.id.topic);
             likenum = (TextView) itemView.findViewById(R.id.likenum);
+            collectionnum = (TextView) itemView.findViewById(R.id.collectionnum);
+            commentnum = (TextView) itemView.findViewById(R.id.commentnum);
             like = (ImageView) itemView.findViewById(R.id.like);
             collection = (ImageView) itemView.findViewById(R.id.collection);
             comment = (ImageView) itemView.findViewById(R.id.comment);
@@ -136,6 +140,8 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
         // 获取数据并设置到ViewHolder中的控件上
         holder.card_pid.setText(list.get(position).get("pid").toString());
         holder.likenum.setText(list.get(position).get("likenum").toString());
+        holder.collectionnum.setText(list.get(position).get("collectionnum").toString());
+        holder.commentnum.setText(list.get(position).get("commentnum").toString());
         Glide.with(mContext).load(list.get(position).get("avatarurl").toString()).apply(RequestOptions.bitmapTransform(new RoundedCorners(100)).override(100, 100)).transform(new CircleTransformation()).into(holder.card_avatar);
         holder.card_nickname.setText("  " + list.get(position).get("nickname").toString());
         holder.card_datetime.setText("  发布于 " + list.get(position).get("datetime").toString());
@@ -220,15 +226,18 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
             holder.jz_video.setVisibility(View.GONE);
             holder.card_image.setVisibility(View.GONE);
         } else {
-            if (url.endsWith(".gif") || url.endsWith(".jpg") || url.endsWith(".png")) {
+            if (url.toLowerCase().endsWith(".gif") || url.toLowerCase().endsWith(".jpg") || url.toLowerCase().endsWith(".jpeg") || url.toLowerCase().endsWith(".png")) {
                 holder.jz_video.setVisibility(View.GONE);
                 holder.card_image.setVisibility(View.VISIBLE);
                 Glide.with(mContext).load(url).apply(RequestOptions.bitmapTransform(new RoundedCorners(20)).override(1280, 720)).into(holder.card_image);
-            } else if (url.endsWith(".mp4") || url.endsWith(".avi") || url.endsWith(".mov")) {
+            } else if (url.toLowerCase().endsWith(".mp4") || url.toLowerCase().endsWith(".avi") || url.toLowerCase().endsWith(".flv") || url.toLowerCase().endsWith(".mov")) {
                 holder.card_image.setVisibility(View.GONE);
                 holder.jz_video.setVisibility(View.VISIBLE);
                 Glide.with(mContext).load(url).centerCrop().into(holder.jz_video.posterImageView); //.placeholder(R.mipmap.placeholder)占位符
                 holder.jz_video.setUp(url, "");
+            } else {
+                holder.card_image.setVisibility(View.GONE);
+                holder.jz_video.setVisibility(View.GONE);
             }
         }
 
@@ -309,9 +318,7 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
                             holder.like.setImageResource(R.mipmap.like2);
                             String i = String.valueOf(Integer.parseInt(holder.likenum.getText().toString()) - 1);
                             holder.likenum.setText(i);
-
                         }
-
                     }
 
                     @Override
@@ -336,10 +343,15 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
                         MyToast.successBig(response.getMessage());
                         if(response.getMessage().equals("收藏成功")){
                             holder.collection.setImageResource(R.mipmap.collection1);
+                            String i = String.valueOf(Integer.parseInt(holder.collectionnum.getText().toString()) + 1);
+                            holder.collectionnum.setText(i);
                         }else if(response.getMessage().equals("取消收藏成功")){
                             holder.collection.setImageResource(R.mipmap.collection2);
+                            String i = String.valueOf(Integer.parseInt(holder.collectionnum.getText().toString()) - 1);
+                            holder.collectionnum.setText(i);
+                            list.remove(position);
+                            notifyItemRemoved(position);
                         }
-
                     }
 
                     @Override
@@ -347,7 +359,6 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
                         MyToast.errorBig("连接服务器超时！");
                     }
                 });
-
             }
         });
 
@@ -364,7 +375,6 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
 
                 // 显示MyBottomSheetDialogFragment
                 CommentBottomDialog.show(getFragmentManager(mContext), "bottomDialog");
-
             }
         });
 

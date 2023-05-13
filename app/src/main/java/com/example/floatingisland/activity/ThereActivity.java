@@ -79,6 +79,8 @@ public class ThereActivity extends AppCompatActivity {
             String lastpid = String.valueOf(getIntent().getIntExtra("lastpid",0));
             String lastcontent = getIntent().getStringExtra("lastcontent");
             String lastimageurl = getIntent().getStringExtra("lastimageurl");
+            String lasttopicname = getIntent().getStringExtra("lasttopicname");
+            String topicimageurl = getIntent().getStringExtra("topicimageurl");
             System.out.println(lastpid+lastcontent+lastimageurl);
 
             //发送传递值
@@ -86,6 +88,8 @@ public class ThereActivity extends AppCompatActivity {
             bundle.putString("lastpid", lastpid);
             bundle.putString("lastcontent", lastcontent);
             bundle.putString("lastimageurl", lastimageurl);
+            bundle.putString("lasttopicname", lasttopicname);
+            bundle.putString("topicimageurl", topicimageurl);
             // 创建MyBottomSheetDialogFragment的实例
             editPostsFragment editPostsFragment = new editPostsFragment();
             editPostsFragment.setArguments(bundle);

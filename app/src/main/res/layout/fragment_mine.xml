@@ -120,12 +120,26 @@
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            app:sLeftTextString="发帖前请阅读「用户协议」哦！"
+            app:sLeftTextString=""
             app:sLeftIconRes="@mipmap/horn"
             app:sUseShape="true"
             app:sShapeSelectorNormalColor="@color/white"
             app:sShapeCornersRadius="10dp"
-            app:sDividerLineType="both"/>
+            app:sDividerLineType="both">
+
+            <com.sunfusheng.marqueeview.MarqueeView
+                android:id="@+id/marqueeView"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="35dp"
+                app:mvAnimDuration="1000"
+                app:mvDirection="top_to_bottom"
+                app:mvInterval="3000"
+                app:mvTextColor="@color/black"
+                app:mvTextSize="15sp"
+                app:mvSingleLine="true" />
+
+        </com.allen.library.SuperTextView>
 
         <GridView
             android:id="@+id/gridview"

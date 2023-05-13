@@ -62,11 +62,12 @@
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:layout_alignParentRight="true"
+        android:visibility="gone"
         />
 
     <cn.jzvd.JzvdStd
         android:id="@+id/jz_video"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="220dp"/>
 
@@ -99,9 +100,9 @@
 
         <com.allen.library.SuperTextView
             android:id="@+id/topic"
-            android:layout_width="180dp"
-            android:layout_height="35dp"
-            app:sLeftTextSize="14sp"
+            android:layout_width="160dp"
+            android:layout_height="30dp"
+            app:sLeftTextSize="12sp"
             app:sLeftIconWidth="45px"
             app:sLeftIconHeight="45px"
             app:sLeftTextString="#话题占位"
@@ -130,7 +131,7 @@
 
          <TextView
              android:id="@+id/likenum"
-             android:layout_width="35dp"
+             android:layout_width="30dp"
              android:layout_height="25dp"
              android:text="占位"
              android:textColor="@color/black"
@@ -147,14 +148,34 @@
              android:src="@mipmap/collection2"
              />
 
+         <TextView
+             android:id="@+id/collectionnum"
+             android:layout_width="30dp"
+             android:layout_height="25dp"
+             android:text="占位"
+             android:textColor="@color/black"
+             android:gravity="center"
+             android:layout_centerVertical="true"
+             android:textSize="12sp"/>
+
          <ImageView
              android:id="@+id/comment"
              android:layout_width="25dp"
              android:layout_height="25dp"
-             android:layout_marginLeft="15dp"
+             android:layout_marginLeft="5dp"
              android:gravity="center_vertical"
              android:src="@mipmap/comment"
              />
+
+         <TextView
+             android:id="@+id/commentnum"
+             android:layout_width="30dp"
+             android:layout_height="25dp"
+             android:text="占位"
+             android:textColor="@color/black"
+             android:gravity="center"
+             android:layout_centerVertical="true"
+             android:textSize="12sp"/>
 
      </LinearLayout>
 

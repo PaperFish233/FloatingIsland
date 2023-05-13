@@ -36,15 +36,11 @@ public class searchPostsFragment extends Fragment {
 
     private View searchPostsFragment;
     private RecyclerView recyclerView;
+    private TextView TextView_keyword;
+    private ImageView isempty;
 
     //将数据封装成数据源
     List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Jzvd.releaseAllVideos();
-    }
 
     //通过 ViewPager 进行滑动切换时释放资源
     @Override
@@ -56,20 +52,22 @@ public class searchPostsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onPause() {
+        super.onPause();
+        Jzvd.releaseAllVideos();
+    }
 
-        searchPostsFragment = inflater.inflate(R.layout.fragment_searchposts, container, false);
+    @Override
+    public void onResume() {
+        super.onResume();
+        list.clear();
+        getSearchPosts();
+    }
 
-        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
-
-        // 获取控件
-        recyclerView = searchPostsFragment.findViewById(R.id.recycler_view);
-        TextView TextView_keyword = searchPostsFragment.findViewById(R.id.keyword);
-        ImageView isempty = searchPostsFragment.findViewById(R.id.isempty);
+    private void getSearchPosts(){
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("searchInfo", Context.MODE_PRIVATE);
         String keyword = sharedPreferences.getString("keyword", "");
-
 
         TextView_keyword.setText("关键词："+keyword);
 
@@ -82,6 +80,8 @@ public class searchPostsFragment extends Fragment {
                     Map<String,Object> map=new HashMap<String, Object>();
                     map.put("pid",datum.getPid());
                     map.put("likenum",datum.getLikenum());
+                    map.put("collectionnum",datum.getCollectionnum());
+                    map.put("commentnum",datum.getCommentnum());
                     map.put("avatarurl",datum.getAvatarurl());
                     map.put("nickname",datum.getNickname());
                     map.put("datetime",datum.getDate());
@@ -109,15 +109,6 @@ public class searchPostsFragment extends Fragment {
                     recyclerView.setAdapter(MyPostsAdapter);
                 }
 
-                // 创建 SpaceItemDecoration 实例，设置5dp的间距
-                searchPostsFragment.SpaceItemDecoration decoration = new searchPostsFragment.SpaceItemDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
-                // 添加
-                recyclerView.addItemDecoration(decoration);
-
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("searchInfo", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.clear().apply();
-
             }
 
             @Override
@@ -125,6 +116,24 @@ public class searchPostsFragment extends Fragment {
                 MyToast.errorBig("连接服务器超时！");
             }
         });
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        searchPostsFragment = inflater.inflate(R.layout.fragment_searchposts, container, false);
+
+        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
+
+        // 获取控件
+        recyclerView = searchPostsFragment.findViewById(R.id.recycler_view);
+        TextView_keyword = searchPostsFragment.findViewById(R.id.keyword);
+        isempty = searchPostsFragment.findViewById(R.id.isempty);
+
+        // 创建 SpaceItemDecoration 实例，设置5dp的间距
+        searchPostsFragment.SpaceItemDecoration decoration = new searchPostsFragment.SpaceItemDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
+        // 添加
+        recyclerView.addItemDecoration(decoration);
 
         return searchPostsFragment;
     }

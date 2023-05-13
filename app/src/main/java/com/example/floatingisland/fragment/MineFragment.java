@@ -35,8 +35,10 @@ import com.example.floatingisland.utils.Constant;
 import com.example.floatingisland.utils.net.OkCallback;
 import com.example.floatingisland.utils.net.OkHttp;
 import com.example.floatingisland.utils.net.Result;
+import com.sunfusheng.marqueeview.MarqueeView;
 
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +48,10 @@ import es.dmoral.toasty.MyToast;
 public class MineFragment extends Fragment {
 
     private View MineFragment;
+    private SuperTextView nickname;
+    private SuperTextView postsnum;
+    private SuperTextView ffocusnum;
+    private SuperTextView ufocusnum;
 
     //getActivity()可能会抛出空指针异常
     private Activity activity;
@@ -54,20 +60,13 @@ public class MineFragment extends Fragment {
         this.activity = (Activity) context;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public void onResume() {
+        super.onResume();
+        getLoginUser();
+    }
 
-        MineFragment = inflater.inflate(R.layout.fragment_mine, container, false);
-
-        SuperTextView nickname = MineFragment.findViewById(R.id.nickname);
-        ImageView setting = MineFragment.findViewById(R.id.setting);
-        GridView gridview = MineFragment.findViewById(R.id.gridview);
-        SuperTextView postsnum = MineFragment.findViewById(R.id.postsnum);
-        SuperTextView ffocusnum = MineFragment.findViewById(R.id.ffocusnum);
-        SuperTextView ufocusnum = MineFragment.findViewById(R.id.ufocusnum);
-
-        gridview.setAdapter(new MyGridViewAdapter());
+    private void getLoginUser(){
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
         String loginInfo = sharedPreferences.getString("account", "");
@@ -126,6 +125,29 @@ public class MineFragment extends Fragment {
                 MyToast.errorBig("连接服务器超时！");
             }
         });
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        MineFragment = inflater.inflate(R.layout.fragment_mine, container, false);
+
+        nickname = MineFragment.findViewById(R.id.nickname);
+        ImageView setting = MineFragment.findViewById(R.id.setting);
+        GridView gridview = MineFragment.findViewById(R.id.gridview);
+        postsnum = MineFragment.findViewById(R.id.postsnum);
+        ffocusnum = MineFragment.findViewById(R.id.ffocusnum);
+        ufocusnum = MineFragment.findViewById(R.id.ufocusnum);
+        MarqueeView marqueeView = MineFragment.findViewById(R.id.marqueeView);
+
+        gridview.setAdapter(new MyGridViewAdapter());
+
+        List<String> messages = new ArrayList<>();
+        messages.add("发帖前请阅读「用户协议」哦！");
+        messages.add("倡导理性思考，拒绝盲从和骂人文化！");
+        messages.add("禁止发布涉及色情、暴力、政治敏感等内容！");
+        marqueeView.startWithList(messages);
 
         setting.setOnClickListener(new View.OnClickListener() {
             @Override

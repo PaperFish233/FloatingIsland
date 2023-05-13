@@ -54,15 +54,19 @@ public class userInfoFragment extends Fragment {
     private View userInfoFragment;
     private RecyclerView recyclerView;
     private MyPostsAdapter adapter;
+    private ImageView background;
+    private Button focus;
+    private ImageView avatar;
+    private TextView nickname;
+    private TextView signature;
+    private TextView account;
+    private SuperTextView postsnum;
+    private TextView ffocusnum;
+    private TextView ufocusnum;
+    private ImageView isempty;
 
     //将数据封装成数据源
     List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Jzvd.releaseAllVideos();
-    }
 
     //getActivity()可能会抛出空指针异常
     private Activity activity;
@@ -71,34 +75,20 @@ public class userInfoFragment extends Fragment {
         this.activity = (Activity) context;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public void onPause() {
+        super.onPause();
+        Jzvd.releaseAllVideos();
+    }
 
-        userInfoFragment = inflater.inflate(R.layout.fragment_userinfo,container,false);
+    @Override
+    public void onResume() {
+        super.onResume();
+        list.clear();
+        getUserInfoAndPosts();
+    }
 
-        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
-
-        Toolbar toolbar = userInfoFragment.findViewById(R.id.Toolbar_userinfo);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 处理左上角按钮点击事件
-                activity.onBackPressed();//销毁自己，用全局变量activity代替getActivity()
-
-            }
-        });
-
-        ImageView background = userInfoFragment.findViewById(R.id.background);
-        Button focus = userInfoFragment.findViewById(R.id.focus);
-        ImageView avatar = userInfoFragment.findViewById(R.id.avatar);
-        TextView nickname = userInfoFragment.findViewById(R.id.nickname);
-        TextView signature = userInfoFragment.findViewById(R.id.signature);
-        TextView account = userInfoFragment.findViewById(R.id.account);
-        SuperTextView postsnum = userInfoFragment.findViewById(R.id.postsnum);
-        TextView ffocusnum = userInfoFragment.findViewById(R.id.ffocusnum);
-        TextView ufocusnum = userInfoFragment.findViewById(R.id.ufocusnum);
-        ImageView isempty = userInfoFragment.findViewById(R.id.isempty);
+    private void getUserInfoAndPosts(){
 
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("userInfoPid", Context.MODE_PRIVATE);
         String pid = sharedPreferences.getString("pid", "");
@@ -192,6 +182,8 @@ public class userInfoFragment extends Fragment {
                         Map<String,Object> map=new HashMap<String, Object>();
                         map.put("pid",datum.getPid());
                         map.put("likenum",datum.getLikenum());
+                        map.put("collectionnum",datum.getCollectionnum());
+                        map.put("commentnum",datum.getCommentnum());
                         map.put("avatarurl",datum.getAvatarurl());
                         map.put("nickname",datum.getNickname());
                         map.put("datetime",datum.getDate());
@@ -353,6 +345,8 @@ public class userInfoFragment extends Fragment {
                         Map<String,Object> map=new HashMap<String, Object>();
                         map.put("pid",datum.getPid());
                         map.put("likenum",datum.getLikenum());
+                        map.put("collectionnum",datum.getCollectionnum());
+                        map.put("commentnum",datum.getCommentnum());
                         map.put("avatarurl",datum.getAvatarurl());
                         map.put("nickname",datum.getNickname());
                         map.put("datetime",datum.getDate());
@@ -430,8 +424,36 @@ public class userInfoFragment extends Fragment {
             });
         }
 
+    }
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        userInfoFragment = inflater.inflate(R.layout.fragment_userinfo,container,false);
+
+        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
+
+        Toolbar toolbar = userInfoFragment.findViewById(R.id.Toolbar_userinfo);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 处理左上角按钮点击事件
+                activity.onBackPressed();//销毁自己，用全局变量activity代替getActivity()
+
+            }
+        });
+
+        background = userInfoFragment.findViewById(R.id.background);
+        focus = userInfoFragment.findViewById(R.id.focus);
+        avatar = userInfoFragment.findViewById(R.id.avatar);
+        nickname = userInfoFragment.findViewById(R.id.nickname);
+        signature = userInfoFragment.findViewById(R.id.signature);
+        account = userInfoFragment.findViewById(R.id.account);
+        postsnum = userInfoFragment.findViewById(R.id.postsnum);
+        ffocusnum = userInfoFragment.findViewById(R.id.ffocusnum);
+        ufocusnum = userInfoFragment.findViewById(R.id.ufocusnum);
+        isempty = userInfoFragment.findViewById(R.id.isempty);
 
         return userInfoFragment;
     }

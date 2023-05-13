@@ -37,6 +37,8 @@ public class focusUserFragment extends Fragment {
 
     private View focusUserFragment;
     private RecyclerView recyclerView;
+    private ImageView isempty;
+    private Toolbar toolbar;
 
     //将数据封装成数据源
     List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
@@ -48,28 +50,14 @@ public class focusUserFragment extends Fragment {
         this.activity = (Activity) context;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public void onResume() {
+        super.onResume();
+        list.clear();
+        getFocus();
+    }
 
-        focusUserFragment = inflater.inflate(R.layout.fragment_focususer, container, false);
-
-        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
-
-        Toolbar toolbar = focusUserFragment.findViewById(R.id.Toolbar_focususer);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 处理左上角按钮点击事件
-                activity.onBackPressed();//销毁自己，用全局变量activity代替getActivity()
-
-            }
-        });
-
-        // 获取控件
-        recyclerView = focusUserFragment.findViewById(R.id.recycler_view);
-        ImageView isempty = focusUserFragment.findViewById(R.id.isempty);
-
+    private void getFocus(){
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
         String loginInfo = sharedPreferences.getString("account", "");
 
@@ -159,9 +147,29 @@ public class focusUserFragment extends Fragment {
                 }
             });
         }
+    }
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        focusUserFragment = inflater.inflate(R.layout.fragment_focususer, container, false);
 
+        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
+
+        toolbar = focusUserFragment.findViewById(R.id.Toolbar_focususer);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 处理左上角按钮点击事件
+                activity.onBackPressed();//销毁自己，用全局变量activity代替getActivity()
+
+            }
+        });
+
+        // 获取控件
+        recyclerView = focusUserFragment.findViewById(R.id.recycler_view);
+        isempty = focusUserFragment.findViewById(R.id.isempty);
 
         return focusUserFragment;
     }

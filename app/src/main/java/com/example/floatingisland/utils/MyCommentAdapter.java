@@ -130,7 +130,8 @@ public class MyCommentAdapter extends RecyclerView.Adapter<MyCommentAdapter.MyVi
                                     @Override
                                     public void onResponse(Result response) {
                                         MyToast.successBig(response.getMessage());
-
+                                        list.remove(position);
+                                        notifyItemRemoved(position);
                                     }
 
                                     @Override
@@ -149,9 +150,6 @@ public class MyCommentAdapter extends RecyclerView.Adapter<MyCommentAdapter.MyVi
                         });
                 AlertDialog dialog = builder.create();
                 dialog.show();
-
-
-
 
 
             }

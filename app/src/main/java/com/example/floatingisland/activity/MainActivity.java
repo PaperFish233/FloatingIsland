@@ -1,8 +1,7 @@
 package com.example.floatingisland.activity;
 
-import static com.example.floatingisland.utils.PermissionHelper.requestCameraPermission;
-import static com.example.floatingisland.utils.PermissionHelper.requestReanAndWritePermission;
-
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -11,24 +10,17 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.floatingisland.R;
-import com.example.floatingisland.entity.Users;
 import com.example.floatingisland.entity.Version;
 import com.example.floatingisland.fragment.DiscoverFragment;
 import com.example.floatingisland.fragment.HomePageFragment;
 import com.example.floatingisland.fragment.MineFragment;
-import com.example.floatingisland.fragment.mineInfoFragment;
-import com.example.floatingisland.fragment.settingFragment;
 import com.example.floatingisland.utils.Constant;
 import com.example.floatingisland.utils.net.OkCallback;
 import com.example.floatingisland.utils.net.OkHttp;
 import com.example.floatingisland.utils.net.Result;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.HashMap;
 import java.util.List;
 
 import cn.jzvd.Jzvd;
@@ -98,53 +90,57 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        //动态获取权限
-//        requestCameraPermission(MainActivity.this);
-        requestReanAndWritePermission(MainActivity.this);
+        UpdateAppUtils.init(this);
 
         MyToast.init(getApplication(),false,true);
 
-        UpdateAppUtils.init(this);
+        SharedPreferences sharedPreferences = this.getSharedPreferences("updateInfo", Context.MODE_PRIVATE);
+        Boolean updatestate = sharedPreferences.getBoolean("updatestate", false);
 
-        PackageManager packageManager = this.getPackageManager();
-        String packageName = this.getPackageName();
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo = packageManager.getPackageInfo(packageName, 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+        if(!updatestate){
+            PackageManager packageManager = this.getPackageManager();
+            String packageName = this.getPackageName();
+            PackageInfo packageInfo = null;
+            try {
+                packageInfo = packageManager.getPackageInfo(packageName, 0);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            thisVersion = String.valueOf(packageInfo.versionCode)+"."+String.valueOf(packageInfo.versionName);
+
+            //获取版本信息
+            OkHttp.post(this, Constant.getVersion, null, new OkCallback<Result<List<Version>>>() {
+                @Override
+                public void onResponse(Result<List<Version>> response) {
+                    String Vnumber="";
+                    String Vupdatetittle="";
+                    String Vcontent="";
+                    String Vapkurl="";
+                    for (Version version : response.getData()) {
+                        Vnumber = version.getVnumber();
+                        Vupdatetittle = version.getVupdatetitle();
+                        Vcontent = version.getVcontent();
+                        Vapkurl = version.getVapkurl();
+                    }
+                    if(!thisVersion.equals(Vnumber)){
+                        apkUrl = Vapkurl;
+                        updateTitle = Vupdatetittle;
+                        updateContent = Vcontent;
+                        UpdateApp();
+                    }
+
+                }
+
+                @Override
+                public void onFailure(String state, String msg) {
+                    MyToast.errorBig("连接服务器超时！");
+                }
+            });
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("updatestate", true);
+            editor.apply();
         }
-        thisVersion = String.valueOf(packageInfo.versionCode)+"."+String.valueOf(packageInfo.versionName);
-
-        //获取版本信息
-        OkHttp.post(this, Constant.getVersion, null, new OkCallback<Result<List<Version>>>() {
-            @Override
-            public void onResponse(Result<List<Version>> response) {
-                String Vnumber="";
-                String Vupdatetittle="";
-                String Vcontent="";
-                String Vapkurl="";
-                for (Version version : response.getData()) {
-                    Vnumber = version.getVnumber();
-                    Vupdatetittle = version.getVupdatetitle();
-                    Vcontent = version.getVcontent();
-                    Vapkurl = version.getVapkurl();
-                }
-                if(!thisVersion.equals(Vnumber)){
-                    apkUrl = Vapkurl;
-                    updateTitle = Vupdatetittle;
-                    updateContent = Vcontent;
-                    UpdateApp();
-                }
-
-            }
-
-            @Override
-            public void onFailure(String state, String msg) {
-                MyToast.errorBig("连接服务器超时！");
-            }
-        });
-
 
         // 显示默认的Fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, HomePageFragment).commit();

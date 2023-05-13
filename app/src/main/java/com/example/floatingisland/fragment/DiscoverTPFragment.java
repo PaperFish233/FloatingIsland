@@ -48,18 +48,14 @@ public class DiscoverTPFragment extends Fragment {
         this.activity = (Activity) context;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public void onResume() {
+        super.onResume();
+        list.clear();
+        getTopic();
+    }
 
-        DiscoverTPFragment = inflater.inflate(R.layout.fragment_discovertp, container, false);
-
-        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
-
-        // 获取 RecyclerView 控件
-        recyclerView = DiscoverTPFragment.findViewById(R.id.recycler_view);
-
-
+    private void getTopic(){
         OkHttp.post(getContext(), Constant.getTopic, null, new OkCallback<Result<List<Topic>>>() {
             @Override
             public void onResponse(Result<List<Topic>> response) {
@@ -89,7 +85,18 @@ public class DiscoverTPFragment extends Fragment {
                 MyToast.errorBig("连接服务器超时！");
             }
         });
+    }
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        DiscoverTPFragment = inflater.inflate(R.layout.fragment_discovertp, container, false);
+
+        MyToast.init((Application) requireContext().getApplicationContext(),false,true);
+
+        // 获取 RecyclerView 控件
+        recyclerView = DiscoverTPFragment.findViewById(R.id.recycler_view);
 
         return DiscoverTPFragment;
     }

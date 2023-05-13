@@ -1,8 +1,5 @@
 package com.example.floatingisland.fragment;
 
-import static com.example.floatingisland.utils.PermissionHelper.requestCameraPermission;
-import static com.example.floatingisland.utils.PermissionHelper.requestReanAndWritePermission;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -25,10 +22,6 @@ import com.example.floatingisland.utils.MyPagerAdapter;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.wyt.searchbox.SearchFragment;
 import com.wyt.searchbox.custom.IOnSearchClickListener;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class HomePageFragment extends Fragment {
 

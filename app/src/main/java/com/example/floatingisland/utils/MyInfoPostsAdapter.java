@@ -77,6 +77,8 @@ public class MyInfoPostsAdapter extends RecyclerView.Adapter<MyInfoPostsAdapter.
         ReadMoreTextView card_content;
         SuperTextView card_topic;
         TextView likenum;
+        TextView collectionnum;
+        TextView commentnum;
         ImageView like;
         ImageView collection;
         ImageView comment;
@@ -95,6 +97,8 @@ public class MyInfoPostsAdapter extends RecyclerView.Adapter<MyInfoPostsAdapter.
             card_content = (ReadMoreTextView) itemView.findViewById(R.id.content);
             card_topic = (SuperTextView) itemView.findViewById(R.id.topic);
             likenum = (TextView) itemView.findViewById(R.id.likenum);
+            collectionnum = (TextView) itemView.findViewById(R.id.collectionnum);
+            commentnum = (TextView) itemView.findViewById(R.id.commentnum);
             like = (ImageView) itemView.findViewById(R.id.like);
             collection = (ImageView) itemView.findViewById(R.id.collection);
             comment = (ImageView) itemView.findViewById(R.id.comment);
@@ -136,10 +140,14 @@ public class MyInfoPostsAdapter extends RecyclerView.Adapter<MyInfoPostsAdapter.
 
         String lastcontent = (String) list.get(position).get("content");
         String lastimageurl = (String) list.get(position).get("imageurl");
+        String lasttopicname = (String) list.get(position).get("topicname");
+        String topicimageurl = list.get(position).get("topicimageurl").toString();
 
         // 获取数据并设置到ViewHolder中的控件上
         holder.card_pid.setText(list.get(position).get("pid").toString());
         holder.likenum.setText(list.get(position).get("likenum").toString());
+        holder.collectionnum.setText(list.get(position).get("collectionnum").toString());
+        holder.commentnum.setText(list.get(position).get("commentnum").toString());
         Glide.with(mContext).load(list.get(position).get("avatarurl").toString()).apply(RequestOptions.bitmapTransform(new RoundedCorners(100)).override(100, 100)).transform(new CircleTransformation()).into(holder.card_avatar);
         holder.card_nickname.setText("  " + list.get(position).get("nickname").toString());
         holder.card_datetime.setText("  发布于 " + list.get(position).get("datetime").toString());
@@ -224,15 +232,18 @@ public class MyInfoPostsAdapter extends RecyclerView.Adapter<MyInfoPostsAdapter.
             holder.jz_video.setVisibility(View.GONE);
             holder.card_image.setVisibility(View.GONE);
         } else {
-            if (url.endsWith(".gif") || url.endsWith(".jpg") || url.endsWith(".png")) {
+            if (url.toLowerCase().endsWith(".gif") || url.toLowerCase().endsWith(".jpg") || url.toLowerCase().endsWith(".jpeg") || url.toLowerCase().endsWith(".png")) {
                 holder.jz_video.setVisibility(View.GONE);
                 holder.card_image.setVisibility(View.VISIBLE);
                 Glide.with(mContext).load(url).apply(RequestOptions.bitmapTransform(new RoundedCorners(20)).override(1280, 720)).into(holder.card_image);
-            } else if (url.endsWith(".mp4") || url.endsWith(".avi") || url.endsWith(".mov")) {
+            } else if (url.toLowerCase().endsWith(".mp4") || url.toLowerCase().endsWith(".avi") || url.toLowerCase().endsWith(".flv") || url.toLowerCase().endsWith(".mov")) {
                 holder.card_image.setVisibility(View.GONE);
                 holder.jz_video.setVisibility(View.VISIBLE);
                 Glide.with(mContext).load(url).centerCrop().into(holder.jz_video.posterImageView); //.placeholder(R.mipmap.placeholder)占位符
                 holder.jz_video.setUp(url, "");
+            } else {
+                holder.card_image.setVisibility(View.GONE);
+                holder.jz_video.setVisibility(View.GONE);
             }
         }
 
@@ -281,6 +292,7 @@ public class MyInfoPostsAdapter extends RecyclerView.Adapter<MyInfoPostsAdapter.
         // 创建一个列表数据源
         final String[] items = {"编辑", "删除", "取消"};
 
+        int listposition = position;
         holder.more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -306,6 +318,8 @@ public class MyInfoPostsAdapter extends RecyclerView.Adapter<MyInfoPostsAdapter.
                                 intent.putExtra("lastpid", pid);
                                 intent.putExtra("lastcontent", lastcontent);
                                 intent.putExtra("lastimageurl", lastimageurl);
+                                intent.putExtra("lasttopicname", lasttopicname);
+                                intent.putExtra("topicimageurl", topicimageurl);
                                 mContext.startActivity(intent);
                                 mActivity.overridePendingTransition(R.anim.slide_in_from_right,R.anim.slide_out_from_left);
                                 break;
@@ -328,6 +342,8 @@ public class MyInfoPostsAdapter extends RecyclerView.Adapter<MyInfoPostsAdapter.
                                                     public void onResponse(Result response) {
                                                         if(response.getMessage().equals("删除成功")){
                                                             MyToast.successBig(response.getMessage());
+                                                            list.remove(listposition);
+                                                            notifyItemRemoved(listposition);
                                                         }else if(response.getMessage().equals("删除失败")){
                                                             MyToast.errorBig(response.getMessage());
                                                         }
@@ -410,8 +426,12 @@ public class MyInfoPostsAdapter extends RecyclerView.Adapter<MyInfoPostsAdapter.
                         MyToast.successBig(response.getMessage());
                         if(response.getMessage().equals("收藏成功")){
                             holder.collection.setImageResource(R.mipmap.collection1);
+                            String i = String.valueOf(Integer.parseInt(holder.collectionnum.getText().toString()) + 1);
+                            holder.collectionnum.setText(i);
                         }else if(response.getMessage().equals("取消收藏成功")){
                             holder.collection.setImageResource(R.mipmap.collection2);
+                            String i = String.valueOf(Integer.parseInt(holder.collectionnum.getText().toString()) - 1);
+                            holder.collectionnum.setText(i);
                         }
 
                     }

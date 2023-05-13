@@ -1,22 +1,13 @@
 package com.example.floatingisland.activity;
 
-import static com.example.floatingisland.utils.PermissionHelper.requestCameraPermission;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
-import android.view.Window;
 
 import com.example.floatingisland.R;
-import com.example.floatingisland.fragment.loginFragment;
 import com.example.floatingisland.fragment.WelcomeFragment;
-import com.example.floatingisland.fragment.protocolFragment;
-import com.example.floatingisland.fragment.registerFragment;
-
 
 public class WelcomeActivity extends AppCompatActivity {
 
