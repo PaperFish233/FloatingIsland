@@ -349,8 +349,6 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
                             holder.collection.setImageResource(R.mipmap.collection2);
                             String i = String.valueOf(Integer.parseInt(holder.collectionnum.getText().toString()) - 1);
                             holder.collectionnum.setText(i);
-                            list.remove(position);
-                            notifyItemRemoved(position);
                         }
                     }
 

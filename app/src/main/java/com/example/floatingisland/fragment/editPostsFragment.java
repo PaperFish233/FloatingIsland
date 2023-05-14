@@ -313,19 +313,21 @@ public class editPostsFragment extends Fragment {
                         public void run() {
                             // 在主线程中执行UI更新操作
                             String resurl = Constant.ServiceIP + responseBody;
-                            MyToast.successBig("上传成功");
                             imageurl.setText(resurl);
                             if (resurl.toLowerCase().endsWith(".gif") || resurl.toLowerCase().endsWith(".jpg") || resurl.toLowerCase().endsWith(".jpeg") || resurl.toLowerCase().endsWith(".png")) {
+                                Glide.with(getContext()).load(resurl).apply(RequestOptions.bitmapTransform(new RoundedCorners(20))
+                                        .override(512, 288)).into(image);
+                                MyToast.successBig("上传成功");
                                 image.setVisibility(View.VISIBLE);
                                 jz_video.setVisibility(View.GONE);
-                                Glide.with(getContext()).load(resurl).apply(RequestOptions.bitmapTransform(new RoundedCorners(20))
-                                        .override(1280, 720)).into(image);
                             } else if (resurl.toLowerCase().endsWith(".mp4") || resurl.toLowerCase().endsWith(".avi") || resurl.toLowerCase().endsWith(".flv") || resurl.toLowerCase().endsWith(".mov")) {
-                                jz_video.setVisibility(View.VISIBLE);
-                                image.setVisibility(View.GONE);
                                 Glide.with(getContext()).load(resurl).centerCrop().into(jz_video.posterImageView);
                                 jz_video.setUp(resurl, "");
+                                MyToast.successBig("上传成功");
+                                jz_video.setVisibility(View.VISIBLE);
+                                image.setVisibility(View.GONE);
                             } else{
+                                MyToast.successBig("资源类型出错，请重新上传！");
                                 image.setVisibility(View.GONE);
                                 jz_video.setVisibility(View.GONE);
                             }
