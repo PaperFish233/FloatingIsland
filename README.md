@@ -4,7 +4,9 @@
 
 *跳转至后台管理系统项目：[点我跳转](https://github.com/PaperFish233/FloatingIslandService)*
 
-*下载用户端Demo：[点我下载](http://ys-l.ysepan.com/621129957/319203107/VGgOjho473K2K7634O4Lba/app-release.apk)*
+*下载用户端Demo：[点我下载](https://paperfish.lanzouw.com/icl480z59mhe)*
+
+![](https://i.imgtg.com/2023/06/14/OBQY9p.png)
 
 本系统功能结构图如图所示：
 
